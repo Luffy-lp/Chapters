@@ -3,78 +3,78 @@
 #字典参数：${func(a=1, b=2)}
 #混合类型参数：${func(1, 2, a=3, b=4)}
 #不跑的用前面加#号
-#- 0:
-#    caseauthor: "lipeng"
-#    casename: "用户登陆-"
-#    casedec: "用户登陆描述"
-#    repeattime: "3"
-#    reportname: "用户登陆"
-#    import_module_functions:
-#        - case.case_test
-#    step:
-#        - ${test_uninstallGame()}
-#        - ${test_installGame()}
-#        - ${test_startgame()}
-#        - ${test_newUserGuide()}
-#        - ${test_discoverPopup()}
-#        - ${pageTurn(4)}
-#        - ${test_signin()}
-
-#- 1:
-#    caseauthor: "lipeng"
-#    casename: "视觉小说阅读"
-#    casedec: "视觉小说阅读描述"
-#    repeattime: "3"
-#    reportname: "视觉小说阅读"
-#    import_module_functions:
-#        - case.case_test
-#    step:
-#        - ${pageTurn(0)}
-#        - ${test_bookchoose(Weekly, 0)}
-#        - ${test_bookPlay()}
-#        - ${test_bookread()}
-#        - ${test_bookPlay()}
-#        - ${test_bookread()}
-#        - ${pageTurn()}
-#
-#- 2:
-#    caseauthor: "lipeng"
-#    casename: "短信小说创作和阅读"
-#    casedec: "短信小说创作和阅读"
-#    repeattime: "3"
-#    reportname: "短信小说创作和阅读"
-#    import_module_functions:
-#        - case.case_test
-#    step:
-#        - ${pageTurn(2)}
-#        - ${test_Creation()}
-#        - ${test_ChapterEdit(lipengBook)}
-#        - ${test_chooseUGCBook(0, 1)}
-#        - ${test_ReadUGCBook(2)}
 - 0:
-    caseauthor: "江浚朋"
-    casename: "个人信息"
-    casedec: "个人信息"
+    caseauthor: "lipeng"
+    casename: "用户登陆-"
+    casedec: "用户登陆描述"
     repeattime: "3"
-    reportname: "个人信息"
+    reportname: "用户登陆"
     import_module_functions:
-        - test_fun.myfun
+        - case.case_test
     step:
-#        - ${test_ChapterEdit()}
+#        - ${test_uninstallGame()}
+        - ${test_installGame()}
+        - ${test_startgame()}
+        - ${test_newUserGuide()}
+        - ${test_discoverPopup()}
         - ${pageTurn(4)}
+        - ${test_signin()}
+
+- 1:
+    caseauthor: "lipeng"
+    casename: "视觉小说阅读"
+    casedec: "视觉小说阅读描述"
+    repeattime: "3"
+    reportname: "视觉小说阅读"
+    import_module_functions:
+        - case.case_test
+    step:
+        - ${pageTurn(0)}
+        - ${test_bookchoose(Weekly, 0)}
+        - ${test_bookPlay()}
+        - ${test_bookread()}
+#        - ${test_bookPlay()}
+#        - ${test_bookread()}
+        - ${pageTurn()}
+#
+- 2:
+    caseauthor: "lipeng"
+    casename: "短信小说创作和阅读"
+    casedec: "短信小说创作和阅读"
+    repeattime: "3"
+    reportname: "短信小说创作和阅读"
+    import_module_functions:
+        - case.case_test
+    step:
+        - ${pageTurn(2)}
+        - ${test_Creation()}
+        - ${test_ChapterEdit(lipengBook)}
+        - ${test_chooseUGCBook(0, 1)}
+        - ${test_ReadUGCBook(2)}
+#- 0:
+#    caseauthor: "江浚朋"
+#    casename: "个人信息"
+#    casedec: "个人信息"
+#    repeattime: "3"
+#    reportname: "个人信息"
+#    import_module_functions:
+#        - test_fun.myfun
+#    step:
+#        - ${test_ChapterEdit()}
+#        - ${pageTurn(4)}
 #        - ${test_ChangeUseravatar()}
 #        - ${test_operationAchievement()}
 #        - ${test_ChangeUseremoticons()}
 #        - ${test_nameedit()}
-- 1:
-    caseauthor: "江浚朋"
-    casename: "商城"
-    casedec: "商城"
-    repeattime: "3"
-    reportname: "商城"
-    import_module_functions:
-        - test_fun.myfun
-    step:
-        - ${test_shop_buy_ticket()}
-        - ${test_shop_buy_diamond()}
-        - ${test_shop_buy_member()}
+#- 1:
+#    caseauthor: "江浚朋"
+#    casename: "商城"
+#    casedec: "商城"
+#    repeattime: "3"
+#    reportname: "商城"
+#    import_module_functions:
+#        - test_fun.myfun
+#    step:
+#        - ${test_shop_buy_ticket()}
+#        - ${test_shop_buy_diamond()}
+#        - ${test_shop_buy_member()}
