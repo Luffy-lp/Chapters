@@ -1,9 +1,7 @@
 import json
-import shutil
-
-from common.COM_path import *
 import yaml
-from common.COM_utilities import *
+import shutil
+from common.COM_path import *
 from common.COM_path import *
 from common.my_log import mylog
 from common.COM_API import APiClass
@@ -13,9 +11,10 @@ from common.COM_API import APiClass
 
 class UserData(APiClass):
     _instance = None
-
+    storyoptions_dir={}
     def __init__(self):
         self.UserData_dir = {}  # 0.device_id 1.uuid 2.LoginStatus
+        self.UserData_dir["bookDetailInfo"] = {}
         self.Bookshelf__dir = {}  # readprogressList 书籍列表
         self.ConfData_dir = {}
         self.Story_cfg_chapter_dir = {}  # 章节总信息表
@@ -24,7 +23,6 @@ class UserData(APiClass):
         self.Stroy_data_dir = {}  # 书籍和ID对应关系
         self.popup_dir = {}
         self.getdata()
-        self.clear()
         self.DeviceData_dir = {}
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
@@ -36,12 +34,18 @@ class UserData(APiClass):
         self.get_story_cfg_chapter()
         self.getbookData()
         self.stroy_data()
+        self.yaml_stroy()
         print(self.Bookshelf__dir)
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
         return cls._instance
+
+    def read_yaml(self,filepath):
+        with open(filepath, encoding='utf-8') as file:
+            value = yaml.safe_load(file)
+        return value
 
     def yamldata_conf(self):  # 读取yaml数据
         data = None
@@ -71,7 +75,6 @@ class UserData(APiClass):
                 self.UserData_dir["uuid"] = self.registerApi5(channel_id, device_id, device_platform)["uuid"]
             print("用户ID：", self.UserData_dir["uuid"])
             f.close()
-            assert_equal(True, True, "接口获取用户ID：{0}".format(self.UserData_dir["uuid"]))
 
     def getbookData(self):
         """大厅书架信息"""
@@ -103,8 +106,12 @@ class UserData(APiClass):
 
     def yaml_case(self):
         bookdetailpaths = os.path.join(path_YAML_FILES, "yamlCase\\bookdetail.yml")
-        bookdetailData = read_yaml(bookdetailpaths)
+        bookdetailData = self.read_yaml(bookdetailpaths)
         self.Element_dir["bookdetailData"] = bookdetailData
+
+    def yaml_stroy(self):
+        storyoptionspath = os.path.join(path_YAML_FILES, "yamlstory/storyoptions.yml")
+        self.storyoptions_dir = self.read_yaml(storyoptionspath)
 
     def get_story_cfg_chapter(self):
         """获取章节详情"""
@@ -151,23 +158,10 @@ class UserData(APiClass):
         member_type = self.memberInfoApi(self.UserData_dir["uuid"])["data"]["member_type"]
         self.UserData_dir["member_type"] = member_type
 
-    def clear(self):
-        """清空之前的报告和文件"""
-        fileNamelist = [path_LOG_DIR, path_REPORT_DIR, path_RES_DIR]
-        for fileName in fileNamelist:
-            filelist = os.listdir(fileName)
-            for f in filelist:
-                filepath = os.path.join(fileName, f)
-                if os.path.isfile(filepath):
-                    os.remove(filepath)
-                # elif os.path.isdir(filepath):
-                #     shutil.rmtree(filepath, True)
-        path = os.path.join(path_LOG_MY, "logging.log")
-        with open(path, 'w') as f1:
-            f1.seek(0)
-            f1.truncate()
-            f1.close()
-        mylog.info("完成文件清空")
-
-
+    def getstoryoptions(self, stroyID, stroychapter):
+        for k in self.storyoptions_dir.keys():
+            if stroyID == k:
+                stroyoptionlist=self.storyoptions_dir[k][stroychapter]
+                return stroyoptionlist
+            else:return None
 MyData = UserData()

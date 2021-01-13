@@ -160,6 +160,6 @@ class Shopmodule(Shop):
         self.buy_ticket_step()
         return True
 
-tt=Shopmodule()
+# tt=Shopmodule()
 # poco1 = AndroidUiautomationPoco()
-tt.buy_ticket_step()
+# tt.buy_ticket_step()

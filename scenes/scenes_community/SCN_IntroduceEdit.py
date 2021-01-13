@@ -173,5 +173,3 @@ class IntroduceEdit(CommonPoco):
         #     self.topBar("Back")
 
 
-# IntroduceEdit1 = IntroduceEdit()
-# IntroduceEdit1.mainprocess("testl")

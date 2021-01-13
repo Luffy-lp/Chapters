@@ -102,6 +102,10 @@ def test_bookread(BookID=None):
     """读书"""
     if BookID == None:
         BookID == MyData.UserData_dir["bookDetailInfo"]["BookID"]
+    else:
+        MyData.UserData_dir["bookDetailInfo"]["BookID"]=BookID
+        print(MyData.UserData_dir["bookDetailInfo"])
+        print(MyData.UserData_dir["bookDetailInfo"]["BookID"])
     myVisual = VisualBook()
     myVisual.bookLoad()
     # actualValue = myVisual.getReadBook_info(BookID)

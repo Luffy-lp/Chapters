@@ -2,6 +2,7 @@ from airtest.core.api import *
 from common.COM_findobject import CommonPoco
 from common.COM_utilities import *
 
+
 # TODO:返回到上一个界面应该用树代替
 
 class MainStudio(CommonPoco):
@@ -128,7 +129,6 @@ class MainStudio(CommonPoco):
                 self.android_findClick("com.mars.avgchapters:id/btn_send", "com.mars.avgchapters:id/btn_send",
                                        description="点击提交按钮")
 
-
         POCOB = self.poco("OptionB").child("InputField").child("Text Area").wait(1)
         BtXt = POCOB.child("Text").get_TMPtext()
         if BtXt:
@@ -139,7 +139,6 @@ class MainStudio(CommonPoco):
             else:
                 self.android_findClick("com.mars.avgchapters:id/btn_send", "com.mars.avgchapters:id/btn_send",
                                        description="点击提交按钮")
-
 
         if not self.find_try("OptionC", description="查看是否有C选项"):
             self.findClick_childobject(self.poco("Create").child("OptionAdd"), description="创建一个新分支选项", sleeptime=1)
@@ -238,4 +237,3 @@ class MainStudio(CommonPoco):
             self.talk("lipeng", txt)
             self.talk("lilei", txt)
         self.branchprocess()
-

@@ -134,14 +134,3 @@ class BookNewDetail(CommonPoco):
 
 # BookNewDetail1=BookNewDetail()
 # BookNewDetail1.bookChoose("Weekly",0)
-# print(MyData.UserData_dir["bookDetailInfo"])
-# aa=MyData.Bookshelf__dir["Weekly Update"][0]
-# print(aa)
-# BookNewDetail1.getBookNewDetail_info("10001","dddadfa")
-# ddd=BookNewDetail1.BookNewDetail_info
-# print(ddd)
-# BookNewDetail1.bookChoose("Banner")
-# print(BookNewDetail1.BookNewDetail_info)
-# dd=BookNewDetail1.poco("TitleScr").offspring("BookTitle").get_TMPtext()
-# print(dd)
-# BookNewDetail1.bookChoose("Weekly","1")

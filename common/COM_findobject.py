@@ -365,8 +365,3 @@ class CommonPoco(CommonDevices):
                         return False
         except:
             pass
-# CommonPoco1=CommonPoco()
-# POCO=CommonPoco1.poco("CoverMask").child("Text")
-# if POCO.exists():
-#     print("ddddddddddddddddddddddddddddd")
-# CommonPoco1.poco("")

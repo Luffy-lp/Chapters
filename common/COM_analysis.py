@@ -1,3 +1,4 @@
+from common.COM_data import MyData
 import inspect
 import re
 import sys
@@ -8,7 +9,6 @@ from common.COM_path import *
 import importlib
 from time import sleep
 from common.COM_path import *
-from common.COM_data import MyData
 from airtest.core.api import assert_equal
 from airtest.report.report import simple_report
 from scenes.scenes_login.SCN_gamestart import GameStart
@@ -144,5 +144,4 @@ class MyAnalysis():
                 self.Runlist.append(item)
             self.Runlist_dir[k] = self.Runlist
             self.Runlist = []
-# MyAnalysis1=MyAnalysis()
-# MyAnalysis1.yaml_data_popup(MyAnalysis1.Popuopath)
+

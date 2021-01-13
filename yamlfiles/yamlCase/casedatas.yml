@@ -13,12 +13,12 @@
         - case.case_test
     step:
 #        - ${test_uninstallGame()}
-        - ${test_installGame()}
-        - ${test_startgame()}
-        - ${test_newUserGuide()}
-        - ${test_discoverPopup()}
+#        - ${test_installGame()}
+#        - ${test_startgame()}
+#        - ${test_newUserGuide()}
+#        - ${test_discoverPopup()}
         - ${pageTurn(4)}
-        - ${test_signin()}
+#        - ${test_signin()}
 
 - 1:
     caseauthor: "lipeng"
@@ -31,26 +31,26 @@
     step:
         - ${pageTurn(0)}
         - ${test_bookchoose(Weekly, 0)}
+#        - ${test_bookPlay()}
+#        - ${test_bookread(10001)}
         - ${test_bookPlay()}
         - ${test_bookread()}
-#        - ${test_bookPlay()}
-#        - ${test_bookread()}
         - ${pageTurn()}
 #
-- 2:
-    caseauthor: "lipeng"
-    casename: "短信小说创作和阅读"
-    casedec: "短信小说创作和阅读"
-    repeattime: "3"
-    reportname: "短信小说创作和阅读"
-    import_module_functions:
-        - case.case_test
-    step:
-        - ${pageTurn(2)}
-        - ${test_Creation()}
-        - ${test_ChapterEdit(lipengBook)}
-        - ${test_chooseUGCBook(0, 1)}
-        - ${test_ReadUGCBook(2)}
+#- 2:
+#    caseauthor: "lipeng"
+#    casename: "短信小说创作和阅读"
+#    casedec: "短信小说创作和阅读"
+#    repeattime: "3"
+#    reportname: "短信小说创作和阅读"
+#    import_module_functions:
+#        - case.case_test
+#    step:
+#        - ${pageTurn(2)}
+#        - ${test_Creation()}
+#        - ${test_ChapterEdit(lipengBook)}
+#        - ${test_chooseUGCBook(0, 1)}
+#        - ${test_ReadUGCBook(2)}
 #- 0:
 #    caseauthor: "江浚朋"
 #    casename: "个人信息"
