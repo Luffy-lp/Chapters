@@ -351,17 +351,15 @@ class CommonPoco(CommonDevices):
                     raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
 
     def heartBeat(self):
-        print("文本框检查")
         sleep(3)
-        self.updatePoP()
+        self.UIAlterPoP()
 
     def mysleep(self, sleeptime:float):
         """会根据设备或其他情况延迟睡眠时间方法"""
         mytime = float(MyData.ConfData_dir["sleepLevel"]) + sleeptime
         sleep(mytime)
-    def updatePoP(self):
+    def UIAlterPoP(self):
         if self.find_try("AlterView",description="文本弹框",waitTime=1):
-            print("文本弹框")
             txt = self.poco("UIAlter").child("AlterView").child("Title").get_TMPtext()
             print("弹框类型：", txt)
             mylog.info("发现-【{}】-类型弹框".format(txt))

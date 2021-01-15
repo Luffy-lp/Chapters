@@ -11,7 +11,7 @@ class Discover(CommonPoco):
         poplist = MyData.popup_dir[0]
         for k in poplist:
             if k["args"][0]=="UIAlter":
-                self.heartBeat()
+                self.UIAlterPoP()
             if k["args"][0]=="UIGiftPopup":
                 if self.find_try("UIGiftPopup", "推送礼包", 0.2, tryTime=1, sleeptime=2):
                     self.findClick_try("GiftShake", "GiftBag3", "礼物", 0.2, tryTime=1, sleeptime=2)

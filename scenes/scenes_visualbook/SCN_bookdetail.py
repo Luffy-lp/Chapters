@@ -20,7 +20,7 @@ class BookNewDetail(CommonPoco):
         poplist = MyData.popup_dir[1]
         for k in poplist:
             if k["args"][0]=="UIAlter":
-                self.heartBeat()
+                self.UIAlterPoP()
             if k["args"][0]=="UIPassGuide":
                 while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
                     self.findClick_object("UIPassGuide", "Close", description="Close按钮")
