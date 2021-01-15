@@ -57,13 +57,14 @@ class Shopmodule(Shop):
         increment = MyData.UserData_dir["diamond"]
         self.click_ticket_enter()
         self.click_buy_diamond(nString)
-        time.sleep(5)
+        self.mysleep(3)
+        self.click_pay()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[0]
             self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
-            time.sleep(5)
-        self.click_pay()
-        time.sleep(5)
+            self.mysleep(3)
+            self.click_pay()
+        self.mysleep(3)
         self.click_claim_shop()
         self.click_top_back()
         # 购买完后展示用户信息

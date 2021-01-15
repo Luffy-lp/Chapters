@@ -85,7 +85,7 @@ class Shop(CommonPoco):
 
     def click_pay(self):
         """点击确认支付"""
-        androidpoco=self.androidpoco("android.widget.LinearLayout").child("android.widget.FrameLayout").offspring("android:id/content").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated")[0].child("com.android.vending:id/0_resource_name_obfuscated")[3].child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").wait(5)
+        androidpoco=self.androidpoco(text="一键购买").wait(5)
         self.findClick_childobject(androidpoco,description="一律购买/订阅",waitTime=3,sleeptime=1)
         # pos = [0.5, 0.96]
         # print("pos",pos)
