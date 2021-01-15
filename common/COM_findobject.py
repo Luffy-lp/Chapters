@@ -47,6 +47,7 @@ class CommonPoco(CommonDevices):
 
     def find_object(self, findName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """寻找目标"""
+        waitTime=waitTime+5
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
@@ -64,25 +65,26 @@ class CommonPoco(CommonDevices):
 
     def findClick_object(self, findName, ClickName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """用寻找目标，后并点击"""
+        waitTime=waitTime+5
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
                 print("正在寻找{0}".format(description))
-                gameobject = self.poco(findName)
-                if gameobject.wait(waitTime).exists():
-                    mylog.info("查找前提条件元素-【{}】--成功".format(findName))
-                    if self.poco(ClickName).exists():
-                        print("发现{0}点击元素，并点击".format(description))
-                        mylog.info("查找点击-【{}】--元素成功".format(description))
-                        self.poco(ClickName).click()
-                        mylog.info("点击元素-【{}】--成功".format(description))
-                        sleep(sleeptime)
-                        return True
-                    else:
-                        print("查找{0}失败".format(description))
-                        mylog.error("查找点击元素-【{}】--失败".format(findName))
+                # gameobject = self.poco(findName)
+                # if self.poco(findName).wait(waitTime).exists():
+                #     mylog.info("查找前提条件元素-【{}】--成功".format(findName))
+                if self.poco(ClickName).wait(waitTime).exists():
+                    print("发现{0}点击元素，并点击".format(description))
+                    mylog.info("查找点击-【{}】--元素成功".format(description))
+                    self.poco(ClickName).click()
+                    mylog.info("点击元素-【{}】--成功".format(description))
+                    sleep(sleeptime)
+                    return True
                 else:
-                    mylog.error("查找前提条件元素-【{}】--失败".format(findName))
+                    print("查找{0}失败".format(description))
+                    mylog.error("查找点击元素-【{}】--失败".format(findName))
+                # else:
+                #     mylog.error("查找前提条件元素-【{}】--失败".format(findName))
             except Exception as e:
                 mylog.error("查找【{0}】出现未知错误，{1}".format(description, e))
                 return False
@@ -91,6 +93,7 @@ class CommonPoco(CommonDevices):
 
     def find_childobject(self, findPoco:poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
+        waitTime=waitTime+3
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
@@ -108,16 +111,16 @@ class CommonPoco(CommonDevices):
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def findClick_childobject(self, ClickPoco:poco, description="", waitTime=1, tryTime=1, sleeptime=0.1):
+        waitTime=waitTime+3
         """用于关联父级才能点击到的元素"""
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
-                gameobject = ClickPoco
-                if gameobject.wait(waitTime).exists():
+                if ClickPoco.wait(waitTime).exists():
                     print("发现{0}".format(description))
                     mylog.info("查找点击元素-【{}】--成功".format(description))
                     sleep(0.2)
-                    gameobject.click()
+                    ClickPoco.click()
                     sleep(sleeptime)
                     mylog.info("点击元素-【{}】--成功".format(description))
                     return True
@@ -132,7 +135,7 @@ class CommonPoco(CommonDevices):
     def click_object(self, clickName, waitTime=1, description="", sleeptime=0.3):
         """直接点击，不存在会报错"""
         try:
-            self.poco(clickName).click()
+            self.poco(clickName).wait(waitTime).click()
             mylog.info("点击元素-【{}】--成功".format(description))
             sleep(sleeptime)
             return True
@@ -223,10 +226,10 @@ class CommonPoco(CommonDevices):
             tryTime = tryTime - 1
             try:
                 print("尝试寻找{0}".format(description))
-                gameobject = self.poco(findName)
-                if gameobject.wait(waitTime).exists():
+                # gameobject = self.poco(findName)
+                if self.poco(findName).wait(waitTime).exists():
                     print("发现{0}".format(description))
-                    if self.poco(ClickName).exists():
+                    if self.poco(ClickName).wait(waitTime+1).exists():
                         print("发现{0}按钮，并点击".format(ClickName))
                         self.poco(ClickName).click()
                         sleep(sleeptime)
@@ -241,129 +244,130 @@ class CommonPoco(CommonDevices):
                 mylog.error("尝试点击-【{}】-元素失败".format(description))
                 return False
 
-    def findClick_Image(self, filename, record_pos, description="", resolution=(1600, 2560), tryTime=1):
+    def findClick_Image(self, filename, record_pos, description="", resolution=(1600, 2560), tryTime=1,waitTime=5):
         width = G.DEVICE.display_info['width']
         height = G.DEVICE.display_info['height']
-        scale = height / width
-        if scale > 1.5 and scale < 2.0:
-            resolution = (1600, 2560)
-            filename = "16_9" + filename
-        elif scale > 2.0:
-            resolution = (1080, 2340)
-            filename = "16_9" + filename
-        else:
-            resolution = (720, 1080)
-            filename = "16_9" + filename
+        # scale = height / width
+        # if scale > 1.5 and scale < 2.0:
+        #     resolution = (1600, 2560)
+        #     filename = "16_9" + filename
+        # elif scale > 2.0:
+        #     resolution = (1080, 2340)
+        #     filename = "16_9" + filename
+        # else:
+        #     resolution = (720, 1080)
+        #     filename = "16_9" + filename
         file_path = os.path.join(path_RESOURCE_IMAGE, filename)  # 1080, 1920
-        while (tryTime > 0):
-            tryTime = tryTime - 1
-            try:
-                touch(Template((file_path), record_pos=record_pos, resolution=resolution))
-                return True
-            except:
-                return False
-                # mylog.error("查找【{0}】出现未知错误，{1}".format(description, e))
-                mylog.error("未触发点击-【{}】-元素".format(description))
-        # log(PocoNoSuchNodeException("点击-【{}】-图片失败".format(description)), desc="点击图片失败")
-        # raise PocoNoSuchNodeException("点击-【{}】-图片失败".format(description))
-
+        # record_pos = (0.432, 0.068),
+        try:
+            pos=wait(Template((file_path), resolution=(width, height)),timeout=3)
+            touch(pos)
+            mylog.info("点击-【{}】-元素成功".format(description))
+            print("点击-【{}】-元素成功".format(description))
+            return True
+        except:return False
+        #
+        # while (tryTime > 0):
+        #     tryTime = tryTime - 1
+        #     try:
+        #         # wait(Template((file_path), record_pos=(0.039, -0.228), resolution=(1080, 1920)),timeout=waitTime):
+        #         touch(Template((file_path), record_pos=record_pos, resolution=resolution))
+        #         print("成功点击图片")
+        #         return True
+        #     except:
+        #         print("查询图片")
+        #         return False
     def findSwipe_object(self, objectName, stopPos, POCOobject, swipeTye="y", beginPos=[0.5, 0.5]):
         """滑动元素，stopPos，swipeTye，beginPos"""
-        find_element = POCOobject.wait(1)
+        find_element = POCOobject.wait(5)
         swipe_time = 0
         clock()  # 插入计时器
         if swipeTye == "y":
             # snapshot(msg="找到目标元素结果: " + str(find_element.exists()))
-            print(clock("stop"))
-            if float(clock("stop")) > 30:
-                log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
-                raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
-            if find_element.exists():
-                # 将元素滚动到屏幕中间
-                position1 = find_element.get_position()
-                x, y = position1
-                print("x:", x)
-                print("y:", y)
-                if y < stopPos + 0.1 and y > stopPos - 0.1:
-                    return True
-                if y < stopPos:
-                    # 元素在上半页面，向下滑动到中间
-                    print("元素在上半页面")
-                    Pos = beginPos[1] + (stopPos - y)
-                    Pos = 1.5 if Pos > 1.5 else Pos
-                    self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], Pos], duration=2.0)
+            while True:
+                print(clock("stop"))
+                if float(clock("stop")) > 30:
+                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
+                    raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
+                if find_element.exists():
+                    # 将元素滚动到屏幕中间
+                    position1 = find_element.get_position()
+                    x, y = position1
+                    print("x:", x)
+                    print("y:", y)
+                    if y < stopPos + 0.1 and y > stopPos - 0.1:
+                        return True
+                    if y < stopPos:
+                        # 元素在上半页面，向下滑动到中间
+                        print("元素在上半页面")
+                        Pos = beginPos[1] + (stopPos - y)
+                        Pos = 1.5 if Pos > 1.5 else Pos
+                        self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], Pos], duration=2.0)
+                    else:
+                        print("元素在下半页面")
+                        self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], beginPos[1] - (y - stopPos)],
+                                        duration=2.0)
+                    # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
+                    find_ele = True
+                elif swipe_time < 30:
+                    self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
+                    # poco.swipe((50, 800), (50, 200), duration=500)
+                    swipe_time = swipe_time + 1
                 else:
-                    print("元素在下半页面")
-                    self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], beginPos[1] - (y - stopPos)],
-                                    duration=2.0)
-                # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
-                find_ele = True
-            elif swipe_time < 30:
-                self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
-                # poco.swipe((50, 800), (50, 200), duration=500)
-                swipe_time = swipe_time + 1
-            else:
-                log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
-                raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
+                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
+                    raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
         else:
-            print(clock("stop"))
-            if float(clock("stop")) > 30:
-                log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
-                raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
-            if find_element.exists():
-                # 将元素滚动到屏幕中间
-                position1 = find_element.get_position()
-                x, y = position1
-                print("x:", x)
-                print("y:", y)
-                if x < stopPos + 0.1 and x > stopPos - 0.1:
-                    return True
-                if x < stopPos:
-                    # 元素在左半页面，向右滑动到中间
-                    print("元素在左半页面")
-                    Pos = beginPos[0] + (stopPos - x)
-                    Pos = -0.5 if Pos < -0.5 else Pos
-                    self.poco.swipe([beginPos[0], beginPos[1]], [Pos, beginPos[1]], duration=2.0)
+            while True:
+                print(clock("stop"))
+                if float(clock("stop")) > 30:
+                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
+                    raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
+                if find_element.exists():
+                    # 将元素滚动到屏幕中间
+                    position1 = find_element.get_position()
+                    x, y = position1
+                    print("x:", x)
+                    print("y:", y)
+                    if x < stopPos + 0.1 and x > stopPos - 0.1:
+                        return True
+                    if x < stopPos:
+                        # 元素在左半页面，向右滑动到中间
+                        print("元素在左半页面")
+                        Pos = beginPos[0] + (stopPos - x)
+                        Pos = -0.5 if Pos < -0.5 else Pos
+                        self.poco.swipe([beginPos[0], beginPos[1]], [Pos, beginPos[1]], duration=2.0)
+                    else:
+                        print("元素在右半页面")
+                        self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0] - (x - stopPos), beginPos[1]],
+                                        duration=2.0)
+                    # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
+                    find_ele = True
+                elif swipe_time < 30:
+                    self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
+                    # poco.swipe((50, 800), (50, 200), duration=500)
+                    swipe_time = swipe_time + 1
                 else:
-                    print("元素在右半页面")
-                    self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0] - (x - stopPos), beginPos[1]],
-                                    duration=2.0)
-                # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
-                find_ele = True
-            elif swipe_time < 30:
-                self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
-                # poco.swipe((50, 800), (50, 200), duration=500)
-                swipe_time = swipe_time + 1
-            else:
-                log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
-                raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
+                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
+                    raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
 
     def heartBeat(self):
-        print("文本框检查")
-        sleep(5)
-        self.updatePoP()
+        sleep(3)
+        self.UIAlterPoP()
 
     def mysleep(self, sleeptime:float):
         """会根据设备或其他情况延迟睡眠时间方法"""
         mytime = float(MyData.ConfData_dir["sleepLevel"]) + sleeptime
         sleep(mytime)
-
-    def updatePoP(self):
-        try:
-            if self.poco("UIAlter").wait(0.5).attr("visible"):
-                print("发现UIAlter")
-                if self.poco("AlterView").wait(0.5).attr("visible") == True:
-                    print("发现提醒弹框")
-                    txt = self.poco("UIAlter").child("AlterView").child("Title").get_TMPtext()
-                    print("弹框类型：", txt)
-                    mylog.info("发现-【{}】-类型弹框".format(txt))
-                    Btn = self.AlterTxt.get(txt)
-                    self.Popuplist.append(txt)
-                    print("点击按钮", Btn)
-                    try:
-                        self.poco(Btn).click()
-                    except:
-                        print("未成功点击按钮")
-                        return False
-        except:
-            pass
+    def UIAlterPoP(self):
+        if self.find_try("AlterView",description="文本弹框",waitTime=1):
+            txt = self.poco("UIAlter").child("AlterView").child("Title").get_TMPtext()
+            print("弹框类型：", txt)
+            mylog.info("发现-【{}】-类型弹框".format(txt))
+            Btn = self.AlterTxt.get(txt)
+            self.Popuplist.append(txt)
+            print("点击按钮", Btn)
+            try:
+                self.poco(Btn).click()
+            except:
+                print("未成功点击按钮")
+                return False

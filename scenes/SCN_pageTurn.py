@@ -11,7 +11,7 @@ class PageTurn(CommonPoco):
         index = str(index)
 
         if self.find_object("Bottom", description="底部跳转",waitTime=3):
-            Bottom = self.poco("Bottom").child(index).wait(2)
+            Bottom = self.poco("Bottom").child(index)
             self.findClick_childobject(Bottom, description="底部跳转到" + index, waitTime=2)
             if index == "0":  # 如果跳转到大厅后需要检查弹框
                 myDiscover = Discover()
