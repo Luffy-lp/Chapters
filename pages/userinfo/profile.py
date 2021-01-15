@@ -659,4 +659,4 @@ class Profile(CommonPoco):
         """编辑界面的back按钮"""
         editPOCO = self.poco("UIProfileEdit").offspring("Back")
         self.findClick_childobject(editPOCO, description="编辑面Back按钮", waitTime=3)
-
+print("20点54分")
