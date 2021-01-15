@@ -639,25 +639,24 @@ class Profile(CommonPoco):
         """选择Friends可以看见"""
         privacyPOCO = self.poco("Options").child("Button(Clone)")[1].child("Text")
         self.findClick_childobject(privacyPOCO, description="选项朋友可见", waitTime=3)
-        print("adasa1111111111111d")
 
     def click_off(self):
         """选择Off"""
         privacyPOCO = self.poco("Options").child("Button(Clone)")[2].child("Text")
-        self.findClick_childobject(privacyPOCO, description="选项关闭", waitTime=1)
+        self.findClick_childobject(privacyPOCO, description="选项关闭", waitTime=3)
 
     def click_cancel(self):
         """选择取消"""
         privacyPOCO = self.poco("Buttons").child("Cancel")
-        self.findClick_childobject(privacyPOCO, description="取消选项", waitTime=1)
+        self.findClick_childobject(privacyPOCO, description="取消选项", waitTime=3)
 
     def click_logout(self):
         """点击退出登录"""
         editPOCO = self.poco("Content").child("LogOut")
-        self.findClick_childobject(editPOCO, description="Logout按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="Logout按钮", waitTime=3)
 
     def click_editback(self):
         """编辑界面的back按钮"""
         editPOCO = self.poco("UIProfileEdit").offspring("Back")
-        self.findClick_childobject(editPOCO, description="编辑面Back按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="编辑面Back按钮", waitTime=3)
 
