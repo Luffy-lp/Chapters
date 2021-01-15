@@ -39,6 +39,7 @@ class SignIn(CommonPoco):
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "Google":
             self.click_Google()
             self.mysleep(8)
+            print("测试是否更新")
             if self.android_tryfind("android.widget.FrameLayout", description="Google绑定", waitTime=3):
                 try:
                     listname = self.androidpoco("com.google.android.gms:id/account_name").wait(5)
