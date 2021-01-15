@@ -29,7 +29,7 @@ class GameLoaded(CommonPoco):
         # self.find_object("LoadingPanel", description="游戏加载界面", sleeptime=1)
         while self.poco("Slider").wait(1).exists():
             self.Popo_Errorinfo()
-            self.Popup_login(login=0)
+            self.Popup_login(login=1)
             mytime = float(COM_utilities.clock("stop"))
             if mytime > 120:
                 print("游戏加载失败。。。")
@@ -41,18 +41,20 @@ class GameLoaded(CommonPoco):
         print("完成游戏加载，加载时间为{0}秒".format(loadtime))
         return True
 
-    def Popup_login(self, login=0):
-        """游戏进入界面弹框处理,处理登陆1，不处理0"""
+    def Popup_login(self, login=1):
+        """游戏进入界面弹框处理,0无弹框，1，有弹框跳过，2，有弹框点击登录"""
+        if login==0:
+            return
         if self.find_try("LoginGuide_LoginCtrl", description="游戏登陆弹框", waitTime=2):  # 登陆弹框
             sleep(2)
-            if login == 0:
+            if login == 1:
                 try:
                     self.findClick_object("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,
                                           sleeptime=2)
                 finally:
                     self.findClick_object("StartGame", "StartGame", description="点击Play Now按钮", waitTime=2)
                     self.GameLoaded_info["游戏登陆弹框"] = "跳过登陆"
-            elif login == 1:
+            elif login == 2:
                 SignIn1 = SignIn()
                 SignIn1.loginGuide_login_process()
                 sleep(3)

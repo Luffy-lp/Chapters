@@ -48,19 +48,20 @@ def test_installGame():
     assert_equal(myGameStart.GameStart_info["安装apk"], True, "安装游戏")
 
 
-def test_startgame():
+def test_startgame(login):
     """启动游戏"""
     myGameStart = GameStart()
     stopGame = myGameStart.stopGame()
     myGameStart.starGame(8)
     assert_equal(myGameStart.isStarGame, True, "启动游戏{0}".format(myGameStart.GameStart_info))
     myGameLoaded = GameLoaded()
-    actualValue = myGameLoaded.mainprocess(login=0)
+    actualValue = myGameLoaded.mainprocess(login=login)
     assert_equal(actualValue, True, "加载游戏详情{0}".format(myGameLoaded.GameLoaded_info))
     sleep(3)
 
 
 def test_discoverPopup():
+    """大厅弹框"""
     myDiscover = Discover()
     discoverPopup = myDiscover.discoverPopup()
     assert_equal(True, discoverPopup[0], "大厅弹框列表{0}".format(discoverPopup[1]))
