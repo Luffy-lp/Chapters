@@ -16,17 +16,17 @@ class Profile(CommonPoco):
     def click_profile_page(self):
         """跳转到个人信息页面"""
         #底部栏的操作
-        perPOCO = self.poco("Bottom").child("4")
+        perPOCO = self.poco("Bottom").child("4").wait(5)
         self.findClick_childobject(perPOCO, description="Profile按钮", waitTime=1)
 
     def click_profile(self):
         """点击个人信息的Profile"""
-        perPOCO = self.poco("ToptGroup").child("Profile")
+        perPOCO = self.poco("ToptGroup").child("Profile").wait(3)
         self.findClick_childobject(perPOCO, description="个人信息按钮", waitTime=1)
 
     def click_achievement(self):
         """点击个人信息的achievement"""
-        AchievementPOCO=self.poco("ToptGroup").child("Achievement").child("Label")
+        AchievementPOCO=self.poco("ToptGroup").child("Achievement").child("Label").wait(3)
         self.findClick_childobject(AchievementPOCO, description="achievement按钮", waitTime=1)
 
     def click_Following(self):

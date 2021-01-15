@@ -241,7 +241,7 @@ class CommonPoco(CommonDevices):
                 mylog.error("尝试点击-【{}】-元素失败".format(description))
                 return False
 
-    def findClick_Image(self, filename, record_pos, description="", resolution=(1600, 2560), tryTime=1):
+    def findClick_Image(self, filename, record_pos, description="", resolution=(1600, 2560), tryTime=1,waitTime=5):
         width = G.DEVICE.display_info['width']
         height = G.DEVICE.display_info['height']
         scale = height / width
@@ -257,16 +257,11 @@ class CommonPoco(CommonDevices):
         file_path = os.path.join(path_RESOURCE_IMAGE, filename)  # 1080, 1920
         while (tryTime > 0):
             tryTime = tryTime - 1
-            try:
+            if wait(Template((file_path), record_pos=(0.039, -0.228), resolution=(1080, 1920)),timeout=waitTime):
                 touch(Template((file_path), record_pos=record_pos, resolution=resolution))
                 return True
-            except:
+            else:
                 return False
-                # mylog.error("查找【{0}】出现未知错误，{1}".format(description, e))
-                mylog.error("未触发点击-【{}】-元素".format(description))
-        # log(PocoNoSuchNodeException("点击-【{}】-图片失败".format(description)), desc="点击图片失败")
-        # raise PocoNoSuchNodeException("点击-【{}】-图片失败".format(description))
-
     def findSwipe_object(self, objectName, stopPos, POCOobject, swipeTye="y", beginPos=[0.5, 0.5]):
         """滑动元素，stopPos，swipeTye，beginPos"""
         find_element = POCOobject.wait(1)

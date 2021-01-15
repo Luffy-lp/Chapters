@@ -32,7 +32,7 @@ class ChapterEdit(CommonPoco):
         """顶部按钮 Back：返回按钮，Guide：帮助按钮，Edit：设置书籍完结"""
         if type == "Edit":
             self.click_object("BtnEdit", description="操作书籍")
-            POCOend = self.poco("Options").child("Button(Clone)")[0]
+            POCOend = self.poco("Options").child("Button(Clone)")[0].wait(5)
             self.findClick_childobject(POCOend, description="设置书籍完结", sleeptime=3)
         if type == "Guide":
             self.click_object("BtnGuide", description="帮助按钮")

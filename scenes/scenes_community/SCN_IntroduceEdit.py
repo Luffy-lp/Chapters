@@ -55,9 +55,6 @@ class IntroduceEdit(CommonPoco):
         # for i in range(10):
         #     keyevent("67")
         text(bookname)
-        # poco("TxtCategory")
-        # pos1600= (0.448, 0.232)
-        # pos1080=(0.431, 0.168)
         if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
             pass
         else:
@@ -161,4 +158,5 @@ class IntroduceEdit(CommonPoco):
         #     chapters_self.click_object("CenterBtn", description="不审核")
         #     self.topBar("Back")
 
-
+IntroduceEdit1=IntroduceEdit()
+IntroduceEdit1.editTitle("ddddddddddd")
