@@ -226,11 +226,11 @@ class Profile(CommonPoco):
 
     def click_choose_avatar(self):
         """初始进入默认展示，没有移动"""
-        x = random.randint(0,1)
+        x = 0
         y = random.randint(0,2)
         print(x,y)
         bgroundPOCO = self.poco("PerRoleItems(Clone)")[x].child("PerRoleItem")[y]
-        self.findClick_childobject(bgroundPOCO, description="0.0", waitTime=1)
+        self.findClick_childobject(bgroundPOCO, description="随机角色形象", waitTime=1)
         self.Profile_info["_instanceId"] = bgroundPOCO.attr("_instanceId")
         return self.Profile_info["_instanceId"]
         #采用图片来匹配方法
@@ -409,110 +409,110 @@ class Profile(CommonPoco):
     def click_back(self):
         """背景部分编辑的点击返回"""
         if self.find_try("Back",description="背景部分的返回按钮"):
-            self.click_object("Back")
+            self.click_object("Back",waitTime=3,description="返回按钮")
 
     def click_accept_popups(self):
         """检测是否有弹窗提醒选择保存否--接受保存"""
         if self.find_try("LeftBtn",description="检测是否有弹框提醒保存"):
-            self.click_object("LeftBtn")
+            self.click_object("LeftBtn",waitTime=3,description="接受保存")
 
     def click_refuse_popups(self):
         """检测是否有弹窗提醒选择保存否--拒绝保存"""
         if self.find_try("RightBtn2",description="检测是否有弹框提醒保存"):
-            self.click_object("RightBtn2")
+            self.click_object("RightBtn2",waitTime=3,description="拒绝保存")
 
     def click_qipao(self):
         """点击气泡"""
         qipaoPOCO = self.poco("Qipao").child("BubbleHead")
-        self.findClick_childobject(qipaoPOCO, description="气泡按钮", waitTime=1)
+        self.findClick_childobject(qipaoPOCO, description="气泡按钮", waitTime=3)
 
     #气泡界面
     def click_qpback(self):
         """在气泡界面点击返回"""
         qipaoPOCO = self.poco("BubbleView").child("Back")
-        self.findClick_childobject(qipaoPOCO, description="返回按钮", waitTime=1)
+        self.findClick_childobject(qipaoPOCO, description="返回按钮", waitTime=3)
 
     #进入订阅界面
     def click_homepage(self):
         """点击homepage按钮"""
         AchievementPOCO=self.poco("Free").child("Button")
-        self.findClick_childobject(AchievementPOCO, description="homepage按钮", waitTime=1)
+        self.findClick_childobject(AchievementPOCO, description="homepage按钮", waitTime=3)
     #订阅界面
     def click_topq(self):
         """点击rules"""
         topbackPOCO = self.poco("Top").child("QBackBtn")
-        self.findClick_childobject(topbackPOCO, description="Rules", waitTime=1)
+        self.findClick_childobject(topbackPOCO, description="Rules", waitTime=3)
 
     def click_mlcoin(self):
         """点击枫叶币"""
         coinbtnPOCO = self.poco("Viewport").offspring("Image")
-        self.findClick_childobject(coinbtnPOCO, description="枫叶币", waitTime=1)
+        self.findClick_childobject(coinbtnPOCO, description="枫叶币", waitTime=3)
 
     def click_entersubs(self):
         """点击订阅"""
         subscribePOCO = self.poco("Viewport").offspring("SubscribeBtn")
-        self.findClick_childobject(subscribePOCO, description="订阅按钮", waitTime=1)
+        self.findClick_childobject(subscribePOCO, description="订阅按钮", waitTime=3)
 
     def click_subscribe(self):
         """点击订阅"""
         subsPOCO = self.poco("Main").child("SubBtn")
-        self.findClick_childobject(subsPOCO, description="订阅按钮", waitTime=1)
+        self.findClick_childobject(subsPOCO, description="订阅按钮", waitTime=3)
 
     def click_firstsubs(self):
         """第一次订阅"""
         subsPOCO = self.poco("UISubscribe_New").offspring("FirstSubBtn")
-        self.findClick_childobject(subsPOCO, description="订阅按钮", waitTime=1)
+        self.findClick_childobject(subsPOCO, description="订阅按钮", waitTime=3)
 
     def click_rulesclose(self):
         """Rules关闭"""
         closePOCO = self.poco("UIMemberExplain").child("CloseBtn")
-        self.findClick_childobject(closePOCO, description="关闭按钮", waitTime=1)
+        self.findClick_childobject(closePOCO, description="关闭按钮", waitTime=3)
 
     #进入编辑界面
     def click_edit(self):
         """点击Edit按钮"""
         editPOCO = self.poco("UserInfoVeiw").child("Edit").wait(3)
-        self.findClick_childobject(editPOCO, description="Edit按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="Edit按钮", waitTime=3)
     #进入头像编辑界面
     def click_head(self):
         """编辑头像"""
         editPOCO = self.poco("Content").child("Head")
-        self.findClick_childobject(editPOCO, description="head编辑按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="head编辑按钮", waitTime=3)
 
     def click_resetbt(self):
         """点击重置按钮"""
         editPOCO = self.poco("UISetUserHead").child("Tip")
-        self.findClick_childobject(editPOCO, description="重置按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="重置按钮", waitTime=3)
 
     def click_game_avatar(self):
         """点击Game Avatar按钮"""
         editPOCO = self.poco("Toggle").child("Avatar")
-        self.findClick_childobject(editPOCO, description="Game Avatar按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="Game Avatar按钮", waitTime=3)
 
     def click_avatar_frame(self):
         """点击Avatar Frame按钮"""
         editPOCO = self.poco("Toggle").child("Frame")
-        self.findClick_childobject(editPOCO, description="Avatar Frame按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="Avatar Frame按钮", waitTime=3)
 
     def click_headportrait(self):
         """点击头像1"""
         editPOCO = self.poco("AvatarView").offspring("dd474eb3d139375b83cd2b6da2acf189")
-        self.findClick_childobject(editPOCO, description="头像1", waitTime=1)
+        self.findClick_childobject(editPOCO, description="头像1", waitTime=3)
 
     def click_headframe(self):
         """点击头像框1"""
         editPOCO = self.poco("FrameView").offspring("fab459563687245526e4b40490d53d70")
-        self.findClick_childobject(editPOCO, description="头像框1", waitTime=1)
+        self.findClick_childobject(editPOCO, description="头像框1", waitTime=3)
 
     def click_headback(self):
         """点击返回"""
         editPOCO = self.poco("UISetUserHead").offspring("Back")
-        self.findClick_childobject(editPOCO, description="返回按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="返回按钮", waitTime=3)
 
     def click_name(self):
         """编辑name"""
         editPOCO = self.poco("Content").child("Name")
-        self.findClick_childobject(editPOCO, description="name编辑按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="name编辑按钮", waitTime=3)
 
     def editNickname(self, Nickname):
         """编辑name文本"""
@@ -526,7 +526,7 @@ class Profile(CommonPoco):
     def click_region(self):
         """编辑region信息"""
         editPOCO = self.poco("Content").child("Region")
-        self.findClick_childobject(editPOCO, description="Region按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="Region按钮", waitTime=3)
 
     def click_select_region(self):
         """选择Region"""
@@ -544,7 +544,7 @@ class Profile(CommonPoco):
     def click_school(self):
         """编辑School信息"""
         editPOCO = self.poco("Content").child("School")
-        self.findClick_childobject(editPOCO, description="编辑School按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="编辑School按钮", waitTime=3)
 
     def editSchooltext(self, School):
         """编辑School文本"""
@@ -556,7 +556,7 @@ class Profile(CommonPoco):
     def click_bio(self):
         """编辑Bio的信息"""
         editPOCO = self.poco("Content").child("Bio")
-        self.findClick_childobject(editPOCO, description="编辑Bio按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="编辑Bio按钮", waitTime=3)
 
     def editBiotext(self, Bio):
         """编辑Bio文本"""
@@ -575,7 +575,7 @@ class Profile(CommonPoco):
     def click_pricacy(self):
         """编辑Pricacy的相关设置"""
         editPOCO = self.poco("Content").child("Pricacy")
-        self.findClick_childobject(editPOCO, description="编辑Pricacy设置按钮", waitTime=1)
+        self.findClick_childobject(editPOCO, description="编辑Pricacy设置按钮", waitTime=3)
 
     def click_pricacy_set1(self):
         """privacy的设置项一"""
@@ -633,12 +633,13 @@ class Profile(CommonPoco):
     def click_everyone(self):
         """选择Everyone可以看见"""
         privacyPOCO = self.poco("Options").child("Button(Clone)")[0].child("Text")
-        self.findClick_childobject(privacyPOCO, description="选项所有人可见", waitTime=1)
+        self.findClick_childobject(privacyPOCO, description="选项所有人可见", waitTime=3)
 
     def click_friends(self):
         """选择Friends可以看见"""
         privacyPOCO = self.poco("Options").child("Button(Clone)")[1].child("Text")
-        self.findClick_childobject(privacyPOCO, description="选项朋友可见", waitTime=1)
+        self.findClick_childobject(privacyPOCO, description="选项朋友可见", waitTime=3)
+        print("adasa1111111111111d")
 
     def click_off(self):
         """选择Off"""
