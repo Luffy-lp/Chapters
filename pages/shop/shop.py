@@ -85,8 +85,8 @@ class Shop(CommonPoco):
 
     def click_pay(self):
         """点击确认支付"""
-        androidpoco=self.androidpoco("android.widget.LinearLayout").child("android.widget.FrameLayout").offspring("android:id/content").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated")[0].child("com.android.vending:id/0_resource_name_obfuscated")[3].child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated")
-        self.findClick_childobject(androidpoco,description="一律购买/订阅",waitTime=1,sleeptime=1)
+        androidpoco=self.androidpoco("android.widget.LinearLayout").child("android.widget.FrameLayout").offspring("android:id/content").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated")[0].child("com.android.vending:id/0_resource_name_obfuscated")[3].child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").wait(5)
+        self.findClick_childobject(androidpoco,description="一律购买/订阅",waitTime=3,sleeptime=1)
         # pos = [0.5, 0.96]
         # print("pos",pos)
         # pos = PosTurn(pos)
@@ -94,7 +94,7 @@ class Shop(CommonPoco):
 
     def click_claim_shop(self):
         """点击确认商品"""
-        shopPOCO = self.poco("UIClaimReward").offspring("Txt")
+        shopPOCO = self.poco("UIClaimReward").offspring("Txt").wait(5)
         self.findClick_childobject(shopPOCO, description="确认按钮", waitTime=1)
 
     def xxxx(self):

@@ -33,13 +33,13 @@ class Shopmodule(Shop):
         increment = MyData.UserData_dir["ticket"]
         self.click_ticket_enter()
         self.click_buy_ticket(nString)
-        sleep(5)
-        if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
-            androidpoco=self.androidpoco("android.widget.RadioButton")[0]
-            self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
-            time.sleep(5)
+        self.mysleep(5)
         self.click_pay()
-        time.sleep(5)
+        if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
+            androidpoco=self.androidpoco("android.widget.RadioButton")[1]
+            self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
+            self.click_pay()
+        time.sleep(2)
         self.click_claim_shop()
         self.click_top_back()
         # 购买完后展示用户信息
@@ -52,7 +52,7 @@ class Shopmodule(Shop):
         return self.Shopmodule_info
 
     def buy_diamond_step(self,nString=""):
-        """购买钻石步骤"""
+        """购买钻石步骤 商品ID"""
         MyData.getUsercurrency()
         increment = MyData.UserData_dir["diamond"]
         self.click_ticket_enter()
