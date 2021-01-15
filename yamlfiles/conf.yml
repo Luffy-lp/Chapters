@@ -1,26 +1,26 @@
 #如果非绑定测试只需要需要填写device_id
 #目前未接三方SDK无法获取到绑定用户的id，只能手动填写uuid
 #默认MINITOUCH，部分手机需要配touch_method=adb方式
-#登录方式Google,FaceBook loginemail: "15019423971",loginpassword: "yo5161381"
+#登录方式Google,FaceBook loginemail: "15019423971",loginpassword: "yo5161381"9889a4443354554539
+#  ADBdevice: "R9WN50H7AVJ","127.0.0.1:7555",R58MB2MWPFR,R52M90DYELT
+#  method: "?cap_method=JAVACAP&&ori_method=ADBORI&&touch_method=adb"#  uuid: "39661"
 UserData:
-  uuid: "42682"
-#  uuid: "39661"
+  uuid: "42494"
   channel_id: "AVG10005"
   device_id: "490000000326402"
   device_platform: "android"
   loginGuide: "Google"
-  loginemail: "15019423971"
+  loginemail: "lipeng66976658@gmail.com"
   loginpassword: "yo5161381"
 ConfData:
   APKpackage: "Chapters_991_8_5ff42b8d2f544.apk"
   packageName: "com.mars.avgchapters"
   ADBip: "127.0.0.1:5037"
-#  ADBdevice: "R9WN50H7AVJ","127.0.0.1:7555",R58MB2MWPFR,R52M90DYELT
   ADBdevice: "127.0.0.1:7555"
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
-#  method: "?cap_method=JAVACAP&&ori_method=ADBORI&&touch_method=adb"
   device: "android"
   sleepLevel: "0"
 APIConf:
   URL: "http://testitf.stardustgod.com/"
   Header: {"TIMECLOSE": "1"}
+devLogpath: "/storage/emulated/0/Android/data/com.mars.avgchapters/files/CompleteChapter.txt"

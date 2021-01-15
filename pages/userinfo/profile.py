@@ -471,7 +471,7 @@ class Profile(CommonPoco):
     #进入编辑界面
     def click_edit(self):
         """点击Edit按钮"""
-        editPOCO = self.poco("UserInfoVeiw").child("Edit")
+        editPOCO = self.poco("UserInfoVeiw").child("Edit").wait(3)
         self.findClick_childobject(editPOCO, description="Edit按钮", waitTime=1)
     #进入头像编辑界面
     def click_head(self):

@@ -51,15 +51,6 @@ class VisualBook(CommonPoco):
         self.Popuplist = []  # 清空之前的弹框列表
         self.ReadBook_info["异常次数"] = 0
         POS = None
-        self.getReadBook_info(MyData.UserData_dir["bookDetailInfo"]["BookID"])
-        print(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]))
-        print(int(self.ReadBook_info["chatProgress"]))
-        self.getstoryoptionslist=MyData.getstoryoptions(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]), int(self.ReadBook_info["chapterProgress"]))
-        print("getstoryoptionslist",self.getstoryoptionslist)
-        if self.getstoryoptionslist:
-            for k in self.getstoryoptionslist:
-                for k1, v1 in k.items():
-                    self.ReadBook_info["storyoption"][k1]=v1
         if self.poco("UIDialogue").wait(5).exists():
             self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2)
             touch(self._POS)
@@ -71,6 +62,15 @@ class VisualBook(CommonPoco):
             #     "find_name": [],
             #     "touch_name": {}
             # }
+            self.getReadBook_info(MyData.UserData_dir["bookDetailInfo"]["BookID"])
+            print(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]))
+            print(int(self.ReadBook_info["chapterProgress"]))
+            self.getstoryoptionslist = MyData.getstoryoptions(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]),                                                              int(self.ReadBook_info["chapterProgress"]))
+            print("getstoryoptionslist", self.getstoryoptionslist)
+            if self.getstoryoptionslist:
+                for k in self.getstoryoptionslist:
+                    for k1, v1 in k.items():
+                        self.ReadBook_info["storyoption"][k1] = v1
             while (not self.isstopRead):
                 bchatProgress = self.ReadBook_info["chatProgress"]
                 print("记录选项进度", bchatProgress)
@@ -113,13 +113,14 @@ class VisualBook(CommonPoco):
         print("上一页ID::", bchatProgress)
         print("当前页ID:", achatProgress)
         print("本章总页数:", self.ReadBook_info["chat_num"])
-        if int(achatProgress) in self.ReadBook_info["storyoption"].keys():
-            description = self.ReadBook_info["storyoption"][achatProgress][0]
-            for val in range(1, len(self.ReadBook_info["storyoption"][achatProgress])):
-                clickname = self.ReadBook_info["storyoption"][achatProgress][val]
-                print("clickname", clickname)
-                print("description", description)
-                self.findClick_object(clickname, clickname, description=description, waitTime=1, sleeptime=2)
+        if self.getstoryoptionslist:
+            if int(achatProgress) in self.ReadBook_info["storyoption"].keys():
+                description = self.ReadBook_info["storyoption"][achatProgress][0]
+                for val in range(1, len(self.ReadBook_info["storyoption"][achatProgress])):
+                    clickname = self.ReadBook_info["storyoption"][achatProgress][val]
+                    print("clickname", clickname)
+                    print("description", description)
+                    self.findClick_object(clickname, clickname, description=description, waitTime=1, sleeptime=2)
         if achatProgress == self.ReadBook_info["chat_num"]:
             touch(self._POS)
             self.dialogueEndPOP()  # 阅读结束弹框判断

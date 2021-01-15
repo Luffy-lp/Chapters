@@ -9,7 +9,7 @@ from common.COM_analysis import MyAnalysis
 from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
-
+# from  airtest.core.android.adb import *
 
 class Run(MyAnalysis):
     def __init__(self):
@@ -53,7 +53,26 @@ class Run(MyAnalysis):
             f1.truncate()
             f1.close()
         mylog.info("完成文件清空")
-
+    def pullfile(self):
+        devlogpath = os.path.join(path_LOG_MY, "devlog.txt")
+        pull = "adb pull "+MyData.UserPath_dir["devLogpath"] + " " + devlogpath
+        connected="adb.exe connect " + MyData.ConfData_dir["ADBdevice"]
+        print(connected)
+        print(pull)
+        try:
+            # print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
+            # print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
+            # sleep(8)
+            # print(os.system("D:"))
+            # print(os.system("cd D:\Pyhton3.7\lipeng\Lib\site-packages\airtest\core\android\static\adb\windows\adb.exe"))
+            print(os.system("adb devices"))
+            sleep(5)
+            print(os.system(connected))
+            sleep(5)
+            print(os.popen(pull))
+            sleep(6)
+        except:
+            pass
     def runing(self):
         CommonDevices()
         for k, v in self.Runlist_dir.items():
@@ -98,9 +117,15 @@ class Run(MyAnalysis):
 
 
 if __name__ == '__main__':
-    print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
-    print(os.system('TASKKILL /F /IM adb.exe'))# 杀死进程
-    sleep(6)
+    try:
+        print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
+        print(os.system('TASKKILL /F /IM adb.exe'))# 杀死进程
+        sleep(10)
+    except:pass
     myRun = Run()
     myRun.clear()
     myRun.runing()
+    myRun.pullfile()
+    # os._exit()
+
+

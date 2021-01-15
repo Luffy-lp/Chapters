@@ -12,6 +12,6 @@
         - ${一日三签活动弹框(UIDailyLoginRewardABTest, ClaimtBtn)}
 #        - ${宝箱弹框(UITreasureHint, sure)}
 #        - ${用户登陆奖励(UIGetOffCredit, GetBtn)}
-#        - ${游戏条款(UIPrivacyPopup, GetBtn)}
+        - ${游戏条款(UIPrivacyPopup, BtnAccept)}
 #        - ${答谢弹框(LuaUIThanksPopup, Back)}
 #        - ${内容推送弹框(UITextPopup, Btn)}

@@ -17,6 +17,7 @@ class UserData(APiClass):
         self.UserData_dir["bookDetailInfo"] = {}
         self.Bookshelf__dir = {}  # readprogressList 书籍列表
         self.ConfData_dir = {}
+        self.UserPath_dir = {}
         self.Story_cfg_chapter_dir = {}  # 章节总信息表
         self.Element_dir = {}
         self.readprogressList_dir = {}  # {'chapterProgress': 10108001, 'chatProgress': 10006}
@@ -71,6 +72,8 @@ class UserData(APiClass):
             self.ConfData_dir["device"] = data["ConfData"]["device"]
             self.ConfData_dir["method"] = data["ConfData"]["method"]
             self.ConfData_dir["sleepLevel"] = data["ConfData"]["sleepLevel"]
+            print("devLogpath",data["devLogpath"])
+            self.UserPath_dir["devLogpath"]=data["devLogpath"]
             if self.UserData_dir["uuid"] is None:
                 self.UserData_dir["uuid"] = self.registerApi5(channel_id, device_id, device_platform)["uuid"]
             print("用户ID：", self.UserData_dir["uuid"])
@@ -112,7 +115,7 @@ class UserData(APiClass):
     def yaml_stroy(self):
         storyoptionspath = os.path.join(path_YAML_FILES, "yamlstory/storyoptions.yml")
         self.storyoptions_dir = self.read_yaml(storyoptionspath)
-
+        print("self.storyoptions_dir:",self.storyoptions_dir)
     def get_story_cfg_chapter(self):
         """获取章节详情"""
         data = None
@@ -161,7 +164,12 @@ class UserData(APiClass):
     def getstoryoptions(self, stroyID, stroychapter):
         for k in self.storyoptions_dir.keys():
             if stroyID == k:
-                stroyoptionlist=self.storyoptions_dir[k][stroychapter]
-                return stroyoptionlist
+                try:
+                    stroyoptionlist=self.storyoptions_dir[k][stroychapter]
+                    print("stroyoptionlist",stroyoptionlist)
+                    return stroyoptionlist
+                except:
+                    print("无特殊选项")
+                    return None
             else:return None
 MyData = UserData()

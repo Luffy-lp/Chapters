@@ -66,25 +66,29 @@ class IntroduceEdit(CommonPoco):
 
     def editCategory(self):
         """选择类型"""
-        # poco("TxtCategory")
-        self.click_object("BtnCategory", description="选择类型")
-        try:
-            categoryItemPOCO = \
-                self.poco("LuaUIReCategory").child("Items").child("Viewport").child("Content").child("Item(Clone)")[
-                    2].wait(
-                    5)
-        except:
-            self.log.error("等待-【{}】-元素可见超时".format("选择类型"))
-        self.findClick_childobject(categoryItemPOCO, description="选择类型")
-
+        self.click_object("BtnCategory", description="选择类型",waitTime=5)
+        categoryItemPOCO=None
+        clock()
+        while categoryItemPOCO==None:
+            try:
+                categoryItemPOCO = \
+                    self.poco("LuaUIReCategory").child("Items").child("Viewport").child("Content").child("Item(Clone)")[
+                        2].wait(5)
+                self.findClick_childobject(categoryItemPOCO, description="选择类型")
+                break
+            except:
+                self.log.error("等待-【{}】-元素可见超时".format("选择类型"))
+            mytime=float(clock("stop"))
+            if mytime>20:
+                raise Exception("等待-【{}】-元素可见超时".format("选择类型"))
     def editCoverIcon(self):
         """选择封面"""
-        if self.find_object("CoverIcon", description="是否无封面"):
+        if self.find_object("CoverIcon", description="是否无封面",waitTime=5):
             self.findClick_childobject(self.poco("LuaUIIntroduceEdit").child("Cover"), description="选择封面",
                                        waitTime=2, sleeptime=2)
             POCO = self.poco("Options").child("Button(Clone)")[0]
             self.findClick_childobject(POCO, description="从我的图库中", sleeptime=2)
-            sleep(2)
+            self.mysleep(2)
             if self.android_tryfind("com.android.packageinstaller:id/permission_allow_button", description="检查开启图库权限",
                                     waitTime=3):
                 self.android_findClick("com.android.packageinstaller:id/permission_allow_button",
@@ -145,21 +149,6 @@ class IntroduceEdit(CommonPoco):
                                "com.android.gallery3d:id/filtershow_done",
                                description="点击保存",
                                waitTime=5)
-
-        # pos = COM_utilities.PosTurn((0.1, 0.1))
-        # print("选择第一个图集")
-        # touch(pos)
-        # sleep(2)
-        # pos = COM_utilities.PosTurn((0.17, 0.17))
-        # print("选择第一个图片")
-        # touch(pos)
-        # sleep(2)
-        # pos = COM_utilities.PosTurn((0.5, 0.5))
-        # touch(pos)
-        # sleep(2)
-        # pos = COM_utilities.PosTurn((0.05, 0.05))
-        # print("尝试点击上方保存按钮")
-        # touch(pos)
 
     def mainprocess(self, bookname):
         """书籍简介编辑以及审核流程"""

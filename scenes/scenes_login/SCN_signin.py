@@ -38,33 +38,36 @@ class SignIn(CommonPoco):
         """选择登陆方式,Google,FaceBook"""
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "Google":
             self.click_Google()
-            self.mysleep(3)
-            if self.android_tryfind("android.widget.FrameLayout", description="Google未登录", waitTime=3):
-                self.androidpoco("identifierId").set_text(MyData.UserData_dir["loginInfo"]["loginemail"])
-                self.android_findClick("identifierNext", "identifierNext", description="点击继续", waitTime=1, sleeptime=2)
-                self.androidpoco("android.widget.EditText").set_text(MyData.UserData_dir["loginInfo"]["loginpassword"])
-                self.android_findClick("passwordNext", "passwordNext", description="下一步", waitTime=1, sleeptime=2)
-                self.android_findClick("signinconsentNext", "signinconsentNext", description="同意", waitTime=1,
-                                       sleeptime=1)
-                self.android_findClick("com.google.android.gms:id/sud_navbar_next",
-                                       "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
-                                       sleeptime=3)
-                self.click_Google()
+            self.mysleep(8)
+            if self.android_tryfind("android.widget.FrameLayout", description="Google绑定", waitTime=3):
+                try:
+                    listname = self.androidpoco("com.google.android.gms:id/account_name").wait(5)
+                    for i in listname:
+                        name = i.get_text()
+                        if name == MyData.UserData_dir["loginInfo"]["loginemail"]:
+                            print(name)
+                            self.findClick_childobject(i, description="登录Google用户")
+                            self.SignIn_info["Google用户"] = name
+                            return True
+                    name = listname.get_text()
+                    self.findClick_childobject(listname, description="登录Google用户")
+                    self.SignIn_info["Google用户"] = name
+                except:
+                    pass
+                if self.android_tryfind("identifierId", description="Google绑定", waitTime=3):
+                    self.androidpoco("identifierId").set_text(MyData.UserData_dir["loginInfo"]["loginemail"])
+                    self.android_findClick("identifierNext", "identifierNext", description="点击继续", waitTime=1, sleeptime=2)
+                    self.androidpoco("android.widget.EditText").set_text(MyData.UserData_dir["loginInfo"]["loginpassword"])
+                    self.android_findClick("passwordNext", "passwordNext", description="下一步", waitTime=1, sleeptime=2)
+                    self.android_findClick("signinconsentNext", "signinconsentNext", description="同意", waitTime=1,
+                                           sleeptime=1)
+                    self.android_findClick("com.google.android.gms:id/sud_navbar_next",
+                                           "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
+                                           sleeptime=3)
+                    self.click_Google()
             self.bindLoginComfirm()
             self.mysleep(2)
-            try:
-                listname = self.androidpoco("com.google.android.gms:id/account_name").wait(5)
-                for i in listname:
-                    name = i.get_text()
-                    if name == MyData.UserData_dir["loginInfo"]["loginemail"]:
-                        print(name)
-                        self.findClick_childobject(i,description="登录Google用户")
-                        self.SignIn_info["Google用户"]=name
-                        return True
-                name = listname.get_text()
-                self.findClick_childobject(listname, description="登录Google用户")
-                self.SignIn_info["Google用户"] = name
-            except:pass
+
             return True
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "FaceBook":
             self.click_FaceBook()

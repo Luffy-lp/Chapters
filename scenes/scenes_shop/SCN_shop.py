@@ -27,18 +27,19 @@ class Shopmodule(Shop):
         # self.findSwipe_object(shopPOCO,stopPos=0.9,POCOobject=shopPOCO,swipeTye="y")
         self.findSwipe_object("SpecialMonth",0.6,POCOobject=self.poco("SpecialMonth"),swipeTye="y")
 
-    def buy_ticket_step(self):
+    def buy_ticket_step(self,nString=""):
         """购买票的步骤"""
         MyData.getUsercurrency()
         increment = MyData.UserData_dir["ticket"]
         self.click_ticket_enter()
-        self.click_buy_ticket()
-        time.sleep(10)
+        self.click_buy_ticket(nString)
+        time.sleep(5)
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[0]
             self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
+            time.sleep(5)
         self.click_pay()
-        time.sleep(20)
+        time.sleep(5)
         self.click_claim_shop()
         self.click_top_back()
         # 购买完后展示用户信息
@@ -50,15 +51,19 @@ class Shopmodule(Shop):
         self.Shopmodule_info["increment"] = MyData.UserData_dir["increment"]
         return self.Shopmodule_info
 
-    def buy_diamond_step(self):
+    def buy_diamond_step(self,nString=""):
         """购买钻石步骤"""
         MyData.getUsercurrency()
         increment = MyData.UserData_dir["diamond"]
         self.click_ticket_enter()
-        self.click_buy_diamond()
-        time.sleep(10)
+        self.click_buy_diamond(nString)
+        time.sleep(5)
+        if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
+            androidpoco=self.androidpoco("android.widget.RadioButton")[0]
+            self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
+            time.sleep(5)
         self.click_pay()
-        time.sleep(20)
+        time.sleep(5)
         self.click_claim_shop()
         self.click_top_back()
         # 购买完后展示用户信息
@@ -84,6 +89,9 @@ class Shopmodule(Shop):
             boolis = True
             clock()
             while boolis:
+                if self.android_tryfind("android.widget.RadioButton", description="购买身份验证", waitTime=2):
+                    androidpoco = self.androidpoco("android.widget.RadioButton")[0]
+                    self.findClick_childobject(androidpoco, description="一律启用", waitTime=1, sleeptime=1)
                 self.click_pay()
                 time.sleep(3)
                 try:
@@ -138,7 +146,7 @@ class Shopmodule(Shop):
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
 
     def shop_buy_packages1(self):
-        """购买4.99礼包"""
+        """购买礼包"""
         MyData.getUsercurrency()
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
         self.click_buy_packges1()
@@ -150,16 +158,19 @@ class Shopmodule(Shop):
         MyData.getUsercurrency()
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
 
-    def shop_buy_diamond(self):
-        """点击购买20钻石"""
-        self.buy_diamond_step()
+    def shop_buy_diamond(self,num=""):
+        """点击购买钻石"""
+        number = "29-" + num
+        print(number)
+        self.buy_diamond_step(nString=number)
         return True
 
-    def shop_buy_ticket(self):
-        """点击购买5票"""
-        self.buy_ticket_step()
+    def shop_buy_ticket(self,num=""):
+        """点击购买票"""
+        number = "30-" + num
+        print(number)
+        self.buy_ticket_step(nString=number)
         return True
 
 # tt=Shopmodule()
-# poco1 = AndroidUiautomationPoco()
-# tt.buy_ticket_step()
+# tt.shop_buy_diamond(num="1004")

@@ -10,7 +10,7 @@ class ReadUGCBook(CommonPoco):
 
     def __init__(self):
         CommonPoco.__init__(self)
-        self._POS = COM_utilities.PosTurn([0.5, 0.8])
+        self._POS = COM_utilities.PosTurn([0.5, 0.9])
 
     def choosebook(self, index_x=0, index_y=0):
         """选择书籍"""
@@ -57,6 +57,7 @@ class ReadUGCBook(CommonPoco):
                 self.click_object("Read", description="阅读")  # poco("BtnAD")选择看广告
             self.dialogueEndPOP()
             self.findClick_try("Read", "Read", description="阅读按钮")
+            self.findClick_try("BtnRestart", "BtnRestart", description="返回到章节头")
             print("Chattime:", self.Chattime)
             self.ReadUGCBook_info["阅读剩余次数"] = self.Chattime
             self.ReadUGCBook_info["点击次数"] = self.touchTime

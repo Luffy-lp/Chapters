@@ -80,12 +80,13 @@ class Profilemodule(Profile):
             self.click_back()
             return self.Profilemodule_info["emoticons"]
 
-    def editname_step(self):
+    def editname_step(self,nameString=""):
         """改名步骤"""
         self.click_profile()
         self.click_edit()
-        sleep(5)
-        self.editNickname(Nickname="das1314")
+        sleep(2)
+        self.editNickname(Nickname=nameString)
+        sleep(1)
         print(self.Profile_info)
         self.Profilemodule_info["name"] = self.Profile_info
         if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
@@ -144,9 +145,9 @@ class Profilemodule(Profile):
         self.changeemoticons_step()
         return True
 
-    def nameedit(self):
+    def nameedit(self,name=""):
         """修改名字"""
-        self.editname_step()
+        self.editname_step(nameString=name)
         return True
 
     def Change_showAchievement(self):
@@ -161,4 +162,4 @@ class Profilemodule(Profile):
 
 
 # tt= Profilemodule()
-# tt.Changeheadportrait()
+# tt.nameedit(name="qwe651")

@@ -13,8 +13,8 @@ from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 # TODO:截图分辨率需要补充
 class CommonPoco(CommonDevices):
-    poco = None
-    androidpoco = None
+    poco: UnityPoco = None
+    androidpoco:AndroidUiautomationPoco = None
     e = None
     globals()
     Popuplist = []
@@ -24,18 +24,19 @@ class CommonPoco(CommonDevices):
         "TRIGGER WARNING": "CenterBtn",
         "Info": "CenterBtn"
     }
+
     def __init__(self):
         CommonDevices.__init__(self)
         if MyData.DeviceData_dir["poco"] == None:
-                MyData.DeviceData_dir["poco"] = UnityPoco()
-                self.androidpoco = MyData.DeviceData_dir["androidpoco"]
-                mylog.info("完成Unity元素定位方法初始化【{}】".format(self.poco))
+            MyData.DeviceData_dir["poco"] = UnityPoco()
+            self.androidpoco = MyData.DeviceData_dir["androidpoco"]
+            mylog.info("完成Unity元素定位方法初始化【{}】".format(self.poco))
         if MyData.DeviceData_dir["androidpoco"] == None:
             MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
             self.androidpoco = MyData.DeviceData_dir["androidpoco"]
             mylog.info("完成android原生元素定位方法初始化【{}】".format(self.androidpoco))
         self.poco = MyData.DeviceData_dir["poco"]
-        self.androidpoco=MyData.DeviceData_dir["androidpoco"]
+        self.androidpoco = MyData.DeviceData_dir["androidpoco"]
         # if self.poco == None:
         #     self.poco = UnityPoco()
         #     mylog.info("完成Unity元素定位方法初始化【{}】".format(self.poco))
@@ -43,6 +44,7 @@ class CommonPoco(CommonDevices):
         #     self.androidpoco=AndroidUiautomationPoco()
         #     mylog.info("完成android原生元素定位方法初始化【{}】".format(self.poco))
         #     print("完成android原生元素定位方法初始化【{}】".format(self.poco))
+
     def find_object(self, findName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """寻找目标"""
         while (tryTime > 0):
@@ -87,7 +89,7 @@ class CommonPoco(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def find_childobject(self, findPoco, description="", waitTime=1, tryTime=3, sleeptime=0):
+    def find_childobject(self, findPoco:poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
         while (tryTime > 0):
             tryTime = tryTime - 1
@@ -105,7 +107,7 @@ class CommonPoco(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findClick_childobject(self, ClickPoco, description="", waitTime=1, tryTime=1, sleeptime=0.1):
+    def findClick_childobject(self, ClickPoco:poco, description="", waitTime=1, tryTime=1, sleeptime=0.1):
         """用于关联父级才能点击到的元素"""
         while (tryTime > 0):
             tryTime = tryTime - 1
@@ -140,7 +142,7 @@ class CommonPoco(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findchildobject_try(self, findPoco, description="", waitTime=0.2, tryTime=1, sleeptime=0):
+    def findchildobject_try(self, findPoco:poco, description="", waitTime=0.2, tryTime=1, sleeptime=0):
         """尝试寻找，不一定存在"""
         while (tryTime > 0):
             tryTime = tryTime - 1
@@ -187,6 +189,7 @@ class CommonPoco(CommonDevices):
                     return True
             except:
                 return False
+
     def android_findClick(self, findName, ClickName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """用寻找目标，后并点击"""
         while (tryTime > 0):
@@ -213,7 +216,6 @@ class CommonPoco(CommonDevices):
                 return False
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
-
 
     def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True):
         """尝试寻找并点击，不一定存在"""
@@ -341,7 +343,7 @@ class CommonPoco(CommonDevices):
         sleep(5)
         self.updatePoP()
 
-    def mysleep(self, sleeptime=0):
+    def mysleep(self, sleeptime:float):
         """会根据设备或其他情况延迟睡眠时间方法"""
         mytime = float(MyData.ConfData_dir["sleepLevel"]) + sleeptime
         sleep(mytime)

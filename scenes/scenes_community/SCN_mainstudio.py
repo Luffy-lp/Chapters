@@ -36,7 +36,7 @@ class MainStudio(CommonPoco):
         if self.findClick_object("LuaUIRoleCreateDlg", "Head", description="选择头像弹框", waitTime=1):
             self.click_object("BtnHead", description="选择图像")
             self.find_object("UIBottomForm", description="选择角色方式", waitTime=3)
-            POCO = self.poco("Options").child("Button(Clone)")[0].wait(1)
+            POCO = self.poco("Options").child("Button(Clone)")[0].wait(3)
             self.findClick_childobject(POCO, description="选择Avatar Gallery")
             self.mysleep(3)
             if self.find_object("ConentPageView", description="等待刷新图像列表", waitTime=3):
@@ -61,7 +61,7 @@ class MainStudio(CommonPoco):
     def characterUI(self, characterType):
         """弹出角色图像弹框 main,supporting主要角色和次要角色"""
         if characterType == "main":
-            MainPOCO = self.poco("MainCharacter").child("HeadMask").wait(1)
+            MainPOCO = self.poco("MainCharacter").child("HeadMask").wait(3)
             self.findClick_childobject(MainPOCO, description="主角色图像框", waitTime=1)
         if characterType == "supporting":
             Supportinglist = self.poco("SupportingCharcters").child("Viewport").child("Content").child(
