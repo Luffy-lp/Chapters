@@ -51,15 +51,15 @@ class Shop(CommonPoco):
         self.findClick_childobject(buyPOCO, description="购买", waitTime=1)
 
     #购买商品流程
-    def click_buy_ticket(self):
-        """点击购买5张票"""
-        shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring("30-1001")[0]
-        self.findClick_childobject(shopPOCO, description="购买5张票按钮", waitTime=1)
+    def click_buy_ticket(self,nString="30-1001"):
+        """点击购买票"""
+        shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring(nString)[0]
+        self.findClick_childobject(shopPOCO, description="购买票卷按钮", waitTime=1)
 
-    def click_buy_diamond(self):
-        """点击购买20颗钻石"""
-        shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring("29-1004")[0]
-        self.findClick_childobject(shopPOCO, description="购买20颗钻按钮", waitTime=1)
+    def click_buy_diamond(self,nString="29-1004"):
+        """点击购买钻石"""
+        shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring(nString)[0]
+        self.findClick_childobject(shopPOCO, description="购买钻石按钮", waitTime=1)
 
     def click_buy_diamondcard(self):
         """点击购钻石月卡"""
@@ -75,20 +75,22 @@ class Shop(CommonPoco):
         """订阅会员"""
         subsPOCO = self.poco(nameMatches=".*SubBtn")
         self.findClick_childobject(subsPOCO, description="订阅按钮", waitTime=1)
-    def click_buy_packges1(self):
-        """点击购礼包1"""
-        shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring("31-2001")
+    def click_buy_packges1(self,nString="31-2002"):
+        """点击购礼包"""
+        shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring(nString)
         pos=shopPOCO.get_position()
         pos=PosTurn(pos)
         touch(pos)
-        # self.findClick_childobject(shopPOCO,description="购买礼包1",waitTime=1)
+        # self.findClick_childobject(shopPOCO,description="购买礼包",waitTime=1)
 
     def click_pay(self):
         """点击确认支付"""
-        pos = [0.5, 0.96]
-        print("pos",pos)
-        pos = PosTurn(pos)
-        touch(pos)
+        androidpoco=self.androidpoco("android.widget.LinearLayout").child("android.widget.FrameLayout").offspring("android:id/content").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated")[0].child("com.android.vending:id/0_resource_name_obfuscated")[3].child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated").child("com.android.vending:id/0_resource_name_obfuscated")
+        self.findClick_childobject(androidpoco,description="一律购买/订阅",waitTime=1,sleeptime=1)
+        # pos = [0.5, 0.96]
+        # print("pos",pos)
+        # pos = PosTurn(pos)
+        # touch(pos)
 
     def click_claim_shop(self):
         """点击确认商品"""
@@ -102,4 +104,4 @@ class Shop(CommonPoco):
 
 
 # tt=Shop()
-# tt.xxxx()
+# tt.click_claim_shop()

@@ -178,10 +178,10 @@ def test_ChangeUseremoticons():
     assert_equal(actualValue, True, "更换角色的表情：{0}".format((myProfilemodule.Profilemodule_info["emoticons"])))
 
 
-def test_nameedit():
+def test_nameedit(name):
     """编辑名字"""
     myProfilemodule = Profilemodule()
-    actualValue = myProfilemodule.nameedit()
+    actualValue = myProfilemodule.nameedit(name=name)
     assert_equal(actualValue, True, "编辑名字:{0}".format((myProfilemodule.Profilemodule_info["name"])))
 
 
@@ -199,15 +199,15 @@ def test_shop_buy_member():
     assert_equal(actualValue, True, "用户的会员状态信息：{0}".format(myShopmodule.Shopmodule_info))
 
 
-def test_shop_buy_ticket():
-    """购买5票"""
+def test_shop_buy_ticket(num):
+    """购买票卷"""
     myShopmodule = Shopmodule()
-    actualValue = myShopmodule.shop_buy_ticket()
+    actualValue = myShopmodule.shop_buy_ticket(num)
     assert_equal(actualValue, True, "购买非双倍奖励的5票{0}".format(myShopmodule.Shopmodule_info))
 
 
-def test_shop_buy_diamond():
-    """购买20钻"""
+def test_shop_buy_diamond(num):
+    """购买钻石"""
     myShopmodule = Shopmodule()
-    actualValue = myShopmodule.shop_buy_diamond()
+    actualValue = myShopmodule.shop_buy_diamond(num)
     assert_equal(actualValue, True, "购买非双倍奖励的20钻石{0}".format(myShopmodule.Shopmodule_info))

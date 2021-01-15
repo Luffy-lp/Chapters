@@ -33,7 +33,7 @@ class Shopmodule(Shop):
         increment = MyData.UserData_dir["ticket"]
         self.click_ticket_enter()
         self.click_buy_ticket(nString)
-        time.sleep(5)
+        sleep(5)
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[0]
             self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
