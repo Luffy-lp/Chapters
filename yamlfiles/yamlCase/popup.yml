@@ -25,15 +25,5 @@
     import_module_functions:
         - case.case_test
     step:
-#        - ${文本弹框(UIAlter, Popup)}
-#        - ${24小时新手礼包(UITwentyFourHourReward, BtnGet)}
-#        - ${月签到活动(UISignActivity, Back)}
-        - ${每日登陆积分(UIGetLoginCredit, FreeBtn)}
-#        - ${一日三签活动弹框(UIDailyLoginRewardABTest, ClaimtBtn)}
-#        - ${宝箱弹框(UITreasureHint, sure)}
-#        - ${用户登陆奖励(UIGetOffCredit, GetBtn)}
-#        - ${游戏条款(UIPrivacyPopup, BtnAccept)}
-#        - ${答谢弹框(LuaUIThanksPopup, Back)}
-#        - ${内容推送弹框(UITextPopup, Btn)}
-        - ${文本推送弹框(UITextPopup, Btn)}
-#        - ${推送礼包(UIGiftPopup, Popup)}
+        - ${文本弹框(UIAlter, Popup)}
+        - ${道具卡使用指导(UIPassGuide, Popup)}

@@ -7,7 +7,7 @@ class Discover(CommonPoco):
 
     def discoverPopup(self):  # 积分弹框
         """大厅弹框检查"""
-        print(MyData.popup_dir[0])
+        print("大厅弹框配置：",MyData.popup_dir[0])
         poplist = MyData.popup_dir[0]
         for k in poplist:
             if k["args"][0]=="UIAlter":
@@ -20,3 +20,6 @@ class Discover(CommonPoco):
             else:
                 self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
         return True, CommonPoco.Popuplist
+
+# Discover1=Discover()
+# Discover1.discoverPopup()

@@ -15,12 +15,18 @@ class BookNewDetail(CommonPoco):
         CommonPoco.__init__(self)
 
     def bookNewDetailPOP(self):
-        print("详情页弹框")
-        self.heartBeat()
-        self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)
-        while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
-            self.findClick_object("UIPassGuide", "Close", description="Close按钮")
-            self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
+        # self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)
+        print("详情页弹框配置：",MyData.popup_dir[1])
+        poplist = MyData.popup_dir[1]
+        for k in poplist:
+            if k["args"][0]=="UIAlter":
+                self.heartBeat()
+            if k["args"][0]=="UIPassGuide":
+                while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
+                    self.findClick_object("UIPassGuide", "Close", description="Close按钮")
+                    self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
+            else:
+                self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
 
     def bookChoose(self, bookShelf, index=0):
         """Discover Banner,Weekly,Mybook，Search，testSearh"""
@@ -133,4 +139,4 @@ class BookNewDetail(CommonPoco):
                 return True
 
 # BookNewDetail1=BookNewDetail()
-# BookNewDetail1.bookChoose("Weekly",0)
+# BookNewDetail1.bookNewDetailPOP()

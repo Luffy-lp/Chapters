@@ -158,5 +158,5 @@ class IntroduceEdit(CommonPoco):
         #     chapters_self.click_object("CenterBtn", description="不审核")
         #     self.topBar("Back")
 
-IntroduceEdit1=IntroduceEdit()
-IntroduceEdit1.editTitle("aaaaaaaaaaaa")
+# IntroduceEdit1=IntroduceEdit()
+# IntroduceEdit1.editTitle("aaaaaaaaaaaa")

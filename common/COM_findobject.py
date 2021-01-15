@@ -284,69 +284,71 @@ class CommonPoco(CommonDevices):
         clock()  # 插入计时器
         if swipeTye == "y":
             # snapshot(msg="找到目标元素结果: " + str(find_element.exists()))
-            print(clock("stop"))
-            if float(clock("stop")) > 30:
-                log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
-                raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
-            if find_element.exists():
-                # 将元素滚动到屏幕中间
-                position1 = find_element.get_position()
-                x, y = position1
-                print("x:", x)
-                print("y:", y)
-                if y < stopPos + 0.1 and y > stopPos - 0.1:
-                    return True
-                if y < stopPos:
-                    # 元素在上半页面，向下滑动到中间
-                    print("元素在上半页面")
-                    Pos = beginPos[1] + (stopPos - y)
-                    Pos = 1.5 if Pos > 1.5 else Pos
-                    self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], Pos], duration=2.0)
+            while True:
+                print(clock("stop"))
+                if float(clock("stop")) > 30:
+                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
+                    raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
+                if find_element.exists():
+                    # 将元素滚动到屏幕中间
+                    position1 = find_element.get_position()
+                    x, y = position1
+                    print("x:", x)
+                    print("y:", y)
+                    if y < stopPos + 0.1 and y > stopPos - 0.1:
+                        return True
+                    if y < stopPos:
+                        # 元素在上半页面，向下滑动到中间
+                        print("元素在上半页面")
+                        Pos = beginPos[1] + (stopPos - y)
+                        Pos = 1.5 if Pos > 1.5 else Pos
+                        self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], Pos], duration=2.0)
+                    else:
+                        print("元素在下半页面")
+                        self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], beginPos[1] - (y - stopPos)],
+                                        duration=2.0)
+                    # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
+                    find_ele = True
+                elif swipe_time < 30:
+                    self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
+                    # poco.swipe((50, 800), (50, 200), duration=500)
+                    swipe_time = swipe_time + 1
                 else:
-                    print("元素在下半页面")
-                    self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0], beginPos[1] - (y - stopPos)],
-                                    duration=2.0)
-                # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
-                find_ele = True
-            elif swipe_time < 30:
-                self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
-                # poco.swipe((50, 800), (50, 200), duration=500)
-                swipe_time = swipe_time + 1
-            else:
-                log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
-                raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
+                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
+                    raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
         else:
-            print(clock("stop"))
-            if float(clock("stop")) > 30:
-                log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
-                raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
-            if find_element.exists():
-                # 将元素滚动到屏幕中间
-                position1 = find_element.get_position()
-                x, y = position1
-                print("x:", x)
-                print("y:", y)
-                if x < stopPos + 0.1 and x > stopPos - 0.1:
-                    return True
-                if x < stopPos:
-                    # 元素在左半页面，向右滑动到中间
-                    print("元素在左半页面")
-                    Pos = beginPos[0] + (stopPos - x)
-                    Pos = -0.5 if Pos < -0.5 else Pos
-                    self.poco.swipe([beginPos[0], beginPos[1]], [Pos, beginPos[1]], duration=2.0)
+            while True:
+                print(clock("stop"))
+                if float(clock("stop")) > 30:
+                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
+                    raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
+                if find_element.exists():
+                    # 将元素滚动到屏幕中间
+                    position1 = find_element.get_position()
+                    x, y = position1
+                    print("x:", x)
+                    print("y:", y)
+                    if x < stopPos + 0.1 and x > stopPos - 0.1:
+                        return True
+                    if x < stopPos:
+                        # 元素在左半页面，向右滑动到中间
+                        print("元素在左半页面")
+                        Pos = beginPos[0] + (stopPos - x)
+                        Pos = -0.5 if Pos < -0.5 else Pos
+                        self.poco.swipe([beginPos[0], beginPos[1]], [Pos, beginPos[1]], duration=2.0)
+                    else:
+                        print("元素在右半页面")
+                        self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0] - (x - stopPos), beginPos[1]],
+                                        duration=2.0)
+                    # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
+                    find_ele = True
+                elif swipe_time < 30:
+                    self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
+                    # poco.swipe((50, 800), (50, 200), duration=500)
+                    swipe_time = swipe_time + 1
                 else:
-                    print("元素在右半页面")
-                    self.poco.swipe([beginPos[0], beginPos[1]], [beginPos[0] - (x - stopPos), beginPos[1]],
-                                    duration=2.0)
-                # snapshot(msg="滑动元素到页面中间： " + str(text) + str(textMatches) )
-                find_ele = True
-            elif swipe_time < 30:
-                self.poco.swipe([0.5, 0.8], [0.5, 0.4], duration=2.0)
-                # poco.swipe((50, 800), (50, 200), duration=500)
-                swipe_time = swipe_time + 1
-            else:
-                log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
-                raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
+                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
+                    raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
 
     def heartBeat(self):
         print("文本框检查")
