@@ -78,7 +78,7 @@ class Run(MyAnalysis):
                 except Exception as e:
                     mylog.error("------出现异常{}",e)
                     MyData.DeviceData_dir["poco"] = None
-                    test_startgame()
+                    test_startgame(1)
                     test_newUserGuide()
                     test_discoverPopup()
                 finally:
