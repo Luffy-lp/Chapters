@@ -26,4 +26,4 @@
         - case.case_test
     step:
         - ${文本弹框(UIAlter, Popup)}
-        - ${道具卡使用指导(UIPassGuide, Popup)}
+#        - ${道具卡使用指导(UIPassGuide, Popup)}

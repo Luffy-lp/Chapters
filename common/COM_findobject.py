@@ -244,7 +244,7 @@ class CommonPoco(CommonDevices):
                 mylog.error("尝试点击-【{}】-元素失败".format(description))
                 return False
 
-    def findClick_Image(self, filename, record_pos, description="", resolution=(1600, 2560), tryTime=1,waitTime=5):
+    def findClick_Image(self, filename, record_pos, description="图片", resolution=(1600, 2560), tryTime=1,waitTime=5):
         width = G.DEVICE.display_info['width']
         height = G.DEVICE.display_info['height']
         # scale = height / width
@@ -260,7 +260,7 @@ class CommonPoco(CommonDevices):
         file_path = os.path.join(path_RESOURCE_IMAGE, filename)  # 1080, 1920
         # record_pos = (0.432, 0.068),
         try:
-            pos=wait(Template((file_path), resolution=(width, height)),timeout=3)
+            pos=wait(Template((file_path), resolution=resolution),timeout=3)
             touch(pos)
             mylog.info("点击-【{}】-元素成功".format(description))
             print("点击-【{}】-元素成功".format(description))
