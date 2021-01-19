@@ -44,11 +44,11 @@ class Shop(CommonPoco):
         self.findClick_childobject(shopPOCO, description="商城的Banner", waitTime=1)
 
     #快捷支付弹窗
-    #钻石不足，购买视觉小说卡片触发
-    def xx(self):
+    #钻石不足，购买视觉小说卡片触发快捷购买/解锁短信小说触发票卷快捷购买
+    def click_quick_purchase(self):
         """点击快捷购买"""
-        buyPOCO = self.poco("Item").child("Purchase")
-        self.findClick_childobject(buyPOCO, description="购买", waitTime=1)
+        buyPOCO = self.poco("Purchase")
+        self.findClick_childobject(buyPOCO, description="快捷购买的商品", waitTime=1)
 
     #购买商品流程
     def click_buy_ticket(self,nString="30-1001"):
@@ -83,25 +83,30 @@ class Shop(CommonPoco):
         touch(pos)
         # self.findClick_childobject(shopPOCO,description="购买礼包",waitTime=1)
 
-    def click_pay(self):
-        """点击确认支付"""
+    def click_keytobuy(self):
+        """点击安卓一键购买"""
         androidpoco=self.androidpoco(text="一键购买").wait(5)
-        self.findClick_childobject(androidpoco,description="一律购买/订阅",waitTime=3,sleeptime=1)
-        # pos = [0.5, 0.96]
-        # print("pos",pos)
-        # pos = PosTurn(pos)
-        # touch(pos)
+        self.findClick_childobject(androidpoco,description="一键购买",waitTime=3,sleeptime=1)
+
+    def click_affirm(self):
+        """点击安卓弹窗确认"""
+        androidpoco = self.androidpoco(text="确认").wait(5)
+        self.findClick_childobject(androidpoco, description="确认", waitTime=3, sleeptime=1)
+
+    def click_subscribed(self):
+        """点击安卓弹窗订阅"""
+        androidpoco = self.androidpoco(text="订阅").wait(5)
+        self.findClick_childobject(androidpoco, description="订阅", waitTime=3, sleeptime=1)
 
     def click_claim_shop(self):
-        """点击确认商品"""
-        shopPOCO = self.poco("UIClaimReward").offspring("Txt").wait(5)
-        self.findClick_childobject(shopPOCO, description="确认按钮", waitTime=1)
+        """点击按钮进行商品确认"""
+        shopPOCO = self.poco("UIClaimReward").offspring("Txt")
+        self.findClick_childobject(shopPOCO, description="商品确认按钮", waitTime=1)
 
-    def xxxx(self):
-        """"""
-        xxPOCO = self.poco("PerRoleItems(Clone)")[0].child("PerRoleItem")[0]
-        print(xxPOCO.attr("_instanceId"))
+    def text(self):
+        self.click_quick_purchase()
+        self.click_keytobuy()
 
 
 # tt=Shop()
-# tt.click_claim_shop()
+# tt.text()

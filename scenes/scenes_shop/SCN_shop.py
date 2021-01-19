@@ -34,11 +34,11 @@ class Shopmodule(Shop):
         self.click_ticket_enter()
         self.click_buy_ticket(nString)
         self.mysleep(5)
-        self.click_pay()
+        self.click_keytobuy()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[1]
             self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
-            self.click_pay()
+            self.click_affirm()
         time.sleep(2)
         self.click_claim_shop()
         self.click_top_back()
@@ -55,15 +55,15 @@ class Shopmodule(Shop):
         """购买钻石步骤 商品ID"""
         MyData.getUsercurrency()
         increment = MyData.UserData_dir["diamond"]
-        self.click_ticket_enter()
+        self.click_diamond_enter()
         self.click_buy_diamond(nString)
         self.mysleep(3)
-        self.click_pay()
+        self.click_keytobuy()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[0]
             self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
             self.mysleep(3)
-            self.click_pay()
+            self.click_affirm()
         self.mysleep(3)
         self.click_claim_shop()
         self.click_top_back()
@@ -87,13 +87,14 @@ class Shopmodule(Shop):
         if self.find_try("TopTip"):
             self.click_subs()#点击订阅会员按钮
             time.sleep(2)
+            self.click_subscribed()
             boolis = True
             clock()
             while boolis:
                 if self.android_tryfind("android.widget.RadioButton", description="购买身份验证", waitTime=2):
                     androidpoco = self.androidpoco("android.widget.RadioButton")[0]
                     self.findClick_childobject(androidpoco, description="一律启用", waitTime=1, sleeptime=1)
-                self.click_pay()
+                    self.click_affirm()
                 time.sleep(3)
                 try:
                     self.poco("CloseBtn").click()
@@ -139,7 +140,7 @@ class Shopmodule(Shop):
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
         self.click_buy_diamondcard()
         time.sleep(10)
-        self.click_pay()
+        self.click_keytobuy()
         time.sleep(20)
         self.click_claim_shop()
         #购买完后的用户数据
@@ -152,7 +153,7 @@ class Shopmodule(Shop):
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
         self.click_buy_packges1()
         time.sleep(10)
-        self.click_pay()
+        self.click_keytobuy()
         time.sleep(20)
         self.click_claim_shop()
         #购买完后的用户数据

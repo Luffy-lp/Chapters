@@ -207,7 +207,7 @@ class Achievement(CommonPoco):
         """点击GetRaward按钮"""
         if self.find_try("Button",description="可解锁/获取奖励"):
             AchievementPOCO = self.poco("Center").child("ScrollView").offspring("Button")
-            AchievementPOCO.click([0.5,0.4])
+            AchievementPOCO.click([0.5,0.5])
             # self.findClick_childobject(AchievementPOCO, description="按钮",waitTime=1)
 
     def click_discoverback(self):

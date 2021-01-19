@@ -146,6 +146,8 @@ class Achievementmodule(Achievement):
         self.click_loyalreader()
         self.Achievementmodule_info["name"] = self.name
         sleep(2)
+        discoverbackPOCO = self.poco("Center").child("ScrollView").offspring("Button")
+        self.findSwipe_object("discoverbackPOCO", 0.89, POCOobject=discoverbackPOCO, swipeTye="y")
         self.click_Getreward()
         sleep(3)
         self.click_discoverback()
@@ -156,3 +158,6 @@ class Achievementmodule(Achievement):
         """对成就进行一定的操作"""
         self.operatiomAchievement_step()
         return True
+
+# tt=Achievementmodule()
+# tt.operationAchievememt()

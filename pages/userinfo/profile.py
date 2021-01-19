@@ -242,6 +242,21 @@ class Profile(CommonPoco):
         bgroundPOCO = self.poco("Banner").child("Emoticons").child("Label")
         self.findClick_childobject(bgroundPOCO, description="Emoticons页面", waitTime=1)
 
+    def click_expression(self,sTing=""):
+        """"""
+        object = None
+        list = self.poco("EmoticonsItem").child("Name")
+        for i in list:
+            if i.get_TMPtext() == sTing:
+                print(i.get_TMPtext())
+                object = i
+                break
+            else:
+                print("failed")
+        self.Profile_info = object.get_TMPtext()
+        object.parent().click()
+        return self.Profile_info
+
     def click_angry(self):
         """选择表情--生气"""
         object = None
@@ -548,7 +563,7 @@ class Profile(CommonPoco):
 
     def editSchooltext(self, School):
         """编辑School文本"""
-        self.click_object("SchoolInput", description="School文本输入框")
+        self.click_object("SchoolInput", description="School文本输入框",sleeptime=1)
         for i in range(10):
             keyevent("67")
         text(School)
@@ -560,7 +575,7 @@ class Profile(CommonPoco):
 
     def editBiotext(self, Bio):
         """编辑Bio文本"""
-        self.click_object("BioInput", description="Bio文本输入框")
+        self.click_object("BioInput", description="Bio文本输入框",sleeptime=1)
         for i in range(10):
             keyevent("67")
         text(Bio)
@@ -659,4 +674,3 @@ class Profile(CommonPoco):
         """编辑界面的back按钮"""
         editPOCO = self.poco("UIProfileEdit").offspring("Back")
         self.findClick_childobject(editPOCO, description="编辑面Back按钮", waitTime=3)
-print("20点54分")
