@@ -172,10 +172,10 @@ def test_operationAchievement():
     assert_equal(True, True, "进行操作的成就名字：{0}".format(myAchievementmodule.Achievementmodule_info["name"]))
 
 
-def test_ChangeUseremoticons():
+def test_ChangeUseremoticons(expression):
     """更换背景角色表情"""
     myProfilemodule = Profilemodule()
-    actualValue = myProfilemodule.ChangeUseremoticons()
+    actualValue = myProfilemodule.ChangeUseremoticons(expression)
     assert_equal(actualValue, True, "更换角色的表情：{0}".format((myProfilemodule.Profilemodule_info["emoticons"])))
 
 
