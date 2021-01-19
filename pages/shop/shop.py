@@ -106,6 +106,7 @@ class Shop(CommonPoco):
     def text(self):
         self.click_quick_purchase()
         self.click_keytobuy()
+        self.click_claim_shop()
 
 
 # tt=Shop()
