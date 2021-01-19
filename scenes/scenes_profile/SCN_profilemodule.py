@@ -65,12 +65,12 @@ class Profilemodule(Profile):
         self.click_topback()
         return self.Profilemodule_info["name"]
 
-    def changeemoticons_step(self,expression):
+    def changeemoticons_step(self):
         """变换表情步骤"""
         self.click_profile()
         self.click_background()
         self.click_emoticons()
-        self.click_expression(sTing=expression)
+        self.click_laughing()
         self.Profilemodule_info["emoticons"] = self.Profile_info
         sleep(3)
         if self.click_save():
@@ -90,10 +90,11 @@ class Profilemodule(Profile):
         print(self.Profile_info)
         self.Profilemodule_info["name"] = self.Profile_info
         if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
-            print("1346165312")
             pass
         else:
-            self.android_findClick("com.mars.avgchapters:id/btn_send","com.mars.avgchapters:id/btn_send",description="点击提交按钮")
+            self.android_findClick("com.mars.avgchapters:id/btn_send", "com.mars.avgchapters:id/btn_send",
+                                   description="点击提交按钮")
+
         sleep(3)
         self.click_editback()
         return self.Profilemodule_info["name"]
@@ -139,10 +140,9 @@ class Profilemodule(Profile):
         self.changeavatar_step()
         return True
 
-    def ChangeUseremoticons(self,epstring="Cry"):
+    def ChangeUseremoticons(self):
         """更换个人信息表情"""
-        expression=epstring
-        self.changeemoticons_step(expression)
+        self.changeemoticons_step()
         return True
 
     def nameedit(self,name=""):
@@ -161,5 +161,5 @@ class Profilemodule(Profile):
         return True
 
 
-tt= Profilemodule()
-tt.nameedit(name="23232")
+# tt= Profilemodule()
+# tt.nameedit(name="qwe651")

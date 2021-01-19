@@ -16,7 +16,7 @@ ConfData:
   APKpackage: "Chapters_991_8_5ff42b8d2f544.apk"
   packageName: "com.mars.avgchapters"
   ADBip: "127.0.0.1:5037"
-  ADBdevice: "127.0.0.1:7555"
+  ADBdevice: "R52M90DYELT"
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
   device: "android"
   sleepLevel: "0"
