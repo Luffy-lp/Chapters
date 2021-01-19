@@ -141,14 +141,15 @@ class Achievementmodule(Achievement):
     def operatiomAchievement_step(self):
         """演示操作成就步骤"""
         self.click_achievement()
-        self.swipe_loyalreader()
+        self.swipe_weeklywarrior()
         sleep(2)
-        self.click_loyalreader()
+        self.click_weeklywarrior()
         self.Achievementmodule_info["name"] = self.name
         sleep(2)
         discoverbackPOCO = self.poco("Center").child("ScrollView").offspring("Button")
-        self.findSwipe_object("discoverbackPOCO", 0.89, POCOobject=discoverbackPOCO, swipeTye="y")
-        self.click_Getreward()
+        if self.find_try("Button"):
+            self.findSwipe_object("discoverbackPOCO", 0.89, POCOobject=discoverbackPOCO, swipeTye="y")
+            self.click_Getreward()
         sleep(3)
         self.click_discoverback()
         sleep(5)

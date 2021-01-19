@@ -139,9 +139,8 @@ class Profilemodule(Profile):
         self.changeavatar_step()
         return True
 
-    def ChangeUseremoticons(self,epstring="Cry"):
+    def ChangeUseremoticons(self,expression):
         """更换个人信息表情"""
-        expression=epstring
         self.changeemoticons_step(expression)
         return True
 
@@ -161,5 +160,5 @@ class Profilemodule(Profile):
         return True
 
 
-tt= Profilemodule()
-tt.nameedit(name="23232")
+# tt= Profilemodule()
+# tt.nameedit(name="23232")
