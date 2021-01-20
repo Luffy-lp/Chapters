@@ -78,6 +78,7 @@ class Run(MyAnalysis):
                 except Exception as e:
                     mylog.error("------出现异常{}",e)
                     MyData.DeviceData_dir["poco"] = None
+                    sleep(3)
                     test_startgame(1)
                     test_newUserGuide()
                     test_discoverPopup()
@@ -98,11 +99,6 @@ class Run(MyAnalysis):
 
 
 if __name__ == '__main__':
-    try:
-        print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
-        print(os.system('TASKKILL /F /IM adb.exe'))# 杀死进程
-        sleep(10)
-    except:pass
     myRun = Run()
     myRun.clear()
     myRun.runing()

@@ -14,16 +14,16 @@ class MainStudio(CommonPoco):
 
     def LuaUITalkEdit2(self):
         self.find_object("LuaUITalkEdit2", description="对话编辑页面2", waitTime=3)
-        self.find_object("LuaUITalkEdit2")
+        self.LuaUIStudio()
         self.findClick_object("UINewBookRack", "CreateBtn", description="进入工作室", waitTime=1, sleeptime=2)
 
     def LuaUIStudio(self):
         self.find_object("LuaUIStudio", description="工作室显示UI", waitTime=3)
         clock()
         while self.find_try("LuaUIGuide", description="新手引导界面"):
-            self.click_object("LuaUIGuide", description="一顿点", sleeptime=1)
+            self.findClick_try("LuaUIGuide", "LuaUIGuide",description="点击下一步", sleeptime=1)
             mytime = float(clock("stop"))
-            if mytime > 30:
+            if mytime > 80:
                 print("新手引导界面异常")
                 log(Exception("查找新手引导界面异常"))
                 raise Exception("查找新手引导界面异常")
@@ -237,3 +237,5 @@ class MainStudio(CommonPoco):
             self.talk("lipeng", txt)
             self.talk("lilei", txt)
         self.branchprocess()
+# MainStudio1=MainStudio()
+# MainStudio1.LuaUIStudio()

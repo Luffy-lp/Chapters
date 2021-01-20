@@ -52,7 +52,8 @@ def test_startgame(login):
     """启动游戏"""
     myGameStart = GameStart()
     stopGame = myGameStart.stopGame()
-    myGameStart.starGame(8)
+    sleep(3)
+    myGameStart.starGame()
     assert_equal(myGameStart.isStarGame, True, "启动游戏{0}".format(myGameStart.GameStart_info))
     myGameLoaded = GameLoaded()
     actualValue = myGameLoaded.mainprocess(login=login)

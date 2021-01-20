@@ -90,8 +90,8 @@ class Shop(CommonPoco):
 
     def click_affirm(self):
         """点击安卓弹窗确认"""
-        androidpoco = self.androidpoco(text="确认").wait(5)
-        self.findClick_childobject(androidpoco, description="确认", waitTime=3, sleeptime=1)
+        androidpoco = self.androidpoco(text="确定").wait(5)
+        self.findClick_childobject(androidpoco, description="确定", waitTime=3, sleeptime=1)
 
     def click_subscribed(self):
         """点击安卓弹窗订阅"""

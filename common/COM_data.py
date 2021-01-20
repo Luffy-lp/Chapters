@@ -41,6 +41,11 @@ class UserData(APiClass):
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
+            try:
+                print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
+                print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
+            except:
+                pass
         return cls._instance
 
     def read_yaml(self,filepath):

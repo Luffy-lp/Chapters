@@ -50,14 +50,13 @@ class GameStart():
         a = os.popen("tasklist")
         return p.read().count(MyData.ConfData_dir["packageName"])
 
-    def starGame(self, sleeptime=1):  # 启动游戏
+    def starGame(self):  # 启动游戏
         wake()
         print("尝试启动游戏")
         mylog.info("启动游戏")
         start_app(MyData.ConfData_dir["packageName"])
         print("等待加载")
         self.isStarGame = True
-        sleep(sleeptime)
 
     def stopGame(self):
         stop_app(MyData.ConfData_dir["packageName"])

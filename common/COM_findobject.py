@@ -15,7 +15,7 @@ from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 class CommonPoco(CommonDevices):
     poco: UnityPoco = None
     androidpoco:AndroidUiautomationPoco = None
-    e = None
+    # e = None
     globals()
     Popuplist = []
     AlterTxt = {
@@ -29,11 +29,9 @@ class CommonPoco(CommonDevices):
         CommonDevices.__init__(self)
         if MyData.DeviceData_dir["poco"] == None:
             MyData.DeviceData_dir["poco"] = UnityPoco()
-            self.androidpoco = MyData.DeviceData_dir["androidpoco"]
             mylog.info("完成Unity元素定位方法初始化【{}】".format(self.poco))
         if MyData.DeviceData_dir["androidpoco"] == None:
             MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
-            self.androidpoco = MyData.DeviceData_dir["androidpoco"]
             mylog.info("完成android原生元素定位方法初始化【{}】".format(self.androidpoco))
         self.poco = MyData.DeviceData_dir["poco"]
         self.androidpoco = MyData.DeviceData_dir["androidpoco"]

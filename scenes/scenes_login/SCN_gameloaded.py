@@ -16,15 +16,15 @@ class GameLoaded(CommonPoco):
     GameLoaded_info["ErrorTxt"] = ErrorTxt
 
     def __init__(self):
+        COM_utilities.clock()  # 插入计时器
+        sleep(12)
         CommonPoco.__init__(self)
-
     def mainprocess(self, login=0):
         self.gameloading()
         self.Popup_login(login)
         return True
 
     def gameloading(self):  # 游戏是否加载完成判断
-        COM_utilities.clock()  # 插入计时器
         NewUserGuide1 = NewUserGuide()
         # self.find_object("LoadingPanel", description="游戏加载界面", sleeptime=1)
         while self.poco("Slider").wait(1).exists():

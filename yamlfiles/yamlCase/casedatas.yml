@@ -30,7 +30,7 @@
         - case.case_test
     step:
         - ${pageTurn(0)}
-        - ${test_bookchoose(Weekly, 0)}
+#        - ${test_bookchoose(Weekly, 0)}
 #        - ${test_bookPlay()}
 #        - ${test_bookread(10001)}
 #        - ${test_bookPlay()}
@@ -47,8 +47,8 @@
         - case.case_test
     step:
         - ${pageTurn(2)}
-#        - ${test_Creation()}
-#        - ${test_ChapterEdit(lipengBook)}
+        - ${test_Creation()}
+        - ${test_ChapterEdit(lipengBook)}
 - 3:
     caseauthor: "lipeng"
     casename: "短信小说阅读"
@@ -71,10 +71,10 @@
         - test_fun.myfun
     step:
         - ${pageTurn(4)}
-        - ${test_ChangeUseravatar()}
-        - ${test_operationAchievement()}
-        - ${test_ChangeUseremoticons()}
-        - ${test_nameedit(lipeng)}
+#        - ${test_ChangeUseravatar()}
+#        - ${test_operationAchievement()}
+#        - ${test_ChangeUseremoticons(Cry)}
+#        - ${test_nameedit(lipeng)}
 - 5:
     caseauthor: "江浚朋"
     casename: "商城"
@@ -84,6 +84,6 @@
     import_module_functions:
         - test_fun.myfun
     step:
-        - ${test_shop_buy_ticket(1004)}
-        - ${test_shop_buy_diamond(1004)}
-        - ${test_shop_buy_member()}
+        - ${test_shop_buy_ticket(1003)}
+#        - ${test_shop_buy_diamond(1004)}
+#        - ${test_shop_buy_member()}

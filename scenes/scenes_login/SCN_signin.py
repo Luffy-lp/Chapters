@@ -24,6 +24,7 @@ class SignIn(CommonPoco):
             if mytime > 30:
                 print("检测是否登陆成功失败")
                 log(Exception("检测是否登陆成功失败"))
+                raise Exception("检测是否登陆成功失败")
         ProfileBt = self.poco("Profile").child("Label")
         self.findClick_childobject(ProfileBt, description="切换到Profile界面")
         if self.find_try("Sign", description="登陆按钮"):

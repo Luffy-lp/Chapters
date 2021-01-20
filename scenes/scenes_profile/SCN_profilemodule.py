@@ -161,5 +161,5 @@ class Profilemodule(Profile):
         return True
 
 
-tt= Profilemodule()
-tt.nameedit(name="23232")
+# tt= Profilemodule()
+# tt.nameedit(name="23232")
