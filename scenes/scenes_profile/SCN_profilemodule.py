@@ -146,6 +146,11 @@ class Profilemodule(Profile):
 
     def ChangeUseremoticons(self,num):
         """更换个人信息表情"""
+        print(num)
+        num2 = int(num)
+        width = G.DEVICE.display_info['width']
+        height = G.DEVICE.display_info['height']
+        scale = height / width
         expression2 = {
             0 : "Angry",
             1 : "Cry",
@@ -157,8 +162,9 @@ class Profilemodule(Profile):
             7 : "Smile",
             8 : "Flirty"
         }
-
-        expression = expression2.get(num)
+        print(expression2.get(num2))
+        expression = expression2.get(num2)
+        print("4dadad",expression)
         self.changeemoticons_step(expression)
         return True
 
@@ -179,4 +185,4 @@ class Profilemodule(Profile):
 
 
 # tt= Profilemodule()
-# tt.ChangeUseremoticons(1)
+# tt.ChangeUseremoticons(2)
