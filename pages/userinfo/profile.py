@@ -243,7 +243,7 @@ class Profile(CommonPoco):
         self.findClick_childobject(bgroundPOCO, description="Emoticons页面", waitTime=1)
 
     def click_expression(self,sTing=""):
-        """"""
+        """进行点击选择表情"""
         object = None
         list = self.poco("EmoticonsItem").child("Name")
         for i in list:
@@ -257,6 +257,17 @@ class Profile(CommonPoco):
         object.parent().click()
         return self.Profile_info
 
+    def swipe_expression(self,Sting=""):
+        """对表情进行滑动（预留一下）"""
+        object = None
+        list = self.poco("EmoticonsItem").child("Name")
+        for i in list:
+            if i.get_TMPtext() == Sting:
+                print(i.get_TMPtext())
+                object = i
+                break
+            else:
+                print("failed")
     def click_angry(self):
         """选择表情--生气"""
         object = None

@@ -103,9 +103,11 @@ class Shop(CommonPoco):
         shopPOCO = self.poco("UIClaimReward").offspring("Txt")
         self.findClick_childobject(shopPOCO, description="商品确认按钮", waitTime=1)
 
-    def text(self):
+    def quick_purchase(self):
+        """便捷购买的后半步骤"""
         self.click_quick_purchase()
         self.click_keytobuy()
+        self.click_claim_shop()
 
 
 # tt=Shop()
