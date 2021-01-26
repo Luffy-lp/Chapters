@@ -70,7 +70,7 @@ class IntroduceEdit(CommonPoco):
             try:
                 categoryItemPOCO = \
                     self.poco("LuaUIReCategory").child("Items").child("Viewport").child("Content").child("Item(Clone)")[
-                        2].wait(5)
+                        2]
                 self.findClick_childobject(categoryItemPOCO, description="选择类型")
                 break
             except:
@@ -92,14 +92,14 @@ class IntroduceEdit(CommonPoco):
                                        "com.android.packageinstaller:id/permission_allow_button",
                                        description="检查开启图库权限", waitTime=1
                                        )
-            if MyData.ConfData_dir["ADBdevice"] == "127.0.0.1:7555":
-                print("mumu模拟器类型")
+            if "127" in MyData.ConfData_dir["ADBdevice"]:
+                print("模拟器类型")
                 self.mumu()
             else:
                 self.android_findClick("com.google.android.apps.photos:id/image",
                                        "com.google.android.apps.photos:id/image",
                                        description="选择图片",
-                                       waitTime=3)
+                                       waitTime=10)
                 pos = self.androidpoco("android.view.ViewGroup")[0].child(
                     "com.google.android.apps.photos:id/title").wait(5).get_position()
                 pos[1] = pos[1] + 0.1
@@ -116,7 +116,7 @@ class IntroduceEdit(CommonPoco):
                 print("图片loading中")
                 sleep(1)
                 mytime = float(COM_utilities.clock("stop"))
-                if mytime > 30:
+                if mytime > 50:
                     print("图片选择失败，请检查权限问题")
                     log(Exception("图片选择失败，请检查权限问题"))
                     raise Exception("图片选择失败，请检查权限问题")
@@ -159,4 +159,4 @@ class IntroduceEdit(CommonPoco):
         #     self.topBar("Back")
 
 # IntroduceEdit1=IntroduceEdit()
-# IntroduceEdit1.editTitle("aaaaaaaaaaaa")
+# IntroduceEdit1.mainprocess("aaaaaaaaaaaa")

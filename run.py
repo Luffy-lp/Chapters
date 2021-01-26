@@ -70,6 +70,7 @@ class Run(MyAnalysis):
                 __desc__ = self.Case_info[k]["casedec"]
                 try:
                     start_record()
+                    mylog.info("【{0}】启动录制成功".format(__title__))
                 except:
                     mylog.info("【{0}】启动录制失败".format(__title__))
                 try:
@@ -84,13 +85,13 @@ class Run(MyAnalysis):
                     test_discoverPopup()
                 finally:
                     outputpath = os.path.join(path_REPORT_DIR, htmlname)
-                    logpath = os.path.join(path_LOG_DIR, logname)
                     print("report__file__", file)
                     simple_report(__file__, logpath=path_LOG_DIR, output=outputpath)
                     self.Case_info[k]["repeattime"] = self.Case_info[k]["repeattime"] - 1
                     mylog.info("完成html测试报告，等待生产录制文件需要一定时间")
                     try:
                         stop_record(recordfile)
+                        mylog.info("【{0}】生成录制文件成功".format(__title__))
                     except:
                         mylog.info("【{0}】生成录制文件失败".format(__title__))
                     auto_setup(logdir=path_LOG_DIR)

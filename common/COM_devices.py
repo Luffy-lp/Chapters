@@ -5,6 +5,8 @@ from airtest.core.api import *
 from common.COM_data import MyData
 from common.COM_path import *
 from common.my_log import mylog
+from airtest.core.api import connect_device, sleep
+
 
 class CommonDevices():
     def __init__(self):
@@ -13,16 +15,12 @@ class CommonDevices():
                 conf = MyData.ConfData_dir["device"] + "://" + MyData.ConfData_dir["ADBip"] + "/" + MyData.ConfData_dir[
                     "ADBdevice"]
                 method = MyData.ConfData_dir["method"]
+                if "127" in  MyData.ConfData_dir["device"]:
+                    method= MyData.ConfData_dir["simulator"]
                 auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
                 print("__file__",__file__)
                 logging.DEBUG = 0
-                self.getADBdevice()
-                # mylog.info("完成DEVICE初始化",G.DEVICE)
                 print("DEVIEC:", G.DEVICE)
-    def getADBdevice(self):
-        adb = ADB(serialno=MyData.ConfData_dir["ADBdevice"])
-        MyData.DeviceData_dir["ADB"] = adb
-
     def getdevlist(self):
         devlist = []
         connectfile = os.popen('adb devices')
@@ -57,5 +55,3 @@ class CommonDevices():
             for i in range(len(connectinfolist)):
                 print(f'设备{i + 1} SN: {connectinfolist[i]}')
             return True
-# CommonDevices1=CommonDevices()
-# # print("dddd:",os.getenv('com.mars.avgchapters'))

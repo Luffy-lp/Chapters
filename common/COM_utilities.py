@@ -52,12 +52,14 @@ def clock(type=None):  # 计时器
 
 def start_record(maxtime=3600):
     """录屏功能，start,stop"""
-    # G.DEVICE.start_recording()
+    G.DEVICE.start_recording(max_time=maxtime)
     # print(MyData.ConfData_dir)
-    Recorder(MyData.DeviceData_dir["ADB"]).start_recording(max_time=maxtime)
+    # Recorder(MyData.DeviceData_dir["ADB"]).start_recording()
+    print("启动录制")
     # maxtime = maxtime
 
 def stop_record(filename):
     file_path = os.path.join(path_RES_DIR, filename)
-    Recorder(MyData.DeviceData_dir["ADB"]).stop_recording(output=file_path)
+    print("file_path",file_path)
+    G.DEVICE.stop_recording(output=file_path)
     # G.DEVICE.stop_recording(output=file_path)

@@ -76,6 +76,7 @@ class UserData(APiClass):
             self.ConfData_dir["ADBip"] = data["ConfData"]["ADBip"]
             self.ConfData_dir["device"] = data["ConfData"]["device"]
             self.ConfData_dir["method"] = data["ConfData"]["method"]
+            self.ConfData_dir["simulator"] = data["ConfData"]["simulator"]
             self.ConfData_dir["sleepLevel"] = data["ConfData"]["sleepLevel"]
             print("devLogpath",data["devLogpath"])
             self.UserPath_dir["devLogpath"]=data["devLogpath"]
@@ -178,3 +179,6 @@ class UserData(APiClass):
                     return None
             else:return None
 MyData = UserData()
+# MyData.getreadprogress("10047")
+# aa=MyData.getreadprogress("10047")
+# print(aa)

@@ -21,7 +21,7 @@ class MainStudio(CommonPoco):
         self.find_object("LuaUIStudio", description="工作室显示UI", waitTime=3)
         clock()
         while self.find_try("LuaUIGuide", description="新手引导界面"):
-            self.findClick_try("LuaUIGuide", "LuaUIGuide",description="点击下一步", sleeptime=1)
+            self.findClick_try("LuaUIGuide", "LuaUIGuide", description="点击下一步", sleeptime=1)
             mytime = float(clock("stop"))
             if mytime > 80:
                 print("新手引导界面异常")
@@ -36,12 +36,12 @@ class MainStudio(CommonPoco):
         if self.findClick_object("LuaUIRoleCreateDlg", "Head", description="选择头像弹框", waitTime=1):
             self.click_object("BtnHead", description="选择图像")
             self.find_object("UIBottomForm", description="选择角色方式", waitTime=3)
-            POCO = self.poco("Options").child("Button(Clone)")[0].wait(3)
+            POCO = self.poco("Options").child("Button(Clone)")[0]
             self.findClick_childobject(POCO, description="选择Avatar Gallery")
-            self.mysleep(3)
+            sleep(2)
             if self.find_object("ConentPageView", description="等待刷新图像列表", waitTime=3):
                 POCO = self.poco("LoopStaggeredGridView1").child("Viewport").child("Content").child("Item(Clone)")[
-                    self.chapterDlg].wait(3)
+                    self.chapterDlg]
                 self.findClick_childobject(POCO, description="选择一个图像", waitTime=3)
                 self.chapterDlg = self.chapterDlg + 1
 
@@ -110,7 +110,7 @@ class MainStudio(CommonPoco):
 
     def creatChoice(self):
         """创建选项"""
-        if self.find_try("BtnTool", description="工具弹框按钮"):
+        if self.find_try("BtnTool", description="工具弹框"):
             self.click_object("BtnTool", description="工具弹框按钮")
             if self.find_try("TutorialWindow", description="新书籍新手引导", waitTime=1):
                 self.click_object("Close", description="关闭", sleeptime=1)
@@ -162,7 +162,7 @@ class MainStudio(CommonPoco):
     def creatCharacter(self, name, characterType="supporting"):
         """name：角色名称characterType：角色类型main,supporting
         创建角色流程"""
-        list = self.poco("TxtName").wait(3)
+        list = self.poco("TxtName").wait(10)
         object = None
         for i in list:
             print(i.get_TMPtext())
@@ -204,7 +204,7 @@ class MainStudio(CommonPoco):
         """分成创作页面流程"""
         self.creatChoice()
         self.intoOption("A")
-        txt = "jklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghi" \
+        txt = "abcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghi" \
               "jklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyz"
         self.creatCharacter("lipeng", "main")
         self.talk("lipeng", txt)
@@ -237,5 +237,3 @@ class MainStudio(CommonPoco):
             self.talk("lipeng", txt)
             self.talk("lilei", txt)
         self.branchprocess()
-# MainStudio1=MainStudio()
-# MainStudio1.LuaUIStudio()

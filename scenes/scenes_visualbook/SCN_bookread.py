@@ -7,7 +7,7 @@ from common import COM_utilities
 from common.COM_data import MyData
 from common.COM_utilities import clock
 from common.my_log import mylog
-
+from pages.shop.shop import Shop
 
 class VisualBook(CommonPoco):
     isstopRead = True  # 阅读状态
@@ -16,20 +16,23 @@ class VisualBook(CommonPoco):
     touchtime = 0
     _etime = 0
     ReadBook_info = {}
-    getstoryoptionslist={}
-    ReadBook_info["storyoption"]={}
+    getstoryoptionslist = {}
+    ReadBook_info["storyoption"] = {}
+
     def __init__(self):
         CommonPoco.__init__(self)
+        self.myShop = Shop()
         self._POS = COM_utilities.PosTurn([0.31, 0.55])
         # self.getReadBook_info("10001")
 
     def bookLoad(self):
         """书籍加载"""
-        if self.find_try("DefaultBg", description="书籍加载界面", waitTime=1, tryTime=3):
+        if self.find_try("DefaultBg", description="书籍加载界面", waitTime=3, tryTime=3):
             startime = time.time()
             while self.poco("DefaultBg").wait(3).exists():
                 loadtime = time.time() - startime
-                if self.find_try("Discover"):
+                sleep(3)
+                if self.find_try("Discover",description="是否返回大厅",waitTime=1):
                     mylog.error("加载书籍异常")
                     log(Exception("加载书籍异常，自动返回到大厅"))
                     raise
@@ -65,7 +68,8 @@ class VisualBook(CommonPoco):
             self.getReadBook_info(MyData.UserData_dir["bookDetailInfo"]["BookID"])
             print(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]))
             print(int(self.ReadBook_info["chapterProgress"]))
-            self.getstoryoptionslist = MyData.getstoryoptions(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]),                                                              int(self.ReadBook_info["chapterProgress"]))
+            self.getstoryoptionslist = MyData.getstoryoptions(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]),
+                                                              int(self.ReadBook_info["chapterProgress"]))
             print("getstoryoptionslist", self.getstoryoptionslist)
             if self.getstoryoptionslist:
                 for k in self.getstoryoptionslist:
@@ -76,6 +80,7 @@ class VisualBook(CommonPoco):
                 print("记录选项进度", bchatProgress)
                 if self.poco("UIChapterSelectList").child("Item").wait(0.2).exists():  # "UISelectList")老版本
                     Item0 = self.poco("UIChapterSelectList").child("Item")[Item]
+                    # if Item0.child("OldPayBg").wait(1).exists():
                     # if Item0.child("FreeBg").wait(0.1).exists():
                     # TXT=Item0.child("Txt").get_TMPtext()
                     # mylog.info("当前进度：【{0}】选择的选项：-【{1}】".format(self.ReadBook_info["chatProgress"],TXT))
@@ -110,8 +115,8 @@ class VisualBook(CommonPoco):
         readprogress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取书籍进度
         self.ReadBook_info["chatProgress"] = readprogress["chatProgress"]
         achatProgress = self.ReadBook_info["chatProgress"]
-        print("上一页ID::", bchatProgress)
-        print("当前页ID:", achatProgress)
+        print("上一次进度ID:", bchatProgress)
+        print("当前页进度ID:", achatProgress)
         print("本章总页数:", self.ReadBook_info["chat_num"])
         if self.getstoryoptionslist:
             if int(achatProgress) in self.ReadBook_info["storyoption"].keys():
@@ -126,15 +131,18 @@ class VisualBook(CommonPoco):
             self.dialogueEndPOP()  # 阅读结束弹框判断
         if achatProgress == bchatProgress:
             self._etime = self._etime + 1
-            if self._etime > 2:
+            if self._etime >= 1:
                 self._etime = 0
+                if self.find_try("UIQuickPayFrame",description="快捷购买"):
+                    self.myShop.quick_purchase()
+                    return
                 if self.roleDressJudge() == True:
                     return
                 else:
                     # utilities.screenshot(loc_desc="有卡顿")
                     self.ReadBook_info["异常次数"] = self.ReadBook_info["异常次数"] + 1
                     print("卡顿或异常次数：", self.ReadBook_info["异常次数"])
-                    if self.ReadBook_info["异常次数"] > 20:
+                    if self.ReadBook_info["异常次数"] > 50:
                         print("卡顿或异常次数较多", self.ReadBook_info["异常次数"])
                         mylog.error("异常次数过多读书可能卡死")
                         log(Exception("异常次数过多读书可能卡死"))
@@ -146,11 +154,12 @@ class VisualBook(CommonPoco):
 
     def roleDressJudge(self):
         if self.find_try("UIChangeDress", "角色装扮选择", waitTime=0.2, tryTime=1):  # UIPortraitDress老版本
-            self.findClick_object("NextCellButton", "NextCellButton", description="装扮右滑", sleeptime=2)
+            # self.findClick_object("NextCellButton", "NextCellButton", description="装扮右滑", sleeptime=2)
             while (self.find_try("UIChangeDress", "角色装扮选择", waitTime=0.2, tryTime=1)):
                 if self.find_try("ButtonNoPrice", description="选择免费选项", sleeptime=3):
                     self.findClick_try("ButtonNoPrice", "ButtonNoPrice", description="选择免费选项", sleeptime=0.5)
                 elif self.find_try("ButtonPrice", description="付费选项", sleeptime=0.5):
+                    # self.findClick_try("ButtonPrice", "ButtonPrice", description="选择免费选项", sleeptime=0.5)
                     self.findClick_try("NextCellButton", "NextCellButton", description="装扮右滑", sleeptime=0.5)
             return True
 
@@ -164,7 +173,6 @@ class VisualBook(CommonPoco):
     def dialogueEndPOP(self):
         """章节尾弹框"""
         # self.poco.wait_for_any()
-        touch(self._POS)
         if self.find_try("UIChapterContinue", description="章节尾弹框", waitTime=1):
             stoptime = str(clock("stop")) + "秒"
             self.ReadBook_info["阅读时长"] = stoptime

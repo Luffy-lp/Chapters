@@ -121,16 +121,16 @@ class APiClass():
         data = self.try_APIlink(url=url, headers=self.Header, body=body)
         return data
 
-    def syncValueApi(self, UUID, value_type, channel_id="AVG10005", ):
-        """diamond，ticket"""
+    def syncValueApi(self, UUID, value_type, channel_id="AVG10005",valuechange=0):
+        """虚拟币类型，值有：diamond，ticket"""
         url = self.url + "syncValueApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 "channel_id": channel_id,
                 "random_id": "",
-                "tag": "",
+                "tag": "charge",
                 "value_type": value_type,
                 "value_all": "",
-                "valuechange": 0
+                "valuechange": valuechange
                 }
 
         data = self.try_APIlink(url=url, headers=self.Header, body=body)
@@ -213,5 +213,6 @@ class APiClass():
             zp = zipfile.ZipFile(code)
             print(zp)
 # APiClass1=APiClass()
+# APiClass1.syncValueApi("42682","diamond",valuechange=-3000)
 # data=APiClass1.registerApi5(bind_type="googleplus",bind_id="42682")
 # print(data)

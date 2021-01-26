@@ -21,8 +21,8 @@ class SignIn(CommonPoco):
             NewUserGuide1 = NewUserGuide()
             NewUserGuide1.newUserPopUp()
             mytime = float(clock("stop"))
-            if mytime > 30:
-                print("检测是否登陆成功失败")
+            if mytime > 360:
+                print("检测是否登陆成功失败,确保大厅是否有弹框遮挡")
                 log(Exception("检测是否登陆成功失败"))
                 raise Exception("检测是否登陆成功失败")
         ProfileBt = self.poco("Profile").child("Label")
@@ -46,12 +46,12 @@ class SignIn(CommonPoco):
                     for i in listname:
                         name = i.get_text()
                         if name == MyData.UserData_dir["loginInfo"]["loginemail"]:
-                            print(name)
+                            print("你登陆的用户:",name)
                             self.findClick_childobject(i, description="登录Google用户")
                             self.SignIn_info["Google用户"] = name
                             return True
                     name = listname.get_text()
-                    self.findClick_childobject(listname, description="登录Google用户")
+                    self.findClick_childobject(name, description="登录Google用户")
                     self.SignIn_info["Google用户"] = name
                 except:
                     pass
@@ -67,8 +67,6 @@ class SignIn(CommonPoco):
                                            sleeptime=3)
                     self.click_Google()
             self.bindLoginComfirm()
-            self.mysleep(2)
-
             return True
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "FaceBook":
             self.click_FaceBook()
@@ -91,10 +89,9 @@ class SignIn(CommonPoco):
     def bindLoginComfirm(self):
         """登陆Comfirm按钮判断"""
         click(PosTurn(self._pos))
-        sleep(3)
-        if self.poco("UIBindLoginComfirm").child("Button").wait(1).exists():
+        if self.poco("UIBindLoginComfirm").child("Button").wait(3).exists():
             LoginComfirmBtn = self.poco("UIBindLoginComfirm").child("Button")
-            self.findClick_childobject(LoginComfirmBtn, description="Comfirm按钮")
+            self.findClick_childobject(LoginComfirmBtn, description="Comfirm按钮",waitTime=3)
 
     def process_profilelogin(self):
         """个人信息登陆流程Google,FaceBook"""

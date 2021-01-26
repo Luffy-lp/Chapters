@@ -12,7 +12,7 @@ class Community(CommonPoco):
 
     def into_workshop(self):
         """进入工作室"""
-        self.findClick_object("UINewBookRack", "CreateBtn", description="进入工作室", waitTime=1)
+        self.findClick_object("UINewBookRack", "CreateBtn", description="进入工作室", waitTime=5)
         return True
 
     def storiesPOP(self):

@@ -7,17 +7,16 @@ class Creation(CommonPoco):
 
     def __init__(self):
         CommonPoco.__init__(self)
-        self.workshop()
+        # self.workshop()
 
     def workshop(self):
         self.find_object("LoopListView", description="作者小说列表界面", waitTime=3)
 
     def click_createNewBook(self):
         """创建新小说+"""
-        print("selfpocp:",self.poco)
         POCO=self.poco("CoverMask").child("Text")
         clock()
-        while not self.findchildobject_try(POCO,description="新增小说按钮",waitTime=2):
+        while not self.findchildobject_try(POCO,description="新增小说按钮",waitTime=1):
             self.poco.swipe([0.5, 0.5], [0.5, 0.1], duration=1.0)
             mytime = float(clock("stop"))
             if mytime > 60:
@@ -42,7 +41,7 @@ class Creation(CommonPoco):
         print("选择小说类型界面")
         ContentPOCO = self.poco("Content").child("Item(Clone)")[0].wait(1).child("TxtName")
         self.findClick_childobject(ContentPOCO, description="选择类型", waitTime=2, sleeptime=1)
-        self.findClick_object("LuaUICategory", "BtnNext", "下一步", waitTime=1, sleeptime=2)
+        self.findClick_object("LuaUICategory", "BtnNext", "下一步", waitTime=1, sleeptime=1)
 
     def storiesPOP(self):
         self.find_object("UINewBookRack", description="短信小说界面", waitTime=3)
