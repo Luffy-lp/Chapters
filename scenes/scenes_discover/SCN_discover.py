@@ -12,6 +12,7 @@ class Discover(CommonPoco):
         """大厅弹框检查"""
         poplist = MyData.popup_dir[0]
         this = True
+        self.UIAlterPoP()
         while this:
             if self.poco("PopupPanel").children():
                 child = self.poco("PopupPanel").child(nameMatches="^UI.*", visible=True)
@@ -20,9 +21,7 @@ class Discover(CommonPoco):
                     print("listname:", listname)
                     for k in poplist:
                         if listname==k["args"][0]:
-                            if listname == "UIAlter":
-                                self.UIAlterPoP()
-                            elif listname == "UIGiftPopup":
+                            if listname == "UIGiftPopup":
                                 if self.find_try("UIGiftPopup", "推送礼包", 0.2, tryTime=1):
                                     self.findClick_try("GiftShake", "GiftBag3", "礼物", 0.2, tryTime=1, sleeptime=5)
                                     self.findClick_try("UIBagItemReward", "BtnStore", "会员卡", 0.2, tryTime=1, sleeptime=2)
@@ -37,8 +36,6 @@ class Discover(CommonPoco):
                     print("listname:", listname)
                     for k in poplist:
                         if listname==k["args"][0]:
-                            if listname == "UIAlter":
-                                self.UIAlterPoP()
                             if listname == "UIGiftPopup":
                                 if self.find_try("UIGiftPopup", "推送礼包", 0.2, tryTime=1):
                                     self.findClick_try("GiftShake", "GiftBag3", "礼物", 0.2, tryTime=1, sleeptime=5)
