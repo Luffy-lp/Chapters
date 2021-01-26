@@ -228,6 +228,7 @@ class MainStudio(CommonPoco):
         """封装好工作室流程"""
         txt = "abcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghi" \
               "jklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyz"
+        self.LuaUIStudio()
         self.creatCharacter("lipeng", "main")
         self.creatCharacter("lilei")
         time = 2
@@ -237,3 +238,5 @@ class MainStudio(CommonPoco):
             self.talk("lipeng", txt)
             self.talk("lilei", txt)
         self.branchprocess()
+# MainStudio1=MainStudio()
+# MainStudio1.mainprocess()

@@ -43,6 +43,7 @@ class GameLoaded(CommonPoco):
 
     def Popup_login(self, login=1):
         """游戏进入界面弹框处理,0无弹框，1，有弹框跳过，2，有弹框点击登录"""
+        login=int(login)
         if login==0:
             return
         if self.find_try("LoginGuide_LoginCtrl", description="游戏登陆弹框", waitTime=5):  # 登陆弹框

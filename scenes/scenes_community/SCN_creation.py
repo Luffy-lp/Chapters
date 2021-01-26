@@ -14,6 +14,7 @@ class Creation(CommonPoco):
 
     def click_createNewBook(self):
         """创建新小说+"""
+        self.findClick_try("UIWriterIntroduceDlg", "BtnOK", description="创作小说条款")
         POCO=self.poco("CoverMask").child("Text")
         clock()
         while not self.findchildobject_try(POCO,description="新增小说按钮",waitTime=1):
@@ -30,7 +31,6 @@ class Creation(CommonPoco):
         if pos[1] > 0.9:
             self.findSwipe_object("CoverMask", 0.9, POCOobject=createMask)
         self.findClick_childobject(createMask, description="创建新小说", sleeptime=1)
-        self.findClick_try("UIWriterIntroduceDlg", "BtnOK", description="创作小说条款")
 
     def click_back(self):
         """返回上一界面"""
