@@ -120,10 +120,15 @@ class Profilemodule(Profile):
         self.click_background()
         sleep(5)
         self.refuse_member_renew()
-        i = 0
-        while i < 3:
-            self.click_maybel()
-            i = i + 1
+        if self.find_try("LaterBtn",description="检测是否有弹框提醒解锁新物品"):
+            i = True
+            while i :
+                self.click_maybel()
+                i = self.click_maybel()
+                #     def click_maybel(self):
+                #         """检测是否有提醒弹窗并进行-稍后变换"""
+                #         if self.find_try("LaterBtn",description="检测是否有弹框提醒解锁新物品"):
+                #             self.click_object("LaterBtn")
         sleep(1)
         self.click_avatar()
         self.click_choose_avatar()
@@ -139,8 +144,27 @@ class Profilemodule(Profile):
         self.changeavatar_step()
         return True
 
-    def ChangeUseremoticons(self,expression):
+    def ChangeUseremoticons(self,num):
         """更换个人信息表情"""
+        print(num)
+        num2 = int(num)
+        width = G.DEVICE.display_info['width']
+        height = G.DEVICE.display_info['height']
+        scale = height / width
+        expression2 = {
+            0 : "Angry",
+            1 : "Cry",
+            2 : "Laughing",
+            3 : "Neutral",
+            4 : "Sad",
+            5 : "Shock",
+            6 : "Shy",
+            7 : "Smile",
+            8 : "Flirty"
+        }
+        print(expression2.get(num2))
+        expression = expression2.get(num2)
+        print("4dadad",expression)
         self.changeemoticons_step(expression)
         return True
 
@@ -161,4 +185,4 @@ class Profilemodule(Profile):
 
 
 # tt= Profilemodule()
-# tt.nameedit(name="23232")
+# tt.ChangeUseremoticons(2)
