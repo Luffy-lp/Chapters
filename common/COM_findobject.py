@@ -374,7 +374,6 @@ class CommonPoco(CommonDevices):
     # def heartBeat(self):
     #     sleep(3)
     #     self.UIAlterPoP()
-
     def mysleep(self, sleeptime:float):
         """会根据设备或其他情况延迟睡眠时间方法"""
         mytime = float(MyData.ConfData_dir["sleepLevel"]) + sleeptime

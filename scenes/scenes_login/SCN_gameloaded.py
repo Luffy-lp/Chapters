@@ -47,7 +47,6 @@ class GameLoaded(CommonPoco):
         if login==0:
             return True
         if self.find_try("LoginGuide_LoginCtrl", description="游戏登陆弹框", waitTime=5):  # 登陆弹框
-            sleep(2)
             if login == 1:
                 try:
                     self.findClick_object("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)

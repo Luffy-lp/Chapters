@@ -84,7 +84,6 @@ def test_newUserGuide():
     isNewUserGuide = myNewUserGuide.newUserPopUp()
     assert_equal(True, True, "新手引导弹出情况：{0}".format(isNewUserGuide[1]))
 
-
 def test_bookchoose(bookShelf, index):
     """找书"""
     bookdetail = BookNewDetail()
