@@ -77,7 +77,7 @@ class Run(MyAnalysis):
                     self.runcase(self.Runlist_dir[k])
                     self.Case_info[k]["repeattime"] = 0
                 except Exception as e:
-                    # mylog.error("------出现异常{}",e)
+                    mylog.error("------出现异常{}",e)
                     MyData.DeviceData_dir["poco"] = None
                     sleep(3)
                     test_startgame(1)

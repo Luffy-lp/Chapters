@@ -27,7 +27,7 @@ class Discover(CommonPoco):
                                     self.findClick_try("UIBagItemReward", "BtnStore", "会员卡", 0.2, tryTime=1, sleeptime=2)
                                     self.findClick_try("UIBagItemReward", "BtnRead", "背包道具推送", 0.2, tryTime=1, sleeptime=2)
                             else:
-                                self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=0.2,
+                                self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,
                                                    tryTime=1, sleeptime=2)
             elif self.poco("PopUpPanel").children():
                 child1 = self.poco("PopUpPanel").child(nameMatches="^UI.*", visible=True)
@@ -42,7 +42,7 @@ class Discover(CommonPoco):
                                     self.findClick_try("UIBagItemReward", "BtnStore", "会员卡", 0.2, tryTime=1, sleeptime=2)
                                     self.findClick_try("UIBagItemReward", "BtnRead", "背包道具推送", 0.2, tryTime=1, sleeptime=2)
                             else:
-                                self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=0.2,
+                                self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,
                                                    tryTime=1, sleeptime=2)
             else:
                 this = False

@@ -386,9 +386,10 @@ class CommonPoco(CommonDevices):
             mylog.info("发现-【{}】-类型弹框".format(txt))
             Btn = self.AlterTxt.get(txt)
             self.Popuplist.append(txt)
-            print("点击按钮", Btn)
+            print("准备点击按钮", Btn)
             try:
                 self.poco(Btn).click()
+                print("点击按钮", Btn)
             except:
                 print("未成功点击按钮")
                 return False

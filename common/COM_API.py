@@ -213,6 +213,6 @@ class APiClass():
             zp = zipfile.ZipFile(code)
             print(zp)
 # APiClass1=APiClass()
-# APiClass1.syncValueApi("42682","diamond",valuechange=-3000)
+# APiClass1.syncValueApi("42682","diamond")
 # data=APiClass1.registerApi5(bind_type="googleplus",bind_id="42682")
 # print(data)

@@ -63,3 +63,5 @@ class ChapterEdit(CommonPoco):
             mylog.error("等待-【{}】-元素可见超时".format("个人信息"))
         finally:
             print("ddd:",self.ChapterEdit_info)
+# ChapterEdit1=ChapterEdit()
+# ChapterEdit1.process_creationStoryFlow("lipeng0000")

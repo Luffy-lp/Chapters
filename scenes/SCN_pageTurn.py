@@ -9,7 +9,6 @@ class PageTurn(CommonPoco):
     def Bottom_click(self, index):
         """0~4对应底部主场景"""
         index = str(index)
-
         if self.find_object("Bottom", description="底部跳转",waitTime=3):
             Bottom = self.poco("Bottom").child(index)
             self.findClick_childobject(Bottom, description="底部跳转到" + index, waitTime=2)

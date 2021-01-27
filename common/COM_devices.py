@@ -15,8 +15,9 @@ class CommonDevices():
                 conf = MyData.ConfData_dir["device"] + "://" + MyData.ConfData_dir["ADBip"] + "/" + MyData.ConfData_dir[
                     "ADBdevice"]
                 method = MyData.ConfData_dir["method"]
-                if "127" in  MyData.ConfData_dir["device"]:
+                if "127" in  MyData.ConfData_dir["ADBdevice"]:
                     method= MyData.ConfData_dir["simulator"]
+                    print("ddddddd",[conf + method,])
                 auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
                 print("__file__",__file__)
                 logging.DEBUG = 0
@@ -55,3 +56,4 @@ class CommonDevices():
             for i in range(len(connectinfolist)):
                 print(f'设备{i + 1} SN: {connectinfolist[i]}')
             return True
+# CommonDevices1=CommonDevices()

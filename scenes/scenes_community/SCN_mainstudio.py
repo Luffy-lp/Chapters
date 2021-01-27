@@ -33,6 +33,7 @@ class MainStudio(CommonPoco):
 
     def chooseHead(self):
         """选择角色头像"""
+
         if self.findClick_object("LuaUIRoleCreateDlg", "Head", description="选择头像弹框", waitTime=1):
             self.click_object("BtnHead", description="选择图像")
             self.find_object("UIBottomForm", description="选择角色方式", waitTime=3)
