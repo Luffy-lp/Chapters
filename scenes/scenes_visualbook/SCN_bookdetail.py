@@ -137,6 +137,3 @@ class BookNewDetail(CommonPoco):
                 self.findClick_object("UIRestart", "SetChapter", description="重置章节", sleeptime=0.5)
                 self.poco("Mask").child("Button").click()
                 return True
-
-# BookNewDetail1=BookNewDetail()
-# BookNewDetail1.bookNewDetailPOP()

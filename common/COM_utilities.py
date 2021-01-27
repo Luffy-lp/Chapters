@@ -5,7 +5,7 @@ from common.COM_path import *
 import yaml
 import types
 from airtest.core.android.recorder import *
-from common.COM_data import MyData
+# from common.COM_data import MyData
 spendtime = None
 
 

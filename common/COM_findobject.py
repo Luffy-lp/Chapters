@@ -390,6 +390,7 @@ class CommonPoco(CommonDevices):
             try:
                 self.poco(Btn).click()
                 print("点击按钮", Btn)
+                sleep(2)
             except:
                 print("未成功点击按钮")
                 return False

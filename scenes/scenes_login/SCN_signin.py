@@ -1,4 +1,5 @@
 from common import COM_utilities
+from common.COM_data import MyData
 from common.COM_findobject import CommonPoco
 from common.COM_utilities import *
 # from pages.startgame.page_loginView import LoginView

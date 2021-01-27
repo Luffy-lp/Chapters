@@ -79,10 +79,15 @@ class Run(MyAnalysis):
                 except Exception as e:
                     mylog.error("------出现异常{}",e)
                     MyData.DeviceData_dir["poco"] = None
-                    sleep(3)
+                    sleep(1)
+                    print("正在进行异常重启------")
+                    mylog.info("----------正在进行异常重启------")
                     test_startgame(1)
                     test_newUserGuide()
                     test_discoverPopup()
+                    print("完成异常重启------")
+                    mylog.info("--------完成异常重启------")
+
                 finally:
                     outputpath = os.path.join(path_REPORT_DIR, htmlname)
                     print("report__file__", file)

@@ -31,7 +31,7 @@ class GameLoaded(CommonPoco):
             self.Popo_Errorinfo()
             self.Popup_login(login=1)
             mytime = float(COM_utilities.clock("stop"))
-            if mytime > 120:
+            if mytime > 360:
                 print("游戏加载失败。。。")
                 log(Exception("游戏加载失败。。。"))
                 raise Exception
@@ -45,7 +45,7 @@ class GameLoaded(CommonPoco):
         """游戏进入界面弹框处理,0无弹框，1，有弹框跳过，2，有弹框点击登录"""
         login=int(login)
         if login==0:
-            return
+            return True
         if self.find_try("LoginGuide_LoginCtrl", description="游戏登陆弹框", waitTime=5):  # 登陆弹框
             sleep(2)
             if login == 1:

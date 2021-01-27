@@ -26,12 +26,12 @@ class CommonDevices():
         devlist = []
         connectfile = os.popen('adb devices')
         list = connectfile.readlines()
-        # print(list)
-        for i in range(len(list)):
-            if list[i].find('\tdevice') != -1:
-                temp = list[i].split('\t')
-                devlist.append(temp[0])
-        return devlist
+        print(list)
+        # for i in range(len(list)):
+        #     if list[i].find('\tdevice') != -1:
+        #         temp = list[i].split('\t')
+        #         devlist.append(temp[0])
+        # return devlist
 
     def checkAdbConnectability(self,flag=0):
         '''
