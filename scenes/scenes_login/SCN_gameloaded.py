@@ -2,14 +2,14 @@
 from time import sleep
 from scenes.scenes_login.SCN_signin import SignIn
 from common import COM_utilities
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from scenes.scenes_login.SCN_newuser import NewUserGuide
 from scenes.SCN_pageTurn import PageTurn
 from common.my_log import mylog
 from airtest.core.api import *
 
 
-class GameLoaded(CommonPoco):
+class GameLoaded(FindObject):
     GameLoaded_info = {}
     __instance = None
     ErrorTxt = []
@@ -18,7 +18,7 @@ class GameLoaded(CommonPoco):
     def __init__(self):
         COM_utilities.clock()  # 插入计时器
         self.mysleep(10)
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
     def mainprocess(self, login=0):
         self.gameloading()
         self.Popup_login(login)

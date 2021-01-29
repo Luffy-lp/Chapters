@@ -1,11 +1,11 @@
 from time import sleep
 
 from common.COM_data import MyData
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 
-class Discover(CommonPoco):
+class Discover(FindObject):
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def discoverPopup(self):  # 积分弹框
         """大厅弹框检查"""
@@ -58,5 +58,5 @@ class Discover(CommonPoco):
             else:
                 print("判断当前无弹框")
                 havePopup = False
-        return True, CommonPoco.Popuplist
+        return True, FindObject.Popuplist
 

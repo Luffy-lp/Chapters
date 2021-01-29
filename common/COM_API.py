@@ -16,17 +16,18 @@ class APiClass():
     def __init__(self):
         print("调用接口类")
 
-    def try_APIlink(self, url, headers, body, trytime=100, timeout=10):
+    def try_APIlink(self, url, headers, body,name,trytime=100,timeout=10):
         """requests公共方法"""
         while (trytime >= 0):
             trytime = trytime - 1
             try:
-                print("拉取{0}接口".format(url[31:-11]))  # 补充正则截取
+                print("拉取{0}接口".format(name))  # 补充正则截取
                 self._response = requests.post(url=url, headers=headers, data=body, timeout=10)
                 dir = eval(self._response.text)
+                print("拉取{0}接口成功".format(name))
                 return dir
             except:
-                print("拉取{0}接口失败，重试".format(url[31:-11]))
+                print("拉取{0}接口失败，重试".format(name))
 
     def registerApi5(self, bind_type="device",channel_id="AVG10005", device_id="490000000326402", device_platform="android"):
         """游戏用户登录注册接口v3"""
@@ -42,7 +43,7 @@ class APiClass():
                 "account_id": "tourists",
                 "account_type": "tourists"
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body)
+        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="registerApi5")
         return data
 
     def LoginStatusApi(self, UUID, deviceId):
@@ -64,7 +65,7 @@ class APiClass():
         body = {"channel_id": "AVG10005",
                 "uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10)
+        data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10,name="summaryApi3")
         return data
 
     def getStoryAllChapterInfoApi(self, UUID, story_id):
@@ -74,9 +75,8 @@ class APiClass():
         body = {"story_id": story_id,
                 "uuid": UUID,
                 }
-        response = requests.post(url=url, headers=self.Header, data=body, timeout=10)
-        dir = eval(response.text)
-        print(dir)
+        data = self.try_APIlink(url=url, headers=self.Header, data=body, timeout=10,name="getStoryAllChapterInfoApi")
+        print(data)
 
     def getCommonDataApi(self, UUID):
         """拉取存档通用数据接口"""
@@ -89,7 +89,7 @@ class APiClass():
                 "my_book_updated_at": time,
                 "read_progress_updated_at": time,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body, trytime=10, timeout=1)
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, trytime=10, timeout=1,name="getCommonDataApi")
         return data
 
     def getAllStoryInfoApi(self, UUID):
@@ -97,9 +97,8 @@ class APiClass():
         url = self.url + "getAllStoryInfoApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-        response = requests.post(url=url, headers=self.Header, data=body, timeout=10)
-        dir = eval(response.text)
-        story_info = dir["data"]["list"][0]
+        data = self.try_APIlink(url=url, headers=self.Header, data=body, timeout=10,name="getAllStoryInfoApi")
+        story_info = data["data"]["list"][0]
         return story_info
 
     def heartbeatsApi3(self, UUID, device_id="490000000326402", channel_id="AVG10005"):
@@ -110,7 +109,7 @@ class APiClass():
                 "device_id": device_id,
                 "big_version": "991"
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body)
+        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="heartbeatsApi3")
         return data
 
     def getAllStoryInfoApi(self, UUID):
@@ -118,7 +117,7 @@ class APiClass():
         url = self.url + "getAllStoryInfoApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body)
+        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="getAllStoryInfoApi")
         return data
 
     def syncValueApi(self, UUID, value_type, channel_id="AVG10005",valuechange=0):
@@ -133,7 +132,7 @@ class APiClass():
                 "valuechange": valuechange
                 }
 
-        data = self.try_APIlink(url=url, headers=self.Header, body=body)
+        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="syncValueApi")
         print(data)
         return data
 
@@ -143,7 +142,7 @@ class APiClass():
         body = {"uuid": UUID,
                 }
 
-        data = self.try_APIlink(url=url, headers=self.Header, body=body)
+        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="todayCheckNewPushApi")
         print(data)
         return data
 
@@ -153,7 +152,7 @@ class APiClass():
         url = self.url + "Controllers/member/GetMemberInfoApi.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body)
+        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="memberInfoApi")
         return data
 
     def unzip_file(self, fz_name, path):
@@ -185,7 +184,7 @@ class APiClass():
         path = "D:/ChaptersApp_Auto/resource"
         try:
             r = requests.get(address, stream=True)
-            print(r)
+            print("下载成功")
         except:
             print("下载失败")
         zip_file = zipfile.ZipFile('gamecfg_0805test_20201217_Q5yEz1.zip')
@@ -201,7 +200,7 @@ class APiClass():
         body = {"chapter_id": bookid,
                 "source_type": "t0"
                 }
-        response = self.try_APIlink(url=url, headers=self.Header, body=body)
+        response = self.try_APIlink(url=url, headers=self.Header, body=body,name="avgcontentApi")
         address:str = response["address"]
         addresslist=address.split('/')
         print(address)

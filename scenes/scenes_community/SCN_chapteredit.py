@@ -1,15 +1,15 @@
 from airtest.core.api import *
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from common.my_log import mylog
 from scenes.scenes_community.SCN_creation import Creation
 from scenes.scenes_community.SCN_IntroduceEdit import IntroduceEdit
 from scenes.scenes_community.SCN_mainstudio import MainStudio
 
-class ChapterEdit(CommonPoco):
+class ChapterEdit(FindObject):
     """小说编辑界面"""
     ChapterEdit_info = {}
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def LuaUIChapterEdit(self):
         self.find_object("LuaUIChapterEdit", description="章节编辑界面", waitTime=3)

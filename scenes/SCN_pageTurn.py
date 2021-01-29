@@ -1,10 +1,10 @@
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from scenes.scenes_discover.SCN_discover import Discover
 
 
-class PageTurn(CommonPoco):
+class PageTurn(FindObject):
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def Bottom_click(self, index):
         """0~4对应底部主场景"""

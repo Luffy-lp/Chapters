@@ -1,13 +1,13 @@
 from airtest.core.api import *
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 
 
 
-class Community(CommonPoco):
+class Community(FindObject):
     """短信小说社区主页"""
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
         # self.storiesPOP()
 
     def into_workshop(self):

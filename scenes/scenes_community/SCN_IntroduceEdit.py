@@ -1,5 +1,5 @@
 from airtest.core.api import *
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from common import COM_utilities
 from common.COM_data import MyData
 from common.COM_utilities import *
@@ -7,11 +7,11 @@ from common.COM_utilities import *
 import time
 
 
-class IntroduceEdit(CommonPoco):
+class IntroduceEdit(FindObject):
     """简介编辑界面"""
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def chapterEdit(self):
         self.find_object("LuaUIIntroduceEdit", description="简介编辑界面", waitTime=3)

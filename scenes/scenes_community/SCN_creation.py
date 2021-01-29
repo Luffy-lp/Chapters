@@ -1,12 +1,12 @@
-from common.COM_findobject import CommonPoco, log
+from common.COM_findobject import FindObject, log
 from common.COM_utilities import clock
 
 
-class Creation(CommonPoco):
+class Creation(FindObject):
     """创建短信小说"""
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
         # self.workshop()
 
     def workshop(self):

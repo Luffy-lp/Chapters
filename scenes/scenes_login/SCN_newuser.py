@@ -1,9 +1,9 @@
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from airtest.core.api import *
 
-class NewUserGuide(CommonPoco):
+class NewUserGuide(FindObject):
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
     def newUserPopUp(self):
         """新手引导"""
         if self.find_try( "UINewGuide", description="新手引导选择类型界面", waitTime=2,sleeptime=3):

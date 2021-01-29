@@ -1,16 +1,16 @@
 from airtest.core.api import *
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from common.COM_utilities import *
 
 
 # TODO:返回到上一个界面应该用树代替
 
-class MainStudio(CommonPoco):
+class MainStudio(FindObject):
     """作家工作室"""
     chapterDlg = 0
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def LuaUITalkEdit2(self):
         self.find_object("LuaUITalkEdit2", description="对话编辑页面2", waitTime=3)

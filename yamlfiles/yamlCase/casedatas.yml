@@ -12,10 +12,10 @@
     import_module_functions:
         - case.case_test
     step:
-#        - ${test_uninstallGame()}
-#        - ${test_installGame()}
-#        - ${test_startgame(1)}
-#        - ${test_newUserGuide()}
+        - ${test_uninstallGame()}
+        - ${test_installGame()}
+        - ${test_startgame(1)}
+        - ${test_newUserGuide()}
         - ${test_discoverPopup()}
         - ${pageTurn(4)}
         - ${test_signin()}
@@ -30,12 +30,13 @@
         - case.case_test
     step:
         - ${pageTurn(0)}
-        - ${test_bookchoose(Weekly, 0)}
+#        - ${test_bookchoose(Weekly, 0)}
+#        - ${test_bookPlay()}
 #        - ${test_bookPlay()}
 #        - ${test_bookread(10001)}
-        - ${test_bookPlay()}
-        - ${test_bookread()}
-        - ${pageTurn()}
+#        - ${test_bookPlay()}
+#        - ${test_bookread()}
+#        - ${pageTurn()}
 
 - 2:
     caseauthor: "lipeng"
@@ -73,7 +74,7 @@
         - ${pageTurn(4)}
         - ${test_ChangeUseravatar()}
         - ${test_operationAchievement()}
-        - ${test_ChangeUseremoticons(Cry)}
+        - ${test_ChangeUseremoticons(0)}
         - ${test_nameedit(lipeng)}
 - 5:
     caseauthor: "江浚朋"

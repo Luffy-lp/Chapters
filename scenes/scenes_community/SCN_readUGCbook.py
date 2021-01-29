@@ -1,15 +1,15 @@
 from airtest.core.api import *
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from common import COM_utilities
 
 
-class ReadUGCBook(CommonPoco):
+class ReadUGCBook(FindObject):
     touchTime = 0
     ReadUGCBook_info = {}
     Chattime = 0
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
         self._POS = COM_utilities.PosTurn([0.5, 0.9])
 
     def choosebook(self, index_x=0, index_y=0):

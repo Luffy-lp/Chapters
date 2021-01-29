@@ -13,22 +13,22 @@ class UserData(APiClass):
     _instance = None
     storyoptions_dir={}
     def __init__(self):
-        self.UserData_dir = {}  # 0.device_id 1.uuid 2.LoginStatus
-        self.UserData_dir["bookDetailInfo"] = {}
-        self.UserData_dir["bookDetailInfo"]["BookID"]=None
-        self.Bookshelf__dir = {}  # readprogressList 书籍列表
-        self.ConfData_dir = {}
-        self.UserPath_dir = {}
-        self.Story_cfg_chapter_dir = {}  # 章节总信息表
-        self.Element_dir = {}
-        self.readprogressList_dir = {}  # {'chapterProgress': 10108001, 'chatProgress': 10006}
-        self.Stroy_data_dir = {}  # 书籍和ID对应关系
-        self.popup_dir = {}
-        self.getdata()
-        self.DeviceData_dir = {}
+        self.DeviceData_dir = {} #设备信息配置表
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
-        self.Story_cfg_chapter_dir_new={}
+        self.ConfData_dir = {} #自动化配置表
+        self.UserData_dir = {}  # 用户基本数据表
+        self.UserData_dir["bookDetailInfo"] = {}
+        self.UserData_dir["bookDetailInfo"]["BookID"]=None
+        self.UserPath_dir = {} #用户自定义路径
+        self.Bookshelf__dir = {}  # readprogressList 书籍列表
+        self.Story_cfg_chapter_dir = {}  # 章节总信息表
+        self.Stroy_data_dir = {}  # 书籍和ID对应关系
+        self.readprogressList_dir = {}  # {'chapterProgress': 10108001, 'chatProgress': 10006} 书籍进度表
+        self.chat_type_dir={} #对话类型配置表
+        self.popup_dir = {} #弹框配置表
+        self.Element_dir = {}
+        self.getdata()
         self.downloadbook_sign={}
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
@@ -38,6 +38,7 @@ class UserData(APiClass):
         self.getbookData()
         self.stroy_data()
         self.yaml_stroy()
+        self.yaml_chattype()
         print(self.Bookshelf__dir)
 
     def __new__(cls):
@@ -53,7 +54,23 @@ class UserData(APiClass):
     def read_yaml(self,filepath):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
+            file.close()
         return value
+    def yaml_case(self):
+        bookdetailpaths = os.path.join(path_YAML_FILES, "yamlCase\\bookdetail.yml")
+        bookdetailData = self.read_yaml(bookdetailpaths)
+        self.Element_dir["bookdetailData"] = bookdetailData
+
+    def yaml_stroy(self):
+        storyoptionspath = os.path.join(path_YAML_FILES, "yamlstory/storyoptions.yml")
+        self.storyoptions_dir = self.read_yaml(storyoptionspath)
+        print("self.storyoptions_dir:",self.storyoptions_dir)
+
+    def yaml_chattype(self):
+        chattype = os.path.join(path_YAML_FILES, "yamlstory/chat_typeconf.yml")
+        self.chat_type_dir = self.read_yaml(chattype)
+        print("self.chat_type_dir:",self.chat_type_dir)
+        return self.chat_type_dir
 
     def yamldata_conf(self):  # 读取yaml数据
         data = None
@@ -105,34 +122,10 @@ class UserData(APiClass):
     def getreadprogress(self, bookid):
         """获取用户阅读进度返回chapterProgress和chatProgress"""
         datalist = self.getCommonDataApi(self.UserData_dir["uuid"])  # 调用通用接口0.章节进度，1.对话进度
-        readprogress = datalist["data"]["readprogress"][bookid]
+        readprogress = datalist["data"]["readprogress"]
+        chapter_id = datalist["data"]["readprogress"][bookid]["chatProgress"]
         # self.readprogressList_dir = readprogress
         return readprogress
-
-    def getLoginStatus(self):
-        """获取用户登陆状态"""
-        LoginStatus = self.LoginStatusApi(self.UserData_dir["uuid"], self.UserData_dir["device_id"])
-        self.UserData_dir["LoginStatus"] = LoginStatus
-        return LoginStatus
-
-    def yaml_case(self):
-        bookdetailpaths = os.path.join(path_YAML_FILES, "yamlCase\\bookdetail.yml")
-        bookdetailData = self.read_yaml(bookdetailpaths)
-        self.Element_dir["bookdetailData"] = bookdetailData
-
-    def yaml_stroy(self):
-        storyoptionspath = os.path.join(path_YAML_FILES, "yamlstory/storyoptions.yml")
-        self.storyoptions_dir = self.read_yaml(storyoptionspath)
-        print("self.storyoptions_dir:",self.storyoptions_dir)
-    # def get_story_cfg_chapter(self):
-    #     """获取章节详情"""
-    #     data = None
-    #     path = os.path.join(path_resource, "data_s\story_cfg_chapter.txt")
-    #     with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
-    #         data = f.read()  # 可以是随便对文件的操作
-    #     data = eval(data)
-    #     self.Story_cfg_chapter_dir = data
-    #     return self.Story_cfg_chapter_dir
     def download_bookresource(self,bookid):
         """拉取书籍资源"""
         if bookid not in self.downloadbook_sign:
@@ -141,17 +134,25 @@ class UserData(APiClass):
             print("下载书籍资源成功")
         else:
             print("书籍资源已经下载")
-    def get_story_cfg_chapter(self,bookid,chapter_id):
-        """获取章节详情"""
+    def read_story_cfg_chapter(self,bookid,chapter_id):
+        """读取当前章节信息txt"""
         bookpath=bookid+"\\data_s\\"+chapter_id+"_chat.txt"
         path = os.path.join(path_resource, bookpath)
         print("path",path)
         with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
             data = f.read()  # 可以是随便对文件的操作
         data=eval(data)
-        length=len(data)
-        self.Story_cfg_chapter_dir[chapter_id]=length
+        self.Story_cfg_chapter_dir = data
+        self.Story_cfg_chapter_dir["length"]=len(data)
         return self.Story_cfg_chapter_dir
+
+    def getLoginStatus(self):
+        """获取用户登陆状态"""
+        LoginStatus = self.LoginStatusApi(self.UserData_dir["uuid"], self.UserData_dir["device_id"])
+        self.UserData_dir["LoginStatus"] = LoginStatus
+        return LoginStatus
+
+
     def stroy_data(self):
         """存在书籍和ID对应关系"""
         path = os.path.join(path_resource, "story_data.json")
@@ -199,7 +200,10 @@ class UserData(APiClass):
                     return None
             else:return None
 MyData = UserData()
-# MyData.download_bookresource("10001")
-# get_story_cfg_chapter_new=MyData.get_story_cfg_chapter("10001","10001001")
-# # aa=MyData.getreadprogress("10047")
-# print("get_story_cfg_chapter_new",get_story_cfg_chapter_new["10001001"])
+
+
+# dddddddd=MyData.get_option_info("10001001","10002")
+#
+# # get_story_cfg_chapter_new=MyData.get_story_cfg_chapter("10001","10001001")
+# # # aa=MyData.getreadprogress("10047")
+# print("dddddddd",dddddddd)

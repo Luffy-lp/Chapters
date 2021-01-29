@@ -29,6 +29,7 @@ class FindObject(CommonDevices):
             mylog.info("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
             print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
         if MyData.DeviceData_dir["androidpoco"] == None:
+            sleep(1)
             MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
             mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
             print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
@@ -261,27 +262,25 @@ class FindObject(CommonDevices):
 
     def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True):
         """尝试寻找并点击，不一定存在"""
-        while (tryTime > 0):
-            tryTime = tryTime - 1
-            try:
-                print("尝试寻找{0}".format(description))
-                # gameobject = self.poco(findName)
-                if self.poco(findName).wait(waitTime).exists():
-                    print("发现{0}".format(description))
-                    if self.poco(ClickName).wait(waitTime+1).exists():
-                        print("发现{0}按钮，并点击".format(ClickName))
-                        self.poco(ClickName).click()
-                        sleep(sleeptime)
-                        self.Popuplist.append(description)
-                        mylog.info("尝试点击-【{}】-元素成功并加入弹框列表".format(description))
-                        return True
-                    else:
-                        mylog.info("尝试点击-【{}】-元素失败".format(description))
-                        print("未触发点击")
-            except:
-                log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
-                mylog.error("尝试点击-【{}】-元素失败".format(description))
-                return False
+        try:
+            print("尝试寻找{0}".format(description))
+            # gameobject = self.poco(findName)
+            if self.poco(findName).wait(waitTime).exists():
+                print("发现{0}".format(description))
+                if self.poco(ClickName).wait(waitTime+1).exists():
+                    print("发现{0}按钮，并点击".format(ClickName))
+                    self.poco(ClickName).click()
+                    sleep(sleeptime)
+                    self.Popuplist.append(description)
+                    mylog.info("尝试点击-【{}】-元素成功并加入弹框列表".format(description))
+                    return True
+                else:
+                    mylog.info("尝试点击-【{}】-元素失败".format(description))
+                    print("未触发点击")
+        except:
+            log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+            mylog.error("尝试点击-【{}】-元素失败".format(description))
+            return False
 
     def findClick_Image(self, filename, record_pos, description="图片", resolution=(1600, 2560), tryTime=1,waitTime=5):
         width = G.DEVICE.display_info['width']

@@ -1,0 +1,9 @@
+#对白类型处理
+3: ["角色名称设置", "ConfirmBtn"]
+4: ["旧版换装", "UIPropItem(Clone)", "ConfirmBtn"]
+5: ["旧版换装", "UIPropItem(Clone)", "ConfirmBtn"]
+6: ["旧版换装", "UIPropItem(Clone)", "ConfirmBtn"]
+9: ["旧版换装", "UIPropItem(Clone)", "ConfirmBtn"]
+10: ["新版换装", "NextCellButton","ButtonNoPrice", "ButtonPrice",3]
+26: ["打电话ui, 此类型播放接听电话的动画", 5]
+27: ["特殊特效类型，播放固定时长过场动画", 20]

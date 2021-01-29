@@ -1,6 +1,6 @@
 from common import COM_utilities
 from common.COM_data import MyData
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from common.COM_utilities import *
 # from pages.startgame.page_loginView import LoginView
 from scenes.scenes_login.SCN_newuser import NewUserGuide
@@ -8,12 +8,12 @@ from scenes.scenes_login.SCN_newuser import NewUserGuide
 
 # TODO:当用户存在多个账号的情况下
 
-class SignIn(CommonPoco):
+class SignIn(FindObject):
     SignIn_info = {}
     _pos = [0.5, 0.53]
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def issign(self):
         """判断是否登陆"""
