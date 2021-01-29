@@ -1,5 +1,5 @@
 from common.COM_path import *
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from airtest.report import report
 from airtest.report.report import simple_report
 from case.test_case import *

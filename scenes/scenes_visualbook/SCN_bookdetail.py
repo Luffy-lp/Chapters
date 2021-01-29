@@ -1,18 +1,18 @@
 import time
 
 from airtest.core.api import assert_equal
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from pages.bookdetail.page_bookdetail import PagBookDetail
 from common.COM_data import MyData
 
 # TODO:概率出现未成功点击书籍的
 
-class BookNewDetail(CommonPoco):
+class BookNewDetail(FindObject):
     BookNewDetail_info = {}
     __instance = None
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def bookNewDetailPOP(self):
         # self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)

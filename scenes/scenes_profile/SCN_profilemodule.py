@@ -1,7 +1,7 @@
 import time
 from airtest.core.api import *
 from pages.userinfo.profile import Profile
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from airtest.core.api import touch
 from airtest.core.cv import Template
 import sys

@@ -1,21 +1,18 @@
 # -*- encoding=utf8 -*-
-from time import perf_counter, sleep
+from time import sleep
 from airtest.core.api import *
 from poco.exceptions import PocoNoSuchNodeException, PocoException
+from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 from common.COM_utilities import clock
 from common.my_log import mylog
 from common.COM_devices import CommonDevices
 from common.COM_path import *
 from common.COM_data import MyData
 from poco.drivers.unity3d import UnityPoco
-from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
-
-# TODO:截图分辨率需要补充
-class CommonPoco(CommonDevices):
+class FindObject(CommonDevices):
     poco: UnityPoco = None
     androidpoco:AndroidUiautomationPoco = None
-    # e = None
     globals()
     Popuplist = []
     AlterTxt = {

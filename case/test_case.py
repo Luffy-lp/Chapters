@@ -1,14 +1,15 @@
-from time import sleep
 from common.COM_path import *
-from airtest.core.api import assert_equal, wake
 from airtest.report.report import simple_report
-
+from common.COM_findobject import FindObject
+from airtest.core.api import assert_equal, wake
+from time import sleep
 from scenes.scenes_community.SCN_creation import Creation
 from scenes.scenes_login.SCN_gamestart import GameStart
 from scenes.scenes_login.SCN_gameloaded import GameLoaded
 from scenes.scenes_login.SCN_newuser import NewUserGuide
 from scenes.scenes_discover.SCN_discover import Discover
-from scenes.scenes_visualbook.SCN_bookread import VisualBook
+from scenes.scenes_visualbook.SCN_bookLoad import BookLoad
+from scenes.scenes_visualbook.SCN_bookread import BookRead
 from scenes.scenes_visualbook.SCN_bookdetail import BookNewDetail
 from scenes.scenes_login.SCN_signin import SignIn
 from scenes.SCN_pageTurn import PageTurn
@@ -19,18 +20,11 @@ from scenes.scenes_shop.SCN_shop import Shopmodule
 from scenes.scenes_profile.SCN_profilemodule import Profilemodule
 from scenes.scenes_profile.SCN_achievementmodule import Achievementmodule
 from common.COM_data import MyData
-from common.COM_findobject import CommonPoco
-# import allure
 __author__ = "lipeng"
 __title__ = "Chapters"
 __desc__ = "脚本描述"
-
-
 # __file__ = "D:\ChaptersApp_Auto\common"
-
-
 # Airtest提供了assert_exists和assert_not_exists两个接口，来断言一张图片存在或不存在于当前画面中。
-#
 # 同时，还提供了assert_equal和assert_not_equal两个语句，来断言传入的两个值相等或者不相等。
 
 def test_uninstallGame():
@@ -59,7 +53,6 @@ def test_startgame(login):
     actualValue = myGameLoaded.mainprocess(login=login)
     assert_equal(actualValue, True, "加载游戏详情{0}".format(myGameLoaded.GameLoaded_info))
     sleep(3)
-
 
 def test_discoverPopup():
     """大厅弹框"""
@@ -98,6 +91,12 @@ def test_bookPlay():
     actualValue = bookdetail.book_Play()
     assert_equal(True, actualValue, "Play书籍")
 
+def test_bookload(BookID=None):
+    """书籍加载"""
+    myBookLoad = BookLoad()
+    myBookLoad.bookLoad(BookID)
+    assert_equal(True, True, "书籍加载{0}".format(myBookLoad.ReadBook_info))
+    sleep(5)
 
 def test_bookread(BookID=None):
     """读书"""
@@ -107,7 +106,7 @@ def test_bookread(BookID=None):
         MyData.UserData_dir["bookDetailInfo"]["BookID"]=BookID
         print(MyData.UserData_dir["bookDetailInfo"])
         print(MyData.UserData_dir["bookDetailInfo"]["BookID"])
-    myVisual = VisualBook()
+    myVisual = BookRead()
     myVisual.bookLoad()
     # actualValue = myVisual.getReadBook_info(BookID)
     myVisual.bookRead()

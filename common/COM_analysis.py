@@ -15,7 +15,7 @@ from scenes.scenes_login.SCN_gamestart import GameStart
 from scenes.scenes_login.SCN_gameloaded import GameLoaded
 from scenes.scenes_login.SCN_newuser import NewUserGuide
 from scenes.scenes_discover.SCN_discover import Discover
-from scenes.scenes_visualbook.SCN_bookread import VisualBook
+from scenes.scenes_visualbook.SCN_bookread import BookRead
 from scenes.scenes_visualbook.SCN_bookdetail import BookNewDetail
 from scenes.scenes_login.SCN_signin import SignIn
 from scenes.SCN_pageTurn import PageTurn

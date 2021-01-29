@@ -1,11 +1,11 @@
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from common.COM_utilities import *
 
-class Shop(CommonPoco):
+class Shop(FindObject):
     Shop_info = {}
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
     #顶部进入商店
     def click_credit_enter(self):
         """点击枫叶币进入商店"""
@@ -100,8 +100,9 @@ class Shop(CommonPoco):
 
     def click_claim_shop(self):
         """点击按钮进行商品确认"""
-        shopPOCO = self.poco("UIClaimReward").offspring("Txt")
-        self.findClick_childobject(shopPOCO, description="商品确认按钮", waitTime=1)
+        sleep(2)
+        shopPOCO = self.poco("UIClaimReward").offspring("Txt").wait(5)
+        self.findClick_childobject(shopPOCO, description="商品确认按钮", waitTime=3)
 
     def quick_purchase(self):
         """便捷购买的后半步骤"""

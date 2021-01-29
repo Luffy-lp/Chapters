@@ -1,7 +1,7 @@
 import time
 from airtest.core.api import *
 from pages.userinfo.Achievement import Achievement
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 
 class Achievementmodule(Achievement):
     Achievementmodule_info = {}

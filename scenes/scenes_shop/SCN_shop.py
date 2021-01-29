@@ -1,6 +1,6 @@
 import time
 from airtest.core.api import *
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 from pages.shop.shop import *
 from common.COM_API import *
 from common.COM_data import *

@@ -1,10 +1,10 @@
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 
 
-class CardPanel(CommonPoco):
+class CardPanel(FindObject):
     """书籍详情页"""
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
         # poco("UIBookNewDetail")
     def click_close(self):
         """会员快捷入口按钮"""

@@ -7,11 +7,11 @@ import sys
 from common.COM_utilities import *
 
 
-class Profile(CommonPoco):
+class Profile(FindObject):
     Profile_info={}
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def click_profile_page(self):
         """跳转到个人信息页面"""

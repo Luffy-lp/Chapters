@@ -15,6 +15,7 @@ class UserData(APiClass):
     def __init__(self):
         self.UserData_dir = {}  # 0.device_id 1.uuid 2.LoginStatus
         self.UserData_dir["bookDetailInfo"] = {}
+        self.UserData_dir["bookDetailInfo"]["BookID"]=None
         self.Bookshelf__dir = {}  # readprogressList 书籍列表
         self.ConfData_dir = {}
         self.UserPath_dir = {}
@@ -27,12 +28,13 @@ class UserData(APiClass):
         self.DeviceData_dir = {}
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
+        self.Story_cfg_chapter_dir_new={}
+        self.downloadbook_sign={}
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
 
     def getdata(self):
         self.yamldata_conf()
-        self.get_story_cfg_chapter()
         self.getbookData()
         self.stroy_data()
         self.yaml_stroy()
@@ -122,16 +124,34 @@ class UserData(APiClass):
         storyoptionspath = os.path.join(path_YAML_FILES, "yamlstory/storyoptions.yml")
         self.storyoptions_dir = self.read_yaml(storyoptionspath)
         print("self.storyoptions_dir:",self.storyoptions_dir)
-    def get_story_cfg_chapter(self):
+    # def get_story_cfg_chapter(self):
+    #     """获取章节详情"""
+    #     data = None
+    #     path = os.path.join(path_resource, "data_s\story_cfg_chapter.txt")
+    #     with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
+    #         data = f.read()  # 可以是随便对文件的操作
+    #     data = eval(data)
+    #     self.Story_cfg_chapter_dir = data
+    #     return self.Story_cfg_chapter_dir
+    def download_bookresource(self,bookid):
+        """拉取书籍资源"""
+        if bookid not in self.downloadbook_sign:
+            self.avgcontentApi(bookid)
+            self.downloadbook_sign[bookid]=True
+            print("下载书籍资源成功")
+        else:
+            print("书籍资源已经下载")
+    def get_story_cfg_chapter(self,bookid,chapter_id):
         """获取章节详情"""
-        data = None
-        path = os.path.join(path_resource, "data_s\story_cfg_chapter.txt")
+        bookpath=bookid+"\\data_s\\"+chapter_id+"_chat.txt"
+        path = os.path.join(path_resource, bookpath)
+        print("path",path)
         with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
             data = f.read()  # 可以是随便对文件的操作
-        data = eval(data)
-        self.Story_cfg_chapter_dir = data
+        data=eval(data)
+        length=len(data)
+        self.Story_cfg_chapter_dir[chapter_id]=length
         return self.Story_cfg_chapter_dir
-
     def stroy_data(self):
         """存在书籍和ID对应关系"""
         path = os.path.join(path_resource, "story_data.json")
@@ -179,6 +199,7 @@ class UserData(APiClass):
                     return None
             else:return None
 MyData = UserData()
-# MyData.getreadprogress("10047")
-# aa=MyData.getreadprogress("10047")
-# print(aa)
+# MyData.download_bookresource("10001")
+# get_story_cfg_chapter_new=MyData.get_story_cfg_chapter("10001","10001001")
+# # aa=MyData.getreadprogress("10047")
+# print("get_story_cfg_chapter_new",get_story_cfg_chapter_new["10001001"])

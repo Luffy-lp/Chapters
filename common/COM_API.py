@@ -1,11 +1,11 @@
 import json
+from time import sleep
 
 import requests
 import sys, os, zipfile
 # from keras.utils.data_utils import get_file
-import zipfile
-# import os
 # from common.COM_utilities import *
+from common.COM_path import *
 
 
 class APiClass():
@@ -195,24 +195,44 @@ class APiClass():
             zip_file.extract(f, folder_abs)
         zip_file.close()
 
-    def avgcontentApi(self, chapter_id):
+    def avgcontentApi(self,bookid):
         """获取章节资源下载地址"""
-        zp = None
-        source_dir = os.getcwd()
         url = self.url + "avgcontentApi.Class.php?DEBUG=true"
-        body = {"chapter_id": chapter_id,
+        body = {"chapter_id": bookid,
+                "source_type": "t0"
                 }
-        response = requests.post(url=url, headers=self.Header, data=body, timeout=10)
-        address = eval(response.text)["address"]
+        response = self.try_APIlink(url=url, headers=self.Header, body=body)
+        address:str = response["address"]
+        addresslist=address.split('/')
         print(address)
-        r = requests.get(
-            "http://chapters-cdn.stardustgod.com/avgContent-test/10009001_shenzhen_a2d65d8cacf402a5435d408d58a4f483.zip")
-        print(type(r))
-        with open("10009001_shenzhen_a2d65d8cacf402a5435d408d58a4f483.zip", "wb") as code:
-            code.write(r.content)
-            zp = zipfile.ZipFile(code)
-            print(zp)
+        address=address.replace("\\","")
+        print(address)
+        print(type(address))
+        time=5
+        while(time>1):
+            time=time-1
+            try:
+                r = requests.get(address)
+                path=os.path.join(path_resource,addresslist[len(addresslist)-1])
+                print("path",path)
+                pathbook=os.path.join(path_resource,bookid)
+                print("pathbook",pathbook)
+                with open(path, "wb") as code:
+                    code.write(r.content)
+                    sleep(5)
+                    print(type(code))
+                    code.close()
+                    file_zip = zipfile.ZipFile(path, 'r')
+                    file_zip.extractall(pathbook)
+                    file_zip.close()
+                    os.remove(path)
+                    return
+            except:
+                print("下载书籍资源失败重试")
+        raise Exception("下载书籍资源失败")
+
 # APiClass1=APiClass()
-# APiClass1.syncValueApi("42682","diamond")
+# APiClass1.avgcontentApi("10001")
 # data=APiClass1.registerApi5(bind_type="googleplus",bind_id="42682")
 # print(data)
+# http://chapters-cdn.stardustgod.com/avgContent-test/10009001_shenzhen_a2d65d8cacf402a5435d408d58a4f483.zip

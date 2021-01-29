@@ -1,1 +1,1 @@
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject

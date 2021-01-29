@@ -1,9 +1,9 @@
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 
-class PagBookDetail(CommonPoco):
+class PagBookDetail(FindObject):
     """书籍详情页"""
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
         self.PagBookDetail_dir={}
         self.get_pagBookDetail_data()
 

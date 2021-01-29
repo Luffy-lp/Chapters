@@ -2,6 +2,7 @@
 1.yamlfiles\conf.yml中将ADB设备ID配置到ADBdevice，可以用adb devices查找
 2.如果需要绑定用户;yamlfiles\conf.yml需要正确添加用户UUID,已经选择登陆的方式和登陆的用户(可以仅选择登陆方式，其他默认)。
 3.需要保证模拟器的adb版本一致
+4.google配置可以支付的账号否则无法支付
 
 使用说明：
 1.用例配置:

@@ -1,11 +1,11 @@
-from common.COM_findobject import CommonPoco
+from common.COM_findobject import FindObject
 
 
-class Achievement(CommonPoco):
+class Achievement(FindObject):
     name={}
 
     def __init__(self):
-        CommonPoco.__init__(self)
+        FindObject.__init__(self)
 
     def click_achievement(self):
         """点击跳到个人信息的achievement"""
