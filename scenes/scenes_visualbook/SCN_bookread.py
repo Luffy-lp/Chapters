@@ -31,7 +31,7 @@ class BookRead(FindObject):
         self.getReadBook_info(bookid)
         if self.poco("UIDialogue").wait(5).exists():
             if self.ReadBook_info["chatProgress"]==10001:
-                self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2)
+                self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2,sleeptime=100)
             clock()
             sleep(1)
             print(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]))
@@ -73,12 +73,10 @@ class BookRead(FindObject):
         print("achatProgress", achatProgress)
         chat_type = MyData.Story_cfg_chapter_dir[achatProgress]["chat_type"]  # 当前选项chat_type值
         select_id = MyData.Story_cfg_chapter_dir[achatProgress]["select_id"]  # select_id值
-        print("记录选项进度:", achatProgress)
-        print("本章总页数:", self.ReadBook_info["chat_num"])
         print("当前选项chat_type值", chat_type)
         print("当前选项select_id值", select_id)
-        bchatProgress = self.ReadBook_info["chatProgress"]
-        print("记录选项进度", bchatProgress)
+        print("本章总页数:", self.ReadBook_info["chat_num"])
+        print("记录选项进度:", achatProgress)
         self.chat_typeconf(chat_type, select_id)  # 处理特殊选择类型
         self.progressjudge(achatProgress)
         if int(achatProgress) == self.ReadBook_info["chat_num"]:
@@ -97,6 +95,7 @@ class BookRead(FindObject):
                     self.findClick_try(clickname, clickname, description=description, waitTime=2, sleeptime=2)
         if select_id == 0:
             touch(self._POS)
+            sleep(0.2)
         else:
             if self.poco("UIChapterSelectList").child("Item").exists():  # "UISelectList")老版本
                 Item0 = self.poco("UIChapterSelectList").child("Item")[0]
@@ -106,10 +105,10 @@ class BookRead(FindObject):
         self.touchtime = self.touchtime + 1
 
     def progressjudge(self, achatProgress):
-        bchatProgress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取当前进度
-        print("readprogress", bchatProgress)
-        self.ReadBook_info["chatProgress"] = bchatProgress[self.ReadBook_info["BookID"]]["chatProgress"]
-        if achatProgress == bchatProgress:
+        readprogress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取当前进度
+        self.ReadBook_info["chatProgress"] = readprogress[self.ReadBook_info["BookID"]]["chatProgress"]
+        print("点击后进度：", self.ReadBook_info["chatProgress"])
+        if achatProgress == str(self.ReadBook_info["chatProgress"]):
             self._etime = self._etime + 1
             if self._etime >= 2:
                 self._etime = 0
@@ -124,12 +123,6 @@ class BookRead(FindObject):
         else:
             print("正常点击")
             self._etime = 0
-
-    # def get_option_info(self, chapter_id, option):
-    #     """获取章节详情"""
-    #     print(self.Story_cfg_chapter_dir)
-    #     self.Story_option_info["chat_type"] = self.Story_cfg_chapter_dir[chapter_id][option]["chat_type"]
-    #     return self.Story_option_info["chat_type"]
 
     def dialogueEndPOP(self):
         """章节尾弹框"""
