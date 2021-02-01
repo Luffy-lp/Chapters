@@ -2,6 +2,8 @@ import logging
 from airtest.cli.parser import cli_setup
 from airtest.core.android.adb import ADB
 from airtest.core.api import *
+from poco.drivers.android.uiautomation import AndroidUiautomationPoco
+
 from common.COM_data import MyData
 from common.COM_path import *
 from common.my_log import mylog
@@ -19,7 +21,10 @@ class CommonDevices():
                     method= MyData.ConfData_dir["simulator"]
                     print("ddddddd",[conf + method,])
                 auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
-                print("__file__",__file__)
+                if MyData.DeviceData_dir["androidpoco"] == None:
+                    MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
+                    mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+                    print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
                 logging.DEBUG = 0
                 print("DEVIEC:", G.DEVICE)
     def getdevlist(self):

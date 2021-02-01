@@ -3,6 +3,7 @@ from common.COM_findobject import FindObject
 from common.my_log import mylog
 from common.COM_data import MyData
 class BookLoad(FindObject):
+    BookLoad_info={}
     def __init__(self):
         FindObject.__init__(self)
 

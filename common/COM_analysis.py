@@ -94,19 +94,16 @@ class MyAnalysis():
             "args": [],
             "kwargs": {}
         }
-        yamldatalist = COM_utilities.read_yaml(path)
-        len1 = len(yamldatalist)
-        for i, val in enumerate(yamldatalist):
+        yamldata_dir = COM_utilities.read_yaml(path)
+        for i, val in yamldata_dir.items():
             dir = {}
-            dir.update({"casename": val[i]["casename"]})
-            dir.update({"casedec": val[i]["casedec"]})
-            dir.update({"reportname": val[i]["reportname"]})
-            dir.update({"caseauthor": val[i]["caseauthor"]})
-            dir.update({"repeattime": int(val[i]["repeattime"])})
+            dir.update({"casename": val["casename"]})
+            dir.update({"casedec": val["casedec"]})
+            dir.update({"reportname": val["reportname"]})
+            dir.update({"caseauthor": val["caseauthor"]})
+            dir.update({"repeattime": int(val["repeattime"])})
             self.Case_info[i] = dir
-        for i in range(0, len(yamldatalist)):
-            self.index = i
-            caselist = yamldatalist[i][i]["step"]
+            caselist = yamldata_dir[i]["step"]
             for k in range(0, len(caselist)):
                 function_meta = self.parse_function(caselist[k])
                 function_meta["func_name"] = function_meta['func_name']
@@ -145,3 +142,5 @@ class MyAnalysis():
             self.Runlist_dir[k] = self.Runlist
             self.Runlist = []
 
+# MyAnalysis1=MyAnalysis()
+# MyAnalysis1.yaml_data()

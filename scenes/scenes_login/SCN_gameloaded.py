@@ -17,7 +17,10 @@ class GameLoaded(FindObject):
 
     def __init__(self):
         COM_utilities.clock()  # 插入计时器
-        self.mysleep(10)
+        self.mysleep(5)
+        if self.android_tryfind("android:id/button1",description="加载中..."):
+            self.android_findClick("android:id/button1","android:id/button1",description="Google框架提示处理")
+        self.mysleep(5)
         FindObject.__init__(self)
     def mainprocess(self, login=0):
         self.gameloading()
@@ -49,7 +52,8 @@ class GameLoaded(FindObject):
         if self.find_try("LoginGuide_LoginCtrl", description="游戏登陆弹框", waitTime=5):  # 登陆弹框
             if login == 1:
                 try:
-                    self.findClick_object("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)
+                    # self.findClick_object("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)
+                    self.up_use_render__Click_try("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)
                 finally:
                     self.findClick_object("StartGame", "StartGame", description="点击Play Now按钮", waitTime=2)
                     self.GameLoaded_info["游戏登陆弹框"] = "跳过登陆"
@@ -63,10 +67,10 @@ class GameLoaded(FindObject):
         return self.GameLoaded_info
 
     def Popo_Errorinfo(self):
-        if self.android_tryfind("android:id/button1",description="Google框架弹框"):
+        if self.android_tryfind("android:id/button1",description="加载中..."):
             self.android_findClick("android:id/button1","android:id/button1",description="Google框架提示处理")
             mylog.error("检测到未安装谷歌框架，无法执行相关操作")
-        if self.find_try("Context", description="异常弹框"):
+        if self.find_try("Context", description="加载中..."):
             TXT = self.poco("Context").get_TMPtext()
             self.GameLoaded_info["ErrorTxt"].append(TXT)
             self.click_object("CenterBtn", description="Try again",waitTime=5)

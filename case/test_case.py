@@ -94,9 +94,9 @@ def test_bookPlay():
 def test_bookload(BookID=None):
     """书籍加载"""
     myBookLoad = BookLoad()
-    myBookLoad.bookLoad(BookID)
-    assert_equal(True, True, "书籍加载{0}".format(myBookLoad.ReadBook_info))
-    sleep(5)
+    DATA=myBookLoad.bookLoad(BookID)
+    assert_equal(True, DATA[0], "书籍加载{0}".format(DATA[1]))
+    sleep(3)
 
 def test_bookread(BookID=None):
     """读书"""
@@ -107,7 +107,6 @@ def test_bookread(BookID=None):
         print(MyData.UserData_dir["bookDetailInfo"])
         print(MyData.UserData_dir["bookDetailInfo"]["BookID"])
     myVisual = BookRead()
-    myVisual.bookLoad()
     # actualValue = myVisual.getReadBook_info(BookID)
     myVisual.bookRead()
     assert_equal(True, True, "阅读详情{0}".format(myVisual.ReadBook_info))

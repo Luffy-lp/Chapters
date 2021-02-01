@@ -159,7 +159,7 @@ class BookRead(FindObject):
     #         # poco("UIQuickPayFrame")快速购买
 
 
-BookRead1 = BookRead()
-BookRead1.bookRead("10001")
+# BookRead1 = BookRead()
+# BookRead1.bookRead("10001")
 # print(BookNewDetail1.ReadBook_info)
 # BookNewDetail1.bookChoose("Weekly",index=0)

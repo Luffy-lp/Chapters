@@ -66,6 +66,8 @@ class SignIn(FindObject):
                     self.android_findClick("com.google.android.gms:id/sud_navbar_next",
                                            "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
                                            sleeptime=3)
+                    self.findClick_try("signinconsentNext", "signinconsentNext", description="同意", waitTime=2,
+                                           sleeptime=1)
                     self.click_Google()
             self.bindLoginComfirm()
             return True

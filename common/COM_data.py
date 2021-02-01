@@ -28,6 +28,7 @@ class UserData(APiClass):
         self.chat_type_dir={} #对话类型配置表
         self.popup_dir = {} #弹框配置表
         self.Element_dir = {}
+        self.mobileconf_dir={}
         self.getdata()
         self.downloadbook_sign={}
         mylog.info("完成数据初始化")
@@ -39,6 +40,7 @@ class UserData(APiClass):
         self.stroy_data()
         self.yaml_stroy()
         self.yaml_chattype()
+        self.yaml_mobileconf()
         print(self.Bookshelf__dir)
 
     def __new__(cls):
@@ -71,6 +73,11 @@ class UserData(APiClass):
         self.chat_type_dir = self.read_yaml(chattype)
         print("self.chat_type_dir:",self.chat_type_dir)
         return self.chat_type_dir
+    def yaml_mobileconf(self):
+        mobileconfpath = os.path.join(path_YAML_FILES, "mobileconf.yml")
+        self.mobileconf_dir = self.read_yaml(mobileconfpath)
+        print("self.mobileconf_dir:",self.mobileconf_dir)
+        return self.mobileconf_dir
 
     def yamldata_conf(self):  # 读取yaml数据
         data = None
@@ -151,7 +158,6 @@ class UserData(APiClass):
         LoginStatus = self.LoginStatusApi(self.UserData_dir["uuid"], self.UserData_dir["device_id"])
         self.UserData_dir["LoginStatus"] = LoginStatus
         return LoginStatus
-
 
     def stroy_data(self):
         """存在书籍和ID对应关系"""

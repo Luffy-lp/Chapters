@@ -2,7 +2,7 @@
 #目前未接三方SDK无法获取到绑定用户的id，只能手动填写uuid
 #默认MINITOUCH，部分手机需要配touch_method=adb方式
 #登录方式Google,FaceBook loginemail: "15019423971",loginpassword: "yo5161381"9889a4443354554539
-#  ADBdevice: "R9WN50H7AVJ","127.0.0.1:62001",R58MB2MWPFR,R52M90DYELT,ZY322V8V5D  62001，
+#  ADBdevice: "R9WN50H7AVJ","127.0.0.1:62001",R58MB2MWPFR,R52M90DYELT,ZY322V8V5D  62001，2PFNW19710005425
 #  uuid: "39661" 42682loginemail: "lipeng66976658@gmail.com"
 #  loginpassword: "yo5161381"
 #  method: "?cap_method=JAVACAP&&ori_method=ADBORI&&touch_method=adb""?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
@@ -12,17 +12,17 @@ UserData:
   device_id: "490000000326402"
   device_platform: "android"
   loginGuide: "Google"
-  loginemail: "lipeng66976658@gmail.com"
-  loginpassword: "yo5161381"
+  loginemail: "huangwanqiuh@gmail.com"
+  loginpassword: "2017864108wq"
 ConfData:
   APKpackage: "Chapters_613_161_601113a40bd5d.apk"
   packageName: "com.mars.avgchapters"
   ADBip: "127.0.0.1:5037"
-  ADBdevice: "127.0.0.1:62001"
+  ADBdevice: "2PFNW19710005425"
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
   simulator: "?cap_method=JAVACAP&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
   device: "android"
-  sleepLevel: "10"
+  sleepLevel: "0"
 APIConf:
   URL: "http://testitf.stardustgod.com/"
   Header: {"TIMECLOSE": "1"}
