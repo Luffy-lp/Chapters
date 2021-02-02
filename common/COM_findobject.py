@@ -178,9 +178,9 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,POCOtype=None):
+    def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,pocotype=None):
         """尝试寻找并点击，不一定存在"""
-        if POCOtype=="Androidpoco":
+        if pocotype=="Androidpoco":
             poco=self.androidpoco
         else:poco=self.poco
         try:
@@ -210,7 +210,6 @@ class FindObject(CommonDevices):
         else:
             poco=self.poco
             ADBdevice=MyData.ConfData_dir["ADBdevice"]
-            print(MyData.mobileconf_dir["up_use_render"])
             if ADBdevice in MyData.mobileconf_dir["up_use_render"]:
                 poco.use_render_resolution(True, MyData.mobileconf_dir["up_use_render"][ADBdevice])
         try:

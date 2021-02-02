@@ -3,17 +3,17 @@
 #字典参数：${func(a=1, b=2)}
 #混合类型参数：${func(1, 2, a=3, b=4)}
 #不跑的用前面加#号，用例说明参考“测试步骤配置说明”
-case1:
-    caseauthor: "lipeng"
-    casename: "安装游戏-"
-    casedec: "安装游戏"
-    repeattime: "3"
-    reportname: "安装游戏"
-    import_module_functions:
-        - case.case_test
-    step:
-        - ${test_uninstallGame()}
-        - ${test_installGame()}
+#case1:
+#    caseauthor: "lipeng"
+#    casename: "安装游戏-"
+#    casedec: "安装游戏"
+#    repeattime: "3"
+#    reportname: "安装游戏"
+#    import_module_functions:
+#        - case.case_test
+#    step:
+#        - ${test_uninstallGame()}
+#        - ${test_installGame()}
 
 case2:
     caseauthor: "lipeng"
@@ -43,9 +43,6 @@ case3:
         - ${test_bookPlay()}
         - ${test_bookload()}
         - ${test_bookread()}
-#        - ${test_bookPlay()}
-#        - ${test_bookload()}
-#        - ${test_bookread(10001)}
         - ${pageTurn()}
 
 case4:

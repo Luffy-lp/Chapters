@@ -27,7 +27,7 @@ class SignIn(FindObject):
                 log(Exception("检测是否登陆成功失败"))
                 raise Exception("检测是否登陆成功失败")
         ProfileBt = self.poco("Profile").child("Label")
-        self.findClick_childobject(ProfileBt, description="切换到Profile界面")
+        self.findClick_childobject(ProfileBt, description="切换到Profile界面",waitTime=5)
         if self.find_try("Sign", description="登陆按钮"):
             self.SignIn_info["用户登陆状态"] = False
             return self.SignIn_info
@@ -63,11 +63,14 @@ class SignIn(FindObject):
                     self.android_findClick("passwordNext", "passwordNext", description="下一步", waitTime=1, sleeptime=2)
                     self.android_findClick("signinconsentNext", "signinconsentNext", description="同意", waitTime=1,
                                            sleeptime=1)
-                    self.android_findClick("com.google.android.gms:id/sud_navbar_next",
+                    if self.findClick_try("android.widget.Button", "android.widget.Button", description="接受", waitTime=2,
+                                           sleeptime=1,pocotype="Androidpoco"):
+                        print("添加账号成功")
+                    else:
+                        self.findClick_try("com.google.android.gms:id/sud_navbar_next",
                                            "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
-                                           sleeptime=3)
-                    self.findClick_try("signinconsentNext", "signinconsentNext", description="同意", waitTime=2,
-                                           sleeptime=1)
+                                           sleeptime=3,pocotype="Androidpoco")
+
                     self.click_Google()
             self.bindLoginComfirm()
             return True

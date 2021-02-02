@@ -28,7 +28,7 @@ class APiClass():
                 return dir
             except:
                 print("拉取{0}接口失败，重试".format(name))
-
+                sleep(1)
     def registerApi5(self, bind_type="device",channel_id="AVG10005", device_id="490000000326402", device_platform="android"):
         """游戏用户登录注册接口v3"""
         url = self.url + 'registerApi5.Class.php?DEBUG=true'
