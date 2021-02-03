@@ -3,20 +3,17 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from common.settings import LOGGING
 from common.COM_path import *
-
-LOG_DIR = "D:/LOG"
-
 file_path = os.path.join(path_LOG_MY, LOGGING.get('log_name'))
 
 def create_logger():
     """创建日志收集器"""
     # 1、创建一个收集器
-    mylog = logging.getLogger("lemon")
+    mylog = logging.getLogger("charpters")
     mylog.setLevel(LOGGING.get('level'))  # 设置收集日志的等级
 
     # 2、创建一个输出到文件的输出渠道(按时间轮转),
     fh = TimedRotatingFileHandler(file_path, when='d',
-                                  interval=1, backupCount=7,
+                                  interval=1, backupCount=1,
                                   encoding="utf-8")
     fh.setLevel(LOGGING.get('fh_level'))  # 设置输出等级
     mylog.addHandler(fh)  # 添加到收集器中

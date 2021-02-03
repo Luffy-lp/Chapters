@@ -52,8 +52,6 @@ class IntroduceEdit(FindObject):
     def editTitle(self, bookname):
         """编辑标题文本"""
         self.click_object("InputTitleAndroid", description="标题文本输入框", waitTime=1, sleeptime=1)
-        # for i in range(10):
-        #     keyevent("67")
         text(bookname)
         if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
             pass
@@ -63,10 +61,10 @@ class IntroduceEdit(FindObject):
 
     def editCategory(self):
         """选择类型"""
-        self.click_object("BtnCategory", description="选择类型",waitTime=5)
-        categoryItemPOCO=None
+        self.click_object("BtnCategory", description="选择类型", waitTime=5)
+        categoryItemPOCO = None
         clock()
-        while categoryItemPOCO==None:
+        while categoryItemPOCO == None:
             try:
                 categoryItemPOCO = \
                     self.poco("LuaUIReCategory").child("Items").child("Viewport").child("Content").child("Item(Clone)")[
@@ -75,12 +73,13 @@ class IntroduceEdit(FindObject):
                 break
             except:
                 self.log.error("等待-【{}】-元素可见超时".format("选择类型"))
-            mytime=float(clock("stop"))
-            if mytime>20:
+            mytime = float(clock("stop"))
+            if mytime > 20:
                 raise Exception("等待-【{}】-元素可见超时".format("选择类型"))
+
     def editCoverIcon(self):
         """选择封面"""
-        if self.find_object("CoverIcon", description="是否无封面",waitTime=5):
+        if self.find_object("CoverIcon", description="是否无封面", waitTime=5):
             self.findClick_childobject(self.poco("LuaUIIntroduceEdit").child("Cover"), description="选择封面",
                                        waitTime=2, sleeptime=2)
             POCO = self.poco("Options").child("Button(Clone)")[0]
@@ -103,14 +102,13 @@ class IntroduceEdit(FindObject):
                 pos = self.androidpoco("android.view.ViewGroup")[0].child(
                     "com.google.android.apps.photos:id/title").wait(5).get_position()
                 pos[1] = pos[1] + 0.1
-                # print("dddddddd:",pos)
                 touch(PosTurn(pos))
                 print("确认图片")
                 self.android_findClick("com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save",
                                        "com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save",
                                        description="完成保存",
                                        waitTime=5)
-            self.mysleep(5)
+            self.mysleep(6)
             COM_utilities.clock()
             while self.find_try("LoadingFlower", description="判断加载是否完成"):
                 print("图片loading中")
@@ -125,7 +123,6 @@ class IntroduceEdit(FindObject):
             print("已存在封面，跳过封面选择")
 
     def mumu(self):
-        # touch(COM_utilities.PosTurn((0.748, 0.527)))
         if self.android_tryfind("com.android.gallery3d:id/gl_root_view", description="选择图片", waitTime=5):
             self.android_findClick("com.android.gallery3d:id/gl_root_view",
                                    "com.android.gallery3d:id/gl_root_view",
@@ -154,9 +151,6 @@ class IntroduceEdit(FindObject):
         self.editCategory()
         self.editCoverIcon()
         self.topBar("Release")
-        # if chapters_self.find_object(self.poco,"CenterBtn",description="未审核通过按钮"):#当存在数字不够的i情况
-        #     chapters_self.click_object("CenterBtn", description="不审核")
-        #     self.topBar("Back")
 
 # IntroduceEdit1=IntroduceEdit()
 # IntroduceEdit1.mainprocess("aaaaaaaaaaaa")

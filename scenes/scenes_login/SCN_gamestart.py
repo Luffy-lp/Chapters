@@ -27,6 +27,7 @@ class GameStart():
             G.DEVICE.install_app(mypath)
             mylog.info("已经安装【{}】--apk包".format(packageName))
             self.GameStart_info["安装apk"] = True
+            return True
         else:
             print("未找到对应的安装包")
             return False

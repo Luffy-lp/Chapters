@@ -10,7 +10,7 @@ class ReadUGCBook(FindObject):
 
     def __init__(self):
         FindObject.__init__(self)
-        self._POS = COM_utilities.PosTurn([0.5, 0.9])
+        self._POS = COM_utilities.PosTurn([0.5, 0.95])
 
     def choosebook(self, index_x=0, index_y=0):
         """选择书籍"""
@@ -19,14 +19,14 @@ class ReadUGCBook(FindObject):
         object_x = self.poco("BookItems(Clone)")[index_x].child("BooItem")[index_y]  # 选择书籍
         objectBook = object_x.child("RawImage")  # 选择第几个书籍
         BookName = object_x.child("BookName").get_TMPtext()
-        self.ReadUGCBook_info["BookName"] = BookName
-        print(self.ReadUGCBook_info["BookName"])
+        self.ReadUGCBook_info["阅读UGC书籍名称:"] = BookName
+        print(self.ReadUGCBook_info["阅读UGC书籍名称:"])
         self.findClick_childobject(objectBook, description="UGC书籍封面", sleeptime=2)
         return self.ReadUGCBook_info
 
     def click_Read(self):
         Readobject = self.poco("LuaUIStoryBook").child("Content").child("Read")
-        self.findClick_childobject(Readobject, description="Read", waitTime=2, tryTime=2)
+        self.findClick_childobject(Readobject, description="Read", waitTime=5, tryTime=2)
 
     def bookRead(self, Chattime):
         """视觉小说阅读界面"""
@@ -42,6 +42,7 @@ class ReadUGCBook(FindObject):
                 self.StoryEndAd()
         else:
             print("未检测到UGC阅读界面")
+        return True
 
     def StoryEndAd(self):
         """章节尾检测"""

@@ -9,7 +9,6 @@ from common.COM_devices import CommonDevices
 from common.COM_path import *
 from common.COM_data import MyData
 from poco.drivers.unity3d import UnityPoco
-
 class FindObject(CommonDevices):
     poco: UnityPoco = None
     androidpoco:AndroidUiautomationPoco = None

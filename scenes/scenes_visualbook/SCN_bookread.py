@@ -30,8 +30,8 @@ class BookRead(FindObject):
         self.ReadBook_info["异常次数"] = 0
         self.getReadBook_info(bookid)
         if self.poco("UIDialogue").wait(5).exists():
-            if self.ReadBook_info["chatProgress"]==10001:
-                self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2,sleeptime=100)
+            if self.ReadBook_info["chatProgress"] == 10001:
+                self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2, sleeptime=100)
             clock()
             sleep(1)
             print(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]))
@@ -40,8 +40,10 @@ class BookRead(FindObject):
             while (not self.isstopRead):
                 print("点击次数{0}".format(self.touchtime))
                 self.dialogueCourseJudge()  # 阅读过程判断对应章节显示的内容
+            return True
         else:
             print("未检测到阅读界面")
+            return True
 
     def getReadBook_info(self, BookID):
         """获取当前书籍信息"""
@@ -81,6 +83,7 @@ class BookRead(FindObject):
         self.progressjudge(achatProgress)
         if int(achatProgress) == self.ReadBook_info["chat_num"]:
             self.dialogueEndPOP()  # 阅读结束弹框判断
+
     def chat_typeconf(self, chat_id, select_id):
         """选项判断"""
         if chat_id in MyData.chat_type_dir:
@@ -157,7 +160,6 @@ class BookRead(FindObject):
     #         self.poco("ConfirmBtn").click(sleep_interval=0.2)
     #         self.poco("ConfirmBtn").click()
     #         # poco("UIQuickPayFrame")快速购买
-
 
 # BookRead1 = BookRead()
 # BookRead1.bookRead("10001")

@@ -19,13 +19,11 @@ class CommonDevices():
                 method = MyData.ConfData_dir["method"]
                 if "127" in  MyData.ConfData_dir["ADBdevice"]:
                     method= MyData.ConfData_dir["simulator"]
-                    print("ddddddd",[conf + method,])
                 auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
                 if MyData.DeviceData_dir["androidpoco"] == None:
                     MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
                     mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
                     print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                logging.DEBUG = 0
                 print("DEVIEC:", G.DEVICE)
     def getdevlist(self):
         devlist = []

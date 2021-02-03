@@ -1,9 +1,11 @@
 from time import sleep
-
+from airtest.core.api import log
+from common import COM_utilities
 from common.COM_data import MyData
 from common.COM_findobject import FindObject
 
 class Discover(FindObject):
+    discoverPopup_info={}
     def __init__(self):
         FindObject.__init__(self)
 
@@ -13,8 +15,13 @@ class Discover(FindObject):
         poplist = MyData.popup_dir[0]
         havePopup = True
         self.UIAlterPoP()
+        COM_utilities.clock()  # 插入计时器
         while havePopup:
             print("进入弹框判断")
+            mytime = float(COM_utilities.clock("stop"))
+            if mytime > 60:
+                log(Exception("弹框处理超时...."))
+                raise Exception
             if self.poco("PopupPanel").children():
                 print("进入PopupPanel弹框判断")
                 child = self.poco("PopupPanel").child(nameMatches="^UI.*", visible=True)
@@ -58,5 +65,6 @@ class Discover(FindObject):
             else:
                 print("判断当前无弹框")
                 havePopup = False
-        return True, FindObject.Popuplist
+            self.discoverPopup_info["弹框列表："]=FindObject.Popuplist
+        return True
 

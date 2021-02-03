@@ -190,16 +190,6 @@ class MainStudio(FindObject):
             self.findClick_childobject(self.poco("ToolBar").child("BtnJump"), description="创建跳转")
             setEnd = self.poco("UIBottomForm").child("Buttons").child("Options").child("Button(Clone)")[3]
             self.findClick_childobject(setEnd, description="设置章节结束", sleeptime=2)
-            # poco("UIBottomForm").child("Options").child("Button(Clone)")[3].click()
-            # poco("Buttons")
-            # poco("Cancel")
-
-    def plotTree(self):
-        pass
-        # poco("Buttons").child("Cancel").click()
-        # poco("TreeIcon").click()
-        # poco("UISMSPlotTree")
-        # poco("View").child("Plot(Clone)").click()
 
     def branchprocess(self):
         """分成创作页面流程"""

@@ -7,7 +7,7 @@
 #  loginpassword: "yo5161381"
 #  method: "?cap_method=JAVACAP&&ori_method=ADBORI&&touch_method=adb""?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
 UserData:
-  uuid: "43551"
+  uuid: "43551"   #需要修改正确的配置
   channel_id: "AVG10005"
   device_id: "490000000326402"
   device_platform: "android"
@@ -15,10 +15,10 @@ UserData:
   loginemail: "lipeng66976658@gmail.com"
   loginpassword: "yo5161381"
 ConfData:
-  APKpackage: "Chapters_613_161_601113a40bd5d.apk"
+  APKpackage: "Chapters_614_170_601a13ff11429.apk"
   packageName: "com.mars.avgchapters"
   ADBip: "127.0.0.1:5037"
-  ADBdevice: "127.0.0.1:62001"
+  ADBdevice: "127.0.0.1:62001"  #需要修改正确的配置
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
   simulator: "?cap_method=JAVACAP&&ori_method=MINICAPORI&&touch_method=MINITOUCH"
   device: "android"
@@ -26,4 +26,4 @@ ConfData:
 APIConf:
   URL: "http://testitf.stardustgod.com/"
   Header: {"TIMECLOSE": "1"}
-devLogpath: "/storage/emulated/0/Android/data/com.mars.avgchapters/files/CompleteChapter.txt"
+errorLogpath: "/storage/emulated/0/Android/data/com.mars.avgchapters/files/errorlog.txt"

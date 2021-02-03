@@ -37,12 +37,24 @@ class MyAnalysis():
     Runlist_dir = {}
     popup_list=[]
     path = os.path.join(path_YAML_FILES, "yamlCase/casedatas.yml")
-    Popuopath = os.path.join(path_YAML_FILES, "yamlCase/popup.yml")
+    Popuopath = os.path.join(path_YAML_FILES, "yamlGame/popup.yml")
+
 
     def __init__(self):
+        self.file_name()
         self.yaml_data(self.path)
         self.getrunlist()
         self.yaml_data_popup(self.Popuopath)
+
+    def file_name(self):
+        path = os.path.join(path_YAML_FILES, "yamlCase")
+        for root, dirs, files in os.walk(path):
+            # print(root) #当前目录路径
+            # print(dirs) #当前路径下所有子目录
+            # print(files) #当前路径下所有非目录子文件
+            filesName=files[0].split(".yml")[0]
+            self.Case_info["casename"]=filesName
+            self.path=os.path.join(path, files[0])
 
     def is_functon(self, content):
         matched = self.function_regexp.match(content)

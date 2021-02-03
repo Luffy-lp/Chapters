@@ -18,8 +18,8 @@ class GameLoaded(FindObject):
     def __init__(self):
         COM_utilities.clock()  # 插入计时器
         self.mysleep(5)
-        if self.android_tryfind("android:id/button1",description="加载中..."):
-            self.android_findClick("android:id/button1","android:id/button1",description="Google框架提示处理")
+        # if self.android_tryfind("android:id/button1",description="加载中..."):
+        #     self.android_findClick("android:id/button1","android:id/button1",description="Google框架提示处理")
         self.mysleep(5)
         FindObject.__init__(self)
     def mainprocess(self, login=0):
@@ -50,6 +50,7 @@ class GameLoaded(FindObject):
         if login==0:
             return True
         if self.find_try("LoginGuide_LoginCtrl", description="游戏登陆弹框", waitTime=5):  # 登陆弹框
+            COM_utilities.clock("stop")
             if login == 1:
                 try:
                     # self.findClick_object("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)

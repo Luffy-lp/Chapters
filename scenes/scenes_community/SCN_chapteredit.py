@@ -60,8 +60,6 @@ class ChapterEdit(FindObject):
             self.ChapterEdit_info["stroyDescript"]=stroyDescript
             self.ChapterEdit_info["stroyStatus"]=stroyStatus
         except:
-            mylog.error("等待-【{}】-元素可见超时".format("个人信息"))
-        finally:
-            print("ddd:",self.ChapterEdit_info)
+            mylog.error("等待-【{}】-元素可见超时".format("书籍详情信息"))
 # ChapterEdit1=ChapterEdit()
 # ChapterEdit1.process_creationStoryFlow("lipeng0000")
