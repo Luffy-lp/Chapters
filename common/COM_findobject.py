@@ -31,7 +31,7 @@ class FindObject(CommonDevices):
         self.androidpoco = MyData.DeviceData_dir["androidpoco"]
     def find_object(self, findName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """寻找目标"""
-        waitTime=waitTime+float(MyData.ConfData_dir["sleepLevel"])
+        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
         print("正在寻找{0}".format(description))
         if self.poco(findName).wait(waitTime).exists():
             print("发现{0}".format(description))
@@ -43,7 +43,7 @@ class FindObject(CommonDevices):
 
     def findClick_object(self, findName, ClickName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """用寻找目标，后并点击"""
-        waitTime=waitTime+float(MyData.ConfData_dir["sleepLevel"])
+        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
         print("正在寻找{0}".format(description))
         if self.poco(ClickName).wait(waitTime).exists():
             print("发现{0}元素，并点击".format(description))
@@ -61,7 +61,7 @@ class FindObject(CommonDevices):
 
     def find_childobject(self, findPoco:poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
-        waitTime=waitTime+float(MyData.ConfData_dir["sleepLevel"])
+        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
         if findPoco.wait(waitTime).exists():
             print("发现{0}".format(description))
             mylog.info("查找点击元素-【{}】--成功".format(description))
@@ -73,7 +73,7 @@ class FindObject(CommonDevices):
 
     def findClick_childobject(self, ClickPoco:poco, description="", waitTime=1, tryTime=1, sleeptime=0.1):
         """用于关联父级才能点击到的元素"""
-        waitTime=waitTime+float(MyData.ConfData_dir["sleepLevel"])
+        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
         if ClickPoco.wait(waitTime).exists():
             print("发现{0}".format(description))
             mylog.info("查找点击元素-【{}】--成功".format(description))
@@ -88,7 +88,7 @@ class FindObject(CommonDevices):
 
     def click_object(self, clickName, waitTime=1, description="", sleeptime=0):
         """直接点击，不存在会报错"""
-        waitTime=waitTime+float(MyData.ConfData_dir["sleepLevel"])
+        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
         try:
             self.poco(clickName).wait(waitTime).click()
             mylog.info("点击元素-【{}】--成功".format(description))
@@ -151,7 +151,7 @@ class FindObject(CommonDevices):
 
     def android_findClick(self, findName, ClickName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """用寻找目标，后并点击"""
-        waitTime=waitTime+float(MyData.ConfData_dir["sleepLevel"])
+        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
@@ -208,9 +208,9 @@ class FindObject(CommonDevices):
             poco=self.androidpoco
         else:
             poco=self.poco
-            ADBdevice=MyData.ConfData_dir["ADBdevice"]
-            if ADBdevice in MyData.mobileconf_dir["up_use_render"]:
-                poco.use_render_resolution(True, MyData.mobileconf_dir["up_use_render"][ADBdevice])
+            ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+                poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
         try:
             print("尝试寻找{0}".format(description))
             # gameobject = self.poco(findName)
@@ -230,7 +230,7 @@ class FindObject(CommonDevices):
             log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
-        poco.use_render_resolution(False, MyData.mobileconf_dir["up_use_render"][ADBdevice])
+        poco.use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
 
     def findClick_Image(self, filename, record_pos, description="图片", resolution=(1600, 2560), tryTime=1,waitTime=5):
         """点击图片"""
@@ -319,7 +319,7 @@ class FindObject(CommonDevices):
                     raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
     def mysleep(self, sleeptime:float):
         """会根据设备或其他情况延迟睡眠时间方法"""
-        mytime = float(MyData.ConfData_dir["sleepLevel"]) + sleeptime
+        mytime = float(MyData.EnvData_dir["sleepLevel"]) + sleeptime
         sleep(mytime)
     def UIAlterPoP(self):
         if self.find_try("AlterView",description="文本弹框"):

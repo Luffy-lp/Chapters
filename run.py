@@ -1,3 +1,5 @@
+import logging
+
 from common.COM_path import *
 from common.COM_findobject import FindObject
 from airtest.report import report
@@ -9,11 +11,26 @@ from common.COM_analysis import MyAnalysis
 from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
-# from  airtest.core.android.adb import *
 
+
+# from  airtest.core.android.adb import *
 class Run(MyAnalysis):
+    logging.DEBUG = 0  # 20
+    adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
+    logpath = os.path.join(path_LOG_DIR, "log.txt")
+
     def __init__(self):
+        self.initialize()
         MyAnalysis.__init__(self)
+
+    def initialize(self):
+        try:
+            print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
+            print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
+        except:
+            pass
+        self.clear()
+        CommonDevices()
 
     def get_eval_value(self, args, func_name):
 
@@ -33,9 +50,68 @@ class Run(MyAnalysis):
         return func_name
 
     def runcase(self, runlist):
-        print("Runlist:", runlist)
+        print("当前执行用例列表:", runlist)
         for i in runlist:
             self.get_eval_value(i["args"], i["func_name"])
+
+    def writelogs(self, logpath):
+        logspath = os.path.join(path_LOG_DIR, "logs.txt")
+        # alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
+        text_file = open(logpath, "r")
+        lines = text_file.readlines()
+        for val in range(len(lines)):
+            # alllog_file = open(alllogspath, "a")
+            # alllog_file.write(lines[val])
+            if "assert_equal" in lines[val] or "traceback" in lines[val]:
+                logs_file = open(logspath, "a")
+                logs_file.write(lines[val])
+        logs_file.close()
+        text_file.close()
+        # alllog_file.close()
+
+    def pull_errorLog(self):
+        """输出errorlog日志"""
+        errorLogpath = os.path.join(path_LOG_MY, "errorlog.txt")
+        try:
+            pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + errorLogpath
+            connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
+            print(os.system(self.adbpath + " devices"))
+            sleep(3)
+            print(os.system(connected))
+            sleep(3)
+            print(os.popen(pull))
+            print("完成读取errorlog")
+            text_file = open(errorLogpath, "r")
+            if text_file:
+                print("存在错误日志", text_file.read())
+                # text_file = open(errorLogpath, "r")
+                lines = text_file.readlines()
+                for val in range(len(lines)):
+                    print("val", val)
+                    print(lines[val])
+                    log(Exception("存在错误日志{}".format(lines[val])))
+                text_file.close()
+                self.writelogs(self.logpath)
+                auto_setup(logdir=path_LOG_DIR)
+            sleep(6)
+        except:
+            print("读取errorlog失败")
+
+    def togetherReport(self):
+        htmlname = self.Case_info["casename"] + ".html"
+        htmlpath = os.path.join(path_REPORT_DIR, htmlname)
+        logspath = os.path.join(path_LOG_DIR, "logs.txt")
+        logpath = os.path.join(path_LOG_DIR, "log.txt")
+        try:
+            with open(logspath, 'r') as f1:
+                with open(logpath, 'w') as f2:
+                    f2.write(f1.read())
+                    f1.close()
+                    f2.close()
+            simple_report(__file__, logpath=path_LOG_DIR, output=htmlpath, MY_DEFAULT_LOG_FILE="logs.txt")
+        except:
+            print("未发现logs日志")
+
     def clear(self):
         """清空之前的报告和文件"""
         fileNamelist = [path_LOG_DIR, path_REPORT_DIR, path_RES_DIR]
@@ -55,7 +131,6 @@ class Run(MyAnalysis):
         mylog.info("完成文件清空")
 
     def runing(self):
-        CommonDevices()
         for k, v in self.Runlist_dir.items():
             repeattime = self.Case_info[k]["repeattime"]
             while (self.Case_info[k]["repeattime"] > 0):
@@ -77,20 +152,20 @@ class Run(MyAnalysis):
                     self.runcase(self.Runlist_dir[k])
                     self.Case_info[k]["repeattime"] = 0
                 except Exception as e:
-                    mylog.error("------出现异常{}",e)
-                    MyData.DeviceData_dir["poco"] = None
                     sleep(1)
-                    print("正在进行异常重启------")
-                    mylog.info("----------正在进行异常重启------")
-                    test_startgame(1)
-                    test_newUserGuide()
-                    test_discoverPopup()
-                    print("完成异常重启------")
+                    mylog.error("------出现异常{}", e)
+                    log(e, "------出现异常")
+                    MyData.DeviceData_dir["poco"] = None
+                    if "test_startgame" in self.Runlist_dir[k]:
+                        pass
+                    else:
+                        mylog.info("----------正在进行异常重启------")
+                        test_startgame(0)
+                        test_discoverPopup()
                     mylog.info("--------完成异常重启------")
-
                 finally:
                     outputpath = os.path.join(path_REPORT_DIR, htmlname)
-                    print("report__file__", file)
+                    self.writelogs(self.logpath)
                     simple_report(__file__, logpath=path_LOG_DIR, output=outputpath)
                     self.Case_info[k]["repeattime"] = self.Case_info[k]["repeattime"] - 1
                     mylog.info("完成html测试报告，等待生产录制文件需要一定时间")
@@ -105,6 +180,12 @@ class Run(MyAnalysis):
 
 
 if __name__ == '__main__':
-    myRun = Run()
-    myRun.clear()
-    myRun.runing()
+    try:
+        myRun = Run()
+        myRun.runing()
+    except Exception as e:
+        mylog.error("------出现异常{}", e)
+        log(e, "------出现异常--------")
+    finally:
+        myRun.pull_errorLog()
+        myRun.togetherReport()

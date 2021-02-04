@@ -14,11 +14,11 @@ class CommonDevices():
     def __init__(self):
         if G.DEVICE == None:
             if not cli_setup():
-                conf = MyData.ConfData_dir["device"] + "://" + MyData.ConfData_dir["ADBip"] + "/" + MyData.ConfData_dir[
+                conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
                     "ADBdevice"]
-                method = MyData.ConfData_dir["method"]
-                if "127" in  MyData.ConfData_dir["ADBdevice"]:
-                    method= MyData.ConfData_dir["simulator"]
+                method = MyData.EnvData_dir["method"]
+                if "127" in  MyData.EnvData_dir["ADBdevice"]:
+                    method= MyData.EnvData_dir["simulator"]
                 auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
                 if MyData.DeviceData_dir["androidpoco"] == None:
                     MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()

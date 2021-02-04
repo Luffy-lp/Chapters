@@ -2,7 +2,7 @@
 #顺序参数：${func(a, b)}
 #字典参数：${func(a=1, b=2)}
 #混合类型参数：${func(1, 2, a=3, b=4)}
-#不跑的用前面加#号，用例说明参考“测试步骤配置说明”
+#单个用例可以#号全部注释，未注释用例step里面最少有一个，用例说明参考“测试步骤配置说明”
 #case1:
 #    caseauthor: "lipeng"
 #    casename: "安装游戏-"
@@ -39,12 +39,12 @@ case3:
         - case.case_test
     step:
         - ${pageTurn(0)}
-        - ${test_bookchoose(Weekly, 0)}
+#        - ${test_bookchoose(Weekly, 0)}
 #        - ${test_bookPlay()}
 #        - ${test_bookload()}
 #        - ${test_bookread()}
 #        - ${test_discoverPopup()}
-        - ${pageTurn()}
+#        - ${pageTurn()}
 
 #case4:
 #    caseauthor: "lipeng"

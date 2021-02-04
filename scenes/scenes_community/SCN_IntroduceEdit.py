@@ -91,7 +91,7 @@ class IntroduceEdit(FindObject):
                                        "com.android.packageinstaller:id/permission_allow_button",
                                        description="检查开启图库权限", waitTime=1
                                        )
-            if "127" in MyData.ConfData_dir["ADBdevice"]:
+            if "127" in MyData.EnvData_dir["ADBdevice"]:
                 print("模拟器类型")
                 self.mumu()
             else:

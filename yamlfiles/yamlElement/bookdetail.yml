@@ -1,7 +1,4 @@
-#无参数：${func()}
-#顺序参数：${func(a, b)}
-#字典参数：${func(a=1, b=2)}
-#混合类型参数：${func(1, 2, a=3, b=4)}
+#暂未使用
 bookdetail:
     name: "书籍详情页"
     page_bookdetail:

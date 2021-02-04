@@ -17,7 +17,7 @@ class UserData(APiClass):
         self.DeviceData_dir = {}  # 设备信息配置表
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
-        self.ConfData_dir = {}  # 自动化配置表
+        self.EnvData_dir = {}  # 环境配置表
         self.UserData_dir = {}  # 用户基本数据表
         self.UserData_dir["bookDetailInfo"] = {}
         self.UserData_dir["bookDetailInfo"]["BookID"] = None
@@ -65,7 +65,7 @@ class UserData(APiClass):
         self.storyoptions_dir = self.read_yaml(storyoptionspath)
 
     def yaml_chattype(self):
-        chattype = os.path.join(path_YAML_FILES, "yamlGame/chat_typeconf.yml")
+        chattype = os.path.join(path_YAML_FILES, "yamlGame/chat_type.yml")
         self.chat_type_dir = self.read_yaml(chattype)
         return self.chat_type_dir
 
@@ -75,7 +75,8 @@ class UserData(APiClass):
         return self.mobileconf_dir
 
     def yamldata_conf(self):
-        # 读取yaml数据
+        # 读取yamlconf数据
+
         data = None
         path = os.path.join(path_YAML_FILES, "conf.yml")
         with open(path, encoding="utf-8") as f:
@@ -91,17 +92,17 @@ class UserData(APiClass):
             loginInfo["loginemail"] = data["UserData"]["loginemail"]
             loginInfo["loginpassword"] = data["UserData"]["loginpassword"]
             self.UserData_dir["loginInfo"] = loginInfo
-            self.ConfData_dir["packagepath"] = os.path.join(path_resource, data["ConfData"]["APKpackage"])
-            print("ConfData_dir:", self.ConfData_dir["packagepath"])
-            self.ConfData_dir["packageName"] = data["ConfData"]["packageName"]
-            self.ConfData_dir["ADBdevice"] = data["ConfData"]["ADBdevice"]
-            self.ConfData_dir["ADBip"] = data["ConfData"]["ADBip"]
-            self.ConfData_dir["device"] = data["ConfData"]["device"]
-            self.ConfData_dir["method"] = data["ConfData"]["method"]
-            self.ConfData_dir["simulator"] = data["ConfData"]["simulator"]
-            self.ConfData_dir["sleepLevel"] = data["ConfData"]["sleepLevel"]
-            print("errorLogpath", data["errorLogpath"])
-            self.UserPath_dir["errorLogpath"] = data["errorLogpath"]
+            self.EnvData_dir["packagepath"] = os.path.join(path_resource, data["EnvData"]["APKpackage"])
+            print("EnvData_dir:", self.EnvData_dir["packagepath"])
+            self.EnvData_dir["packageName"] = data["EnvData"]["packageName"]
+            self.EnvData_dir["ADBdevice"] = data["EnvData"]["ADBdevice"]
+            self.EnvData_dir["ADBip"] = data["EnvData"]["ADBip"]
+            self.EnvData_dir["device"] = data["EnvData"]["device"]
+            self.EnvData_dir["method"] = data["EnvData"]["method"]
+            self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
+            self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
+            self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
+            self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
             if self.UserData_dir["uuid"] is None:
                 self.UserData_dir["uuid"] = self.registerApi5(channel_id, device_id, device_platform)["uuid"]
             print("用户ID：", self.UserData_dir["uuid"])
