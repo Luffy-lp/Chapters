@@ -202,7 +202,7 @@ class FindObject(CommonDevices):
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
 
-    def up_use_render__Click_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,POCOtype=None):
+    def notchfit__Click_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True, POCOtype=None):
         """解决上部分黑屏问题，更改渲染"""
         if POCOtype=="Androidpoco":
             poco=self.androidpoco
@@ -337,4 +337,4 @@ class FindObject(CommonDevices):
                 print("未成功点击按钮")
                 return False
 # FindObject1=FindObject()
-# FindObject1.up_use_render__Click_try("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)
+# FindObject1.notchfit__Click_try("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)

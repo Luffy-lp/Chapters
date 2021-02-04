@@ -111,12 +111,12 @@ class UserData(APiClass):
     def getbookData(self):
         """大厅书架信息"""
         bookData = self.summaryApi3(self.UserData_dir["uuid"])
-        areadata = bookData["area_data"]
-        bannerdata = bookData["banner_data"]
-        story_ids = bannerdata["story_ids"]
+        areaData = bookData["area_data"]
+        bannerData = bookData["banner_data"]
+        story_ids = bannerData["story_ids"]
         self.Bookshelf__dir["banner_data"] = story_ids
         # 获得大厅Weekly Update书籍列表
-        for i in areadata:
+        for i in areaData:
             for k, v in i.items():
                 if v == "Weekly Update":
                     story_ids = i["story_ids"]

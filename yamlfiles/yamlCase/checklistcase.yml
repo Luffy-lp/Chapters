@@ -43,7 +43,6 @@ case3:
 #        - ${test_bookPlay()}
 #        - ${test_bookload()}
 #        - ${test_bookread()}
-        - ${test_discoverPopup()}
         - ${pageTurn()}
 
 case4:

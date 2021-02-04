@@ -68,8 +68,8 @@ def test_startgame(login):
     myGameLoaded = GameLoaded()
     actualValue = myGameLoaded.mainprocess(login=login)
     if float(myGameLoaded.GameLoaded_info["loadtime"])>30:
-        log(Exception("load时间大于30s{0}".format(myGameLoaded.GameLoaded_info["loadtime"])))
-    assert_equal(actualValue, True, "启动游戏\r{0}".format(myGameLoaded.GameLoaded_info))
+        log(Exception("load游戏时间大于30s！加载时间为：{0}".format(myGameLoaded.GameLoaded_info["loadtime"])))
+    assert_equal(actualValue, True, "启动游戏{0}".format(myGameLoaded.GameLoaded_info))
     sleep(3)
 
 
@@ -77,7 +77,7 @@ def test_discoverPopup():
     """大厅弹框"""
     myDiscover = Discover()
     actualValue = myDiscover.discoverPopup()
-    assert_equal(True, actualValue, "大厅弹框列表\r{0}".format(myDiscover.discoverPopup_info))
+    assert_equal(True, actualValue, "大厅弹框列表{0}".format(myDiscover.discoverPopup_info))
     sleep(3)
 
 
@@ -86,7 +86,7 @@ def test_signin(login="Google", email="15019423971", password="yo5161381"):
     SignIn1 = SignIn()
     actualValuSignIne = SignIn1.process_profilelogin()
     SignIn1.issign()  # 判断用户登陆情况
-    assert_equal(True, actualValuSignIne, "用户绑定\r{0}".format(SignIn1.SignIn_info))
+    assert_equal(True, actualValuSignIne, "用户绑定{0}".format(SignIn1.SignIn_info))
     sleep(3)
 
 
@@ -94,7 +94,7 @@ def test_newUserGuide():
     """新手引导"""
     myNewUserGuide = NewUserGuide()
     actualValue = myNewUserGuide.newUserPopUp()
-    assert_equal(actualValue, True, "新手引导\r{0}".format(myNewUserGuide.NewUserGuide_info))
+    assert_equal(actualValue, True, "新手引导{0}".format(myNewUserGuide.NewUserGuide_info))
 
 
 def test_bookchoose(bookShelf, index):
@@ -102,7 +102,7 @@ def test_bookchoose(bookShelf, index):
     bookdetail = BookNewDetail()
     bookdetail.bookChoose(bookShelf=bookShelf, index=index)
     # actualValue = bookdetail.getBookNewDetail_info()
-    assert_equal(True, True, "视觉小说书籍选择\r{0}".format(bookdetail.BookNewDetail_info))
+    assert_equal(True, True, "视觉小说书籍选择{0}".format(bookdetail.BookNewDetail_info))
 
 
 def test_bookPlay():
@@ -116,7 +116,7 @@ def test_bookload(BookID=None):
     """书籍加载"""
     myBookLoad = BookLoad()
     actualValue = myBookLoad.bookLoad(BookID)
-    assert_equal(actualValue, True, "书籍loading\r{0}".format(myBookLoad.BookLoad_info))
+    assert_equal(actualValue, True, "书籍loading{0}".format(myBookLoad.BookLoad_info))
     sleep(3)
 
 
@@ -130,7 +130,7 @@ def test_bookread(BookID=None):
     #     print(MyData.UserData_dir["bookDetailInfo"]["BookID"])
     myVisual = BookRead()
     actualValue = myVisual.bookRead(BookID)
-    assert_equal(actualValue, True, "阅读详情\r{0}".format(myVisual.ReadBook_info))
+    assert_equal(actualValue, True, "阅读详情{0}".format(myVisual.ReadBook_info))
     sleep(5)
 
 
@@ -138,7 +138,7 @@ def test_Creation():
     """创建书籍"""
     Community1 = Community()
     actualValueinto_workshop = Community1.into_workshop()
-    assert_equal(actualValueinto_workshop, True, "进入工作室\r{0}")
+    assert_equal(actualValueinto_workshop, True, "进入工作室{0}")
     Creation1 = Creation()
     isCreation = Creation1.process_createNewBook()
     assert_equal(isCreation, True, "创建书籍")
@@ -148,7 +148,7 @@ def test_ChapterEdit(storyName):
     """编写小说"""
     myChapterEdit = ChapterEdit()
     actualValue = myChapterEdit.process_creationStoryFlow(storyName)
-    assert_equal(actualValue, True, "创作小说\r{0}".format(myChapterEdit.ChapterEdit_info))
+    assert_equal(actualValue, True, "创作小说{0}".format(myChapterEdit.ChapterEdit_info))
     sleep(5)
 
 
@@ -163,60 +163,60 @@ def test_ReadUGCBook(time=2):
     myReadUGCBook = ReadUGCBook()
     myReadUGCBook.click_Read()
     actualValue = myReadUGCBook.bookRead(time)
-    assert_equal(actualValue, True, "短信小说阅读\r{0}".format(myReadUGCBook.ReadUGCBook_info))
+    assert_equal(actualValue, True, "短信小说阅读{0}".format(myReadUGCBook.ReadUGCBook_info))
 
 
 def test_ChangeUseravatar():
     """更换个人信息背景角色"""
     myProfilemodule = Profilemodule()
     actualValue = myProfilemodule.ChangeUseravatar()
-    assert_equal(actualValue, True, "更换背景角色情况\r{0}".format(myProfilemodule.Profilemodule_info))
+    assert_equal(actualValue, True, "更换背景角色情况{0}".format(myProfilemodule.Profilemodule_info))
 
 
 def test_operationAchievement():
     """对成就进行操作"""
     myAchievementmodule = Achievementmodule()
     actualValue = myAchievementmodule.operationAchievememt()
-    assert_equal(True, True, "进行操作的成就名字\r{0}".format(myAchievementmodule.Achievementmodule_info["name"]))
+    assert_equal(True, True, "进行操作的成就名字{0}".format(myAchievementmodule.Achievementmodule_info["name"]))
 
 
 def test_ChangeUseremoticons(expression):
     """更换背景角色表情"""
     myProfilemodule = Profilemodule()
     actualValue = myProfilemodule.ChangeUseremoticons(expression)
-    assert_equal(actualValue, True, "更换角色的表情\r{0}".format((myProfilemodule.Profilemodule_info["emoticons"])))
+    assert_equal(actualValue, True, "更换角色的表情{0}".format((myProfilemodule.Profilemodule_info["emoticons"])))
 
 
 def test_nameedit(name):
     """编辑名字"""
     myProfilemodule = Profilemodule()
     actualValue = myProfilemodule.nameedit(name=name)
-    assert_equal(actualValue, True, "编辑名字\r{0}".format((myProfilemodule.Profilemodule_info["name"])))
+    assert_equal(actualValue, True, "编辑名字{0}".format((myProfilemodule.Profilemodule_info["name"])))
 
 
 def test_showAchievement():
     """成就展示"""
     myProfilemodule = Profilemodule()
     actualValue = myProfilemodule.Change_showAchievement()
-    assert_equal(actualValue, True, "成就展示变更的名字\r{0}".format(myProfilemodule.Profilemodule_info["name"]))
+    assert_equal(actualValue, True, "成就展示变更的名字{0}".format(myProfilemodule.Profilemodule_info["name"]))
 
 
 def test_shop_buy_member():
     """订阅会员"""
     myShopmodule = Shopmodule()
     actualValue = myShopmodule.shop_buy_member()
-    assert_equal(actualValue, True, "用户的会员状态信息\r{0}".format(myShopmodule.Shopmodule_info))
+    assert_equal(actualValue, True, "用户的会员状态信息{0}".format(myShopmodule.Shopmodule_info))
 
 
 def test_shop_buy_ticket(num):
     """购买票卷"""
     myShopmodule = Shopmodule()
     actualValue = myShopmodule.shop_buy_ticket(num)
-    assert_equal(actualValue, True, "购买非双倍奖励的5票\r{0}".format(myShopmodule.Shopmodule_info))
+    assert_equal(actualValue, True, "购买非双倍奖励的5票{0}".format(myShopmodule.Shopmodule_info))
 
 
 def test_shop_buy_diamond(num):
     """购买钻石"""
     myShopmodule = Shopmodule()
     actualValue = myShopmodule.shop_buy_diamond(num)
-    assert_equal(actualValue, True, "购买非双倍奖励的20钻石\r{0}".format(myShopmodule.Shopmodule_info))
+    assert_equal(actualValue, True, "购买非双倍奖励的20钻石{0}".format(myShopmodule.Shopmodule_info))
