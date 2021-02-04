@@ -38,8 +38,9 @@ class GameLoaded(FindObject):
                 print("游戏加载失败。。。")
                 log(Exception("游戏加载失败。。。"))
                 raise Exception
-        loadtime = COM_utilities.clock("stop")
-        self.GameLoaded_info["loadtime"] = loadtime
+        if self.GameLoaded_info["loadtime"]==None:
+            loadtime = COM_utilities.clock("stop")
+            self.GameLoaded_info["loadtime"] = float(COM_utilities.clock("stop"))-2
         mylog.info("完成游戏加载，加载时间为{0}秒".format(loadtime))
         print("完成游戏加载，加载时间为{0}秒".format(loadtime))
         return True
@@ -50,7 +51,7 @@ class GameLoaded(FindObject):
         if login==0:
             return True
         if self.find_try("LoginGuide_LoginCtrl", description="游戏登陆弹框", waitTime=5):  # 登陆弹框
-            COM_utilities.clock("stop")
+            self.GameLoaded_info["loadtime"]=float(COM_utilities.clock("stop"))-2
             if login == 1:
                 try:
                     # self.findClick_object("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)

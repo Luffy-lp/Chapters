@@ -7,7 +7,7 @@
         - case.case_test
     step:
         - ${文本弹框(UIAlter, Popup)}
-        - ${24小时新手礼包(UITwentyFourHourReward, BtnGet)} #- ${弹框名称(弹框标识元素, 出现弹框后点击按钮元素)}
+        - ${24小时新手礼包(UITwentyFourHourReward, BtnGet)} #- ${弹框名称(弹框标识元素, 出现弹框后点击按钮元素)}UIBookNewDetail
         - ${月签到活动(UISignActivity, Back)}
         - ${每日登陆积分(UIGetLoginCredit, FreeBtn)}
         - ${一日三签活动弹框(UIDailyLoginRewardABTest, ClaimtBtn)}
@@ -19,6 +19,8 @@
         - ${答谢弹框(LuaUIThanksPopup, Back)}
         - ${内容推送弹框(UITextPopup, Btn)}
         - ${推送礼包(UIGiftPopup, Popup)}
+        - ${书籍详情页(UIBookNewDetail, Button)}
+
 
 - 1:
     Popupscene: "bookdetail"

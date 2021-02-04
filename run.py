@@ -16,12 +16,11 @@ from common.COM_utilities import *
 # from  airtest.core.android.adb import *
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
-    adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
-    logpath = os.path.join(path_LOG_DIR, "log.txt")
 
     def __init__(self):
-        self.initialize()
         MyAnalysis.__init__(self)
+        self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
+        self.logpath = os.path.join(path_LOG_DIR, "log.txt")
 
     def initialize(self):
         try:
@@ -54,50 +53,54 @@ class Run(MyAnalysis):
         for i in runlist:
             self.get_eval_value(i["args"], i["func_name"])
 
-    def writelogs(self, logpath):
+    def writelogs(self):
         logspath = os.path.join(path_LOG_DIR, "logs.txt")
         # alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
-        text_file = open(logpath, "r")
-        lines = text_file.readlines()
+        log_file = open(self.logpath, "r")
+        lines = log_file.readlines()
+        logs_file = open(logspath, "a")
         for val in range(len(lines)):
             # alllog_file = open(alllogspath, "a")
             # alllog_file.write(lines[val])
-            if "assert_equal" in lines[val] or "traceback" in lines[val]:
-                logs_file = open(logspath, "a")
-                logs_file.write(lines[val])
+            # if "assert_equal" in lines[val] or "traceback" in lines[val]:
+            logs_file.write(lines[val])
         logs_file.close()
-        text_file.close()
-        # alllog_file.close()
+        log_file.close()
 
     def pull_errorLog(self):
-        """输出errorlog日志"""
+        """输出errorlog日志转化到log.txt中"""
         errorLogpath = os.path.join(path_LOG_MY, "errorlog.txt")
+        print("errorLogpath",errorLogpath)
         try:
             pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + errorLogpath
             connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
+            print("pull",pull)
+            print("connected",connected)
             print(os.system(self.adbpath + " devices"))
             sleep(3)
             print(os.system(connected))
             sleep(3)
             print(os.popen(pull))
             print("完成读取errorlog")
-            text_file = open(errorLogpath, "r")
-            if text_file:
-                print("存在错误日志", text_file.read())
+            errorlog_file = open(errorLogpath, "r")
+            if errorlog_file:
+                lines = errorlog_file.readlines()
+                print("存在错误日志", errorlog_file.read())
                 # text_file = open(errorLogpath, "r")
-                lines = text_file.readlines()
                 for val in range(len(lines)):
+                    time = 1612407756.9300864+int(val)
+                    print(type(time))
                     print("val", val)
                     print(lines[val])
-                    log(Exception("存在错误日志{}".format(lines[val])))
-                text_file.close()
-                self.writelogs(self.logpath)
-                auto_setup(logdir=path_LOG_DIR)
-            sleep(6)
+                    log(Exception("Unity异常"+lines[val]), timestamp=time)
+            errorlog_file.close()
+                # auto_setup(logdir=path_LOG_DIR)
+            print("输出errorlog日志转化到log.txt中成功")
         except:
-            print("读取errorlog失败")
+            print("输出errorlog日志转化到log.txt中失败")
 
     def togetherReport(self):
+        """生成最后的合成日志"""
         htmlname = self.Case_info["casename"] + ".html"
         htmlpath = os.path.join(path_REPORT_DIR, htmlname)
         logspath = os.path.join(path_LOG_DIR, "logs.txt")
@@ -165,7 +168,7 @@ class Run(MyAnalysis):
                     mylog.info("--------完成异常重启------")
                 finally:
                     outputpath = os.path.join(path_REPORT_DIR, htmlname)
-                    self.writelogs(self.logpath)
+                    self.writelogs()
                     simple_report(__file__, logpath=path_LOG_DIR, output=outputpath)
                     self.Case_info[k]["repeattime"] = self.Case_info[k]["repeattime"] - 1
                     mylog.info("完成html测试报告，等待生产录制文件需要一定时间")
@@ -182,10 +185,13 @@ class Run(MyAnalysis):
 if __name__ == '__main__':
     try:
         myRun = Run()
+        myRun.initialize()
         myRun.runing()
     except Exception as e:
         mylog.error("------出现异常{}", e)
         log(e, "------出现异常--------")
     finally:
         myRun.pull_errorLog()
+        myRun.writelogs()
+        # myRun.pull_errorLog()
         myRun.togetherReport()
