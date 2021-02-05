@@ -85,8 +85,8 @@ class Shop(FindObject):
 
     def click_keytobuy(self):
         """点击安卓一键购买"""
-        androidpoco=self.androidpoco(text="一键购买").wait(5)
-        self.findClick_childobject(androidpoco,description="一键购买",waitTime=3,sleeptime=1)
+        androidpoco=self.androidpoco(text="一键购买")
+        self.findClick_childobject(androidpoco,description="一键购买",waitTime=5,sleeptime=1)
 
     def click_affirm(self):
         """点击安卓弹窗确认"""

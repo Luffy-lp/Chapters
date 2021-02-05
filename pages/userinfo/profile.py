@@ -197,7 +197,7 @@ class Profile(FindObject):
     def click_background(self):
         """点击user背景"""
         bgroundPOCO = self.poco("View").child("UserBackground")
-        self.findClick_childobject(bgroundPOCO, description="user background", waitTime=1)
+        self.findClick_childobject(bgroundPOCO, description="user background", waitTime=1,clickPos=[0.5,0.25])
 
     def refuse_member_renew(self):
         """检测是否提醒会员资格过期并取消续费"""

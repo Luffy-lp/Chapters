@@ -76,13 +76,16 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findClick_childobject(self, ClickPoco:poco, description="", waitTime=1, tryTime=1, sleeptime=0.1):
+    def findClick_childobject(self, ClickPoco:poco, description="", waitTime=1, tryTime=1, sleeptime=0.1,clickPos=None):
         """用于关联父级才能点击到的元素"""
         waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
         if ClickPoco.wait(waitTime).exists():
             print("发现{0}".format(description))
             mylog.info("查找点击元素-【{}】--成功".format(description))
-            ClickPoco.click()
+            if clickPos is None:
+                ClickPoco.click()
+            else:
+                ClickPoco.click(clickPos)
             sleep(sleeptime)
             mylog.info("点击元素-【{}】--成功".format(description))
             return True
