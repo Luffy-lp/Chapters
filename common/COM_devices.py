@@ -24,6 +24,14 @@ class CommonDevices():
                     MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
                     mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
                     print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+                    # ADBdevice = MyData.EnvData_dir["ADBdevice"]
+                    # print(MyData.mobileconf_dir["Notch_Fit"])
+                    # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+                    #     print("报错把刚开始了解")
+                    #     MyData.DeviceData_dir["androidpoco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][
+                    #         ADBdevice])
+                    #     mylog.info("androidpoco完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
+                    #     print("androidpoco完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
                 print("DEVIEC:", G.DEVICE)
     def getdevlist(self):
         devlist = []

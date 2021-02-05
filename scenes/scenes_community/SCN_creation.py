@@ -14,7 +14,7 @@ class Creation(FindObject):
 
     def click_createNewBook(self):
         """创建新小说+"""
-        self.findClick_try("UIWriterIntroduceDlg", "BtnOK", description="创作小说条款")
+        self.findClick_try("UIWriterIntroduceDlg", "BtnOK", description="创作小说条款",waitTime=3)
         POCO=self.poco("CoverMask").child("Text")
         clock()
         while not self.findchildobject_try(POCO,description="新增小说按钮",waitTime=1):

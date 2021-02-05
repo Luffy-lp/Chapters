@@ -61,7 +61,7 @@ class GameLoaded(FindObject):
         return self.GameLoaded_info
 
     def Popo_Errorinfo(self):
-        if self.android_tryfind("android:id/button1", description="加载中..."):
+        if self.android_tryfind("android:id/button1", description="Google提示"):
             self.android_findClick("android:id/button1", "android:id/button1", description="Google框架提示处理")
             mylog.error("检测到未安装谷歌框架，无法执行相关操作")
         if self.find_try("Context", description="加载中..."):
@@ -69,3 +69,5 @@ class GameLoaded(FindObject):
             self.GameLoaded_info["ErrorTxt"].append(TXT)
             self.click_object("CenterBtn", description="Try again", waitTime=5)
             mylog.info("异常弹框，{0}".format(TXT))
+# GameLoaded1=GameLoaded()
+# GameLoaded1.Popo_Errorinfo()

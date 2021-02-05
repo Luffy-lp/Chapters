@@ -132,8 +132,8 @@ class Run(MyAnalysis):
         mylog.info("完成html测试报告，等待生产录制文件需要一定时间")
 
     def resetEnv(self, k):
-        MyData.DeviceData_dir["poco"] = None
-        if "test_startgame" in self.Runlist_dir[k]:
+        print(self.Runlist_dir[k])
+        if "登陆" in self.Case_info[k]["casename"]:
             pass
         else:
             mylog.info("----------正在进行异常重启------")

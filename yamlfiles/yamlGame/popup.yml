@@ -19,6 +19,7 @@
         - ${答谢弹框(LuaUIThanksPopup, Back)}
         - ${内容推送弹框(UITextPopup, Btn)}
         - ${推送礼包(UIGiftPopup, Popup)}
+        - ${DayPass详情弹框(UIDayPassState, Button)}
 
 - 1:
     Popupscene: "bookdetail"

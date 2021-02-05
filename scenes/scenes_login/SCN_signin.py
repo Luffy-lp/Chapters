@@ -27,7 +27,9 @@ class SignIn(FindObject):
                 log(Exception("检测是否登陆成功失败"))
                 raise Exception("检测是否登陆成功失败")
         ProfileBt = self.poco("Profile").child("Label")
-        self.findClick_childobject(ProfileBt, description="切换到Profile界面",waitTime=5)
+        self.notchfit_childobject(ProfileBt, description="切换到Profile界面",
+                                 waitTime=5, sleeptime=2)
+        # self.findClick_childobject(ProfileBt, description="切换到Profile界面",waitTime=5)
         if self.find_try("Sign", description="登陆按钮"):
             self.SignIn_info["用户登陆状态"] = False
             return self.SignIn_info
@@ -40,10 +42,14 @@ class SignIn(FindObject):
         """选择登陆方式,Google,FaceBook"""
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "Google":
             self.click_Google()
-            self.mysleep(3)
-            if self.android_tryfind("android.widget.FrameLayout", description="Google绑定", waitTime=3):
+            self.mysleep(5)
+            # ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+            #     MyData.DeviceData_dir["poco"].use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+            #     print("取消【{}】刘海屏特殊渲染处理".format(ADBdevice))
+            if self.android_tryfind("com.google.android.gms:id/list", description="Google绑定用户选择", waitTime=3):
                 try:
-                    listname = self.androidpoco("com.google.android.gms:id/account_name").wait(5)
+                    listname = self.androidpoco("com.google.android.gms:id/account_name")
                     for i in listname:
                         name = i.get_text()
                         if name == MyData.UserData_dir["loginInfo"]["loginemail"]:
@@ -51,32 +57,44 @@ class SignIn(FindObject):
                             self.findClick_childobject(i, description="登录Google用户")
                             self.SignIn_info["Google用户"] = name
                             return True
-                    name = listname.get_text()
-                    self.findClick_childobject(name, description="登录Google用户")
-                    self.SignIn_info["Google用户"] = name
+                        else:
+                            name = listname[0].get_text()
+                            print("未找到你想要登陆的用户，目前登陆用户:",name)
+                            self.findClick_childobject(listname[0], description="登录Google用户")
+                            self.SignIn_info["Google用户"] = name
+                    self.bindLoginComfirm()
                 except:
                     pass
-                if self.android_tryfind("identifierId", description="Google绑定", waitTime=3):
-                    self.androidpoco("identifierId").set_text(MyData.UserData_dir["loginInfo"]["loginemail"])
-                    self.android_findClick("identifierNext", "identifierNext", description="点击继续", waitTime=1, sleeptime=2)
-                    self.androidpoco("android.widget.EditText").set_text(MyData.UserData_dir["loginInfo"]["loginpassword"])
-                    self.android_findClick("passwordNext", "passwordNext", description="下一步", waitTime=1, sleeptime=2)
-                    self.android_findClick("signinconsentNext", "signinconsentNext", description="同意", waitTime=1,
-                                           sleeptime=1)
-                    if self.findClick_try("android.widget.Button", "android.widget.Button", description="接受", waitTime=2,
-                                           sleeptime=1,pocotype="Androidpoco"):
-                        print("添加账号成功")
-                    else:
-                        self.findClick_try("com.google.android.gms:id/sud_navbar_next",
-                                           "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
-                                           sleeptime=3,pocotype="Androidpoco")
+            elif self.android_tryfind("identifierId", description="Google新增用户", waitTime=3):
+                self.androidpoco("identifierId").set_text(MyData.UserData_dir["loginInfo"]["loginemail"])
+                self.android_findClick("identifierNext", "identifierNext", description="点击继续", waitTime=1, sleeptime=2)
+                self.androidpoco("android.widget.EditText").set_text(MyData.UserData_dir["loginInfo"]["loginpassword"])
+                self.android_findClick("passwordNext", "passwordNext", description="下一步", waitTime=1, sleeptime=2)
+                self.android_findClick("signinconsentNext", "signinconsentNext", description="同意", waitTime=1,
+                                       sleeptime=1)
+                if self.findClick_try("android.widget.Button", "android.widget.Button", description="接受", waitTime=2,
+                                       sleeptime=1,pocotype="Androidpoco"):
+                    print("添加账号成功")
+                else:
+                    self.findClick_try("com.google.android.gms:id/sud_navbar_next",
+                                       "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
+                                       sleeptime=3,pocotype="Androidpoco")
 
                     self.click_Google()
-            self.bindLoginComfirm()
+                    self.bindLoginComfirm()
+            else:
+                print("已绑定过用户")
+            # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+            #     MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+            #     print("开启【{}】刘海屏特殊渲染处理".format(ADBdevice))
             return True
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "FaceBook":
             self.click_FaceBook()
             self.mysleep(5)
+            ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+                MyData.DeviceData_dir["poco"].use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+                print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
             if self.android_tryfind("m_login_email", description="faceBook未登录", waitTime=3):
                 # m_login_emailPOCO=self.androidpoco("m_login_email")
                 # self.findClick_childobject(m_login_emailPOCO,description="点击输入邮箱",waitTime=1,sleeptime=2)
@@ -91,7 +109,9 @@ class SignIn(FindObject):
                 if self.android_tryfind("u_0_1", description="使用相同信息登录", waitTime=1):
                     loginPOCO1 = self.androidpoco("u_0_1")[0]
                     self.findClick_childobject(loginPOCO1, description="点击继续", waitTime=1, sleeptime=2)
-
+            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+                MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+                print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
     def bindLoginComfirm(self):
         """登陆Comfirm按钮判断"""
         click(PosTurn(self._pos))
@@ -102,7 +122,6 @@ class SignIn(FindObject):
     def process_profilelogin(self):
         """个人信息登陆流程Google,FaceBook"""
         self.issign()
-        print(self.SignIn_info["用户登陆状态"])
         if self.SignIn_info["用户登陆状态"] == False:
             self.click_Signin()
             if not self.show_checkImage1().wait(1).exists():
@@ -120,7 +139,8 @@ class SignIn(FindObject):
 
     def click_Signin(self):
         """Signin按钮"""
-        self.click_object("Sign", description="登陆按钮")
+        # self.click_object("Sign", description="登陆按钮")
+        self.notchfit__Click_try("Sign","Sign", description="登陆按钮",waitTime=5)
 
     def check_agree(self):
         """勾选同意"""
@@ -147,4 +167,9 @@ class SignIn(FindObject):
 
 # width = G.DEVICE.display_info['width']
 # SignIn1 = SignIn()
-# SignIn1.process_profilelogin()
+# SignIn1.loginGuide()
+# if SignIn1.android_tryfind("com.google.android.gms:id/list", description="Google绑定用户选择", waitTime=3):
+#     print("ddddddddd")
+# elif SignIn1.android_tryfind("identifierId", description="Google新增用户", waitTime=3):
+#     print("eeeeeeeeeeeee")
+# else:print("ccccccccccccccccccc")

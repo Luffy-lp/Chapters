@@ -25,6 +25,11 @@ class FindObject(CommonDevices):
         CommonDevices.__init__(self)
         if MyData.DeviceData_dir["poco"] == None:
             MyData.DeviceData_dir["poco"] = UnityPoco()
+            ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+                MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+                mylog.info("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
+                print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
             mylog.info("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
             print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
         self.poco = MyData.DeviceData_dir["poco"]
@@ -208,20 +213,23 @@ class FindObject(CommonDevices):
             poco=self.androidpoco
         else:
             poco=self.poco
-            ADBdevice=MyData.EnvData_dir["ADBdevice"]
-            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-                poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+            # ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+            #     poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
         try:
             print("尝试寻找{0}".format(description))
             # gameobject = self.poco(findName)
             if poco(findName).wait(waitTime).exists():
                 print("发现{0}".format(description))
+                # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+                #     poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
                 if poco(ClickName).wait(waitTime+1).exists():
                     print("发现{0}按钮，并点击".format(ClickName))
                     poco(ClickName).click()
                     sleep(sleeptime)
                     self.Popuplist.append(description)
                     mylog.info("尝试点击-【{}】-元素成功并加入弹框列表".format(description))
+                    # poco.use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
                     return True
                 else:
                     mylog.info("尝试点击-【{}】-元素失败".format(description))
@@ -230,7 +238,25 @@ class FindObject(CommonDevices):
             log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
-        poco.use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+
+    def notchfit_childobject(self, ClickPoco:poco, description="",  waitTime=0.5, tryTime=1, sleeptime=0, log=True):
+        """用于关联父级才能点击到的元素"""
+        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        # ADBdevice=MyData.EnvData_dir["ADBdevice"]
+        # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+        #     self.poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+        if ClickPoco.wait(waitTime).exists():
+            print("发现{0}".format(description))
+            mylog.info("查找点击元素-【{}】--成功".format(description))
+            ClickPoco.click()
+            sleep(sleeptime)
+            mylog.info("点击元素-【{}】--成功".format(description))
+            # self.poco.use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+            return True
+        else:
+            mylog.error("查找-【{}】-元素失败".format(description))
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+        raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def findClick_Image(self, filename, record_pos, description="图片", resolution=(1600, 2560), tryTime=1,waitTime=5):
         """点击图片"""
@@ -337,4 +363,5 @@ class FindObject(CommonDevices):
                 print("未成功点击按钮")
                 return False
 # FindObject1=FindObject()
+# FindObject1.android_tryfind("")
 # FindObject1.notchfit__Click_try("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)
