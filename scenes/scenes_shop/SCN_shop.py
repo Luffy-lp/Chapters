@@ -84,7 +84,7 @@ class Shopmodule(Shop):
         MyData.UserData_dir["member_type_old"] = MyData.UserData_dir["member_type"]
         self.swipe_diamonds()
         self.click_buy_member()
-        if self.find_try("TopTip"):
+        if self.poco(nameMatches=".*SubBtn").wait(5).exists():
             self.click_subs()#点击订阅会员按钮
             time.sleep(2)
             self.click_subscribed()
@@ -97,7 +97,7 @@ class Shopmodule(Shop):
                     self.click_affirm()
                 time.sleep(3)
                 try:
-                    self.poco("CloseBtn").click()
+                    self.poco("BtnReturn").click()
                     boolis=False
                     print("订阅后点击返回按钮")
                     mylog.info("订阅后点击返回按钮")
