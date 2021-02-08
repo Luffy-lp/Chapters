@@ -1,6 +1,6 @@
 # from asyncio import sleep
 from time import sleep
-from scenes.scenes_login.SCN_signin import SignIn
+# from scenes.scenes_login.SCN_signin import SignIn
 from common import COM_utilities
 from common.COM_findobject import FindObject
 from scenes.scenes_login.SCN_newuser import NewUserGuide
@@ -18,12 +18,12 @@ class GameLoaded(FindObject):
         self.mysleep(10)
         FindObject.__init__(self)
 
-    def mainprocess(self, login=0):
-        self.gameloading()
-        self.Popup_login(login)
-        return True
+    # def mainprocess(self, login=0):
+    #     self.gameloading()
+    #     self.Popup_login(login)
+    #     return True
 
-    def gameloading(self):  # 游戏是否加载完成判断
+    def gameloading(self,login=1):  # 游戏是否加载完成判断
         while self.poco("Slider").wait(1).exists():
             self.Popo_Errorinfo()
             self.Popup_login(login=1)
@@ -51,13 +51,13 @@ class GameLoaded(FindObject):
                 finally:
                     self.findClick_object("StartGame", "StartGame", description="点击Play Now按钮", waitTime=2)
                     self.GameLoaded_info["游戏登陆弹框"] = "跳过登陆"
-            elif login == 2:
-                SignIn1 = SignIn()
-                SignIn1.loginGuide_login_process()
-                sleep(3)
-                self.GameLoaded_info["游戏登陆弹框"] = "登陆"
-                self.GameLoaded_info["登陆状态"] = SignIn1.SignIn_info["用户登陆状态"]
-                self.PageTurn.Bottom_click(0)
+            # elif login == 2:
+            #     SignIn1 = SignIn()
+            #     SignIn1.loginGuide_login_process()
+            #     sleep(3)
+            #     self.GameLoaded_info["游戏登陆弹框"] = "登陆"
+            #     self.GameLoaded_info["登陆状态"] = SignIn1.SignIn_info["用户登陆状态"]
+            #     self.PageTurn.Bottom_click(0)
         return self.GameLoaded_info
 
     def Popo_Errorinfo(self):

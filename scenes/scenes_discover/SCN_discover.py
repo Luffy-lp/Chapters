@@ -11,7 +11,7 @@ class Discover(FindObject):
 
     def discoverPopup(self):  # 积分弹框
         """大厅弹框检查"""
-        print(MyData.popup_dir)
+        self.Popuplist=[]
         poplist = MyData.popup_dir[0]
         havePopup = True
         self.UIAlterPoP()
@@ -40,12 +40,6 @@ class Discover(FindObject):
                                                    tryTime=1, sleeptime=2)
             elif self.poco("PopUpPanel").children():
                 print("进入PopUpPanel弹框判断")
-
-                #     name=self.poco("PopUpPanel").children().get_name()
-                #     print("进入PopUpPanel弹框name",name)
-                #     if name=="PopMask":
-                #         continue
-                # except:pass
                 try:
                     child1 = self.poco("PopUpPanel").child(nameMatches="^UI.*", visible=True)
                     for list in child1:

@@ -14,7 +14,6 @@ case1:
     step:
         - ${test_uninstallGame()}
         - ${test_installGame()}
-
 case2:
     caseauthor: "lipeng"
     casename: "用户登陆-"

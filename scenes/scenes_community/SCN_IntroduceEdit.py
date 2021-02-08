@@ -91,24 +91,37 @@ class IntroduceEdit(FindObject):
                                        "com.android.packageinstaller:id/permission_allow_button",
                                        description="检查开启图库权限", waitTime=1
                                        )
+            ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            if ADBdevice in MyData.mobileconf_dir["Upload_Image"]:
+                Upload_ImageData=MyData.mobileconf_dir["Upload_Image"][ADBdevice]
+                for val in range(0, len(Upload_ImageData)):
+                    clickName = Upload_ImageData[val]
+                    if type(clickName) == list:
+                            touch(clickName)
+                    if type(clickName) == int:
+                            sleep(clickName)
+                    else:
+                        self.findClick_try(clickName, clickName, description=clickName, waitTime=2, sleeptime=3,pocotype="Androidpoco")
             if "127" in MyData.EnvData_dir["ADBdevice"]:
                 print("模拟器类型")
                 self.mumu()
             else:
-                self.android_findClick("com.google.android.apps.photos:id/image",
-                                       "com.google.android.apps.photos:id/image",
-                                       description="选择图片",
-                                       waitTime=10)
-                pos = self.androidpoco("android.view.ViewGroup")[0].child(
-                    "com.google.android.apps.photos:id/title").wait(5).get_position()
-                pos[1] = pos[1] + 0.1
-                touch(PosTurn(pos))
-                print("确认图片")
-                self.android_findClick("com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save",
-                                       "com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save",
-                                       description="完成保存",
-                                       waitTime=5)
-            self.mysleep(6)
+                print("mobileconf未找到上传图片对应配置")
+            # else:
+            #     self.android_findClick("com.google.android.apps.photos:id/image",
+            #                            "com.google.android.apps.photos:id/image",
+            #                            description="选择图片",
+            #                            waitTime=10)
+            #     pos = self.androidpoco("android.view.ViewGroup")[0].child(
+            #         "com.google.android.apps.photos:id/title").wait(5).get_position()
+            #     pos[1] = pos[1] + 0.1
+            #     touch(PosTurn(pos))
+            #     print("确认图片")
+            #     self.android_findClick("com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save",
+            #                            "com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save",
+            #                            description="完成保存",
+            #                            waitTime=5)
+            # self.mysleep(6)
             COM_utilities.clock()
             while self.find_try("LoadingFlower", description="判断加载是否完成"):
                 print("图片loading中")
@@ -151,6 +164,6 @@ class IntroduceEdit(FindObject):
         self.editCategory()
         self.editCoverIcon()
         self.topBar("Release")
-
+#
 # IntroduceEdit1=IntroduceEdit()
 # IntroduceEdit1.mainprocess("aaaaaaaaaaaa")

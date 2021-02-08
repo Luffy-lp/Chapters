@@ -27,6 +27,7 @@ class Run(MyAnalysis):
         try:
             print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
             print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
+            sleep(3)
         except:
             pass
         self.clear()

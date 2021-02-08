@@ -72,6 +72,7 @@ class UserData(APiClass):
     def yaml_mobileconf(self):
         mobileconfpath = os.path.join(path_YAML_FILES, "mobileconf.yml")
         self.mobileconf_dir = self.read_yaml(mobileconfpath)
+        print(self.mobileconf_dir)
         return self.mobileconf_dir
 
     def yamldata_conf(self):

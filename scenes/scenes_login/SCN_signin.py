@@ -3,6 +3,7 @@ from common.COM_data import MyData
 from common.COM_findobject import FindObject
 from common.COM_utilities import *
 # from pages.startgame.page_loginView import LoginView
+from scenes.scenes_login.SCN_gameloaded import GameLoaded
 from scenes.scenes_login.SCN_newuser import NewUserGuide
 
 
@@ -16,50 +17,39 @@ class SignIn(FindObject):
         FindObject.__init__(self)
 
     def issign(self):
-        """判断是否登陆"""
+        """判断是否完成登陆"""
         clock()
-        while not self.find_try("UIUserInfoSys", description="检测是否登陆成功"):
-            NewUserGuide1 = NewUserGuide()
+        GameLoaded1 = GameLoaded()
+        NewUserGuide1=NewUserGuide()
+        while not self.find_try("UserBackground", description="用户信息界面"):
+            GameLoaded1.gameloading()
             NewUserGuide1.newUserPopUp()
             mytime = float(clock("stop"))
-            if mytime > 360:
-                print("检测是否登陆成功失败,确保大厅是否有弹框遮挡")
+            if mytime > 120:
                 log(Exception("检测是否登陆成功失败"))
+                self.SignIn_info["用户登陆状态"] = "尝试登陆失败"
                 raise Exception("检测是否登陆成功失败")
-        ProfileBt = self.poco("Profile").child("Label")
-        self.notchfit_childobject(ProfileBt, description="切换到Profile界面",
-                                 waitTime=5, sleeptime=2)
-        # self.findClick_childobject(ProfileBt, description="切换到Profile界面",waitTime=5)
-        if self.find_try("Sign", description="登陆按钮"):
-            self.SignIn_info["用户登陆状态"] = False
-            return self.SignIn_info
-        else:
-            self.SignIn_info["用户登陆状态"] = True
-            return self.SignIn_info
+        self.SignIn_info["用户登陆状态"] = "完成登陆"
         return True
 
     def loginGuide(self):
-        """选择登陆方式,Google,FaceBook"""
+        """登陆流程"""
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "Google":
             self.click_Google()
             self.mysleep(5)
-            # ADBdevice=MyData.EnvData_dir["ADBdevice"]
-            # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-            #     MyData.DeviceData_dir["poco"].use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
-            #     print("取消【{}】刘海屏特殊渲染处理".format(ADBdevice))
             if self.android_tryfind("com.google.android.gms:id/list", description="Google绑定用户选择", waitTime=3):
                 try:
                     listname = self.androidpoco("com.google.android.gms:id/account_name")
                     for i in listname:
                         name = i.get_text()
                         if name == MyData.UserData_dir["loginInfo"]["loginemail"]:
-                            print("你登陆的用户:",name)
+                            print("你登陆的用户:", name)
                             self.findClick_childobject(i, description="登录Google用户")
                             self.SignIn_info["Google用户"] = name
                             return True
                         else:
                             name = listname[0].get_text()
-                            print("未找到你想要登陆的用户，目前登陆用户:",name)
+                            print("未找到你想要登陆的用户，目前登陆用户:", name)
                             self.findClick_childobject(listname[0], description="登录Google用户")
                             self.SignIn_info["Google用户"] = name
                     self.bindLoginComfirm()
@@ -73,28 +63,21 @@ class SignIn(FindObject):
                 self.android_findClick("signinconsentNext", "signinconsentNext", description="同意", waitTime=1,
                                        sleeptime=1)
                 if self.findClick_try("android.widget.Button", "android.widget.Button", description="接受", waitTime=2,
-                                       sleeptime=1,pocotype="Androidpoco"):
+                                      sleeptime=1, pocotype="Androidpoco"):
                     print("添加账号成功")
                 else:
                     self.findClick_try("com.google.android.gms:id/sud_navbar_next",
                                        "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
-                                       sleeptime=3,pocotype="Androidpoco")
+                                       sleeptime=3, pocotype="Androidpoco")
 
                     self.click_Google()
                     self.bindLoginComfirm()
             else:
                 print("已绑定过用户")
-            # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-            #     MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
-            #     print("开启【{}】刘海屏特殊渲染处理".format(ADBdevice))
             return True
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "FaceBook":
             self.click_FaceBook()
             self.mysleep(5)
-            ADBdevice=MyData.EnvData_dir["ADBdevice"]
-            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-                MyData.DeviceData_dir["poco"].use_render_resolution(False, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
-                print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
             if self.android_tryfind("m_login_email", description="faceBook未登录", waitTime=3):
                 # m_login_emailPOCO=self.androidpoco("m_login_email")
                 # self.findClick_childobject(m_login_emailPOCO,description="点击输入邮箱",waitTime=1,sleeptime=2)
@@ -109,25 +92,26 @@ class SignIn(FindObject):
                 if self.android_tryfind("u_0_1", description="使用相同信息登录", waitTime=1):
                     loginPOCO1 = self.androidpoco("u_0_1")[0]
                     self.findClick_childobject(loginPOCO1, description="点击继续", waitTime=1, sleeptime=2)
-            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-                MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
-                print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
+
     def bindLoginComfirm(self):
         """登陆Comfirm按钮判断"""
         click(PosTurn(self._pos))
         if self.poco("UIBindLoginComfirm").child("Button").wait(3).exists():
             LoginComfirmBtn = self.poco("UIBindLoginComfirm").child("Button")
-            self.findClick_childobject(LoginComfirmBtn, description="Comfirm按钮",waitTime=3)
+            self.findClick_childobject(LoginComfirmBtn, description="Comfirm按钮", waitTime=3)
 
     def process_profilelogin(self):
         """个人信息登陆流程Google,FaceBook"""
-        self.issign()
-        if self.SignIn_info["用户登陆状态"] == False:
+        if self.find_try("UserBackground", description="用户信息界面", waitTime=5) == True:
+            self.SignIn_info["用户登陆状态"] = "已登陆"
+        else:
+            self.SignIn_info["用户登陆状态"] = "未登陆"
+            self.click_Profile()
             self.click_Signin()
-            if not self.show_checkImage1().wait(1).exists():
-                self.check_agree()
+            self.check_agree()
             self.loginGuide()
             self.mysleep(5)
+            self.issign()
         return True
 
     def loginGuide_login_process(self, login="Google", email="15019423971", password="yo5161381"):
@@ -137,19 +121,26 @@ class SignIn(FindObject):
         click(PosTurn(self._pos))  # 盲点按钮
         self.bindLoginComfirm()
 
+    def click_Profile(self):
+        self.findClick_object("Profile", "Profile", description="Profile", waitTime=5)
+
     def click_Signin(self):
         """Signin按钮"""
-        # self.click_object("Sign", description="登陆按钮")
-        self.notchfit__Click_try("Sign","Sign", description="登陆按钮",waitTime=5)
+        self.notchfit__Click_try("Sign", "Sign", description="Sign in按钮", waitTime=5)
 
     def check_agree(self):
         """勾选同意"""
         POCOBtn = self.poco("PolicyBtn").child("Image")
-        self.findClick_childobject(POCOBtn, description="勾选同意按钮")
+        if not self.show_checkImage1().wait(1).exists():
+            self.findClick_childobject(POCOBtn, description="勾选同意按钮")
 
     def click_Google(self):
         """选择Google方式登陆"""
         self.click_object("GoogleBtn", description="选择Google方式", waitTime=1)
+
+    def click_FaceBook(self):
+        """选择FaceBook方式登陆"""
+        self.click_object("FaceBookBtn", description="选择FaceBook方式")
 
     def click_FaceBook(self):
         """选择FaceBook方式登陆"""
