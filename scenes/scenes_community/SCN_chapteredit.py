@@ -15,7 +15,7 @@ class ChapterEdit(FindObject):
         self.find_object("LuaUIChapterEdit", description="章节编辑界面", waitTime=3)
 
     def into_mainstudio(self):
-        self.click_object("BtnEdit", description="进入创作工作室")
+        self.click_object("BtnEdit", description="进入创作工作室",sleeptime=5)
 
     def into_IntroduceEdit(self):
         """编辑简介入口"""
