@@ -1,0 +1,81 @@
+#无参数：${func()}
+#顺序参数：${func(a, b)}
+#字典参数：${func(a=1, b=2)}
+#混合类型参数：${func(1, 2, a=3, b=4)}
+#单个用例可以#号全部注释，未注释用例step里面最少有一个，用例说明参考“测试步骤配置说明”
+case1:
+    caseauthor: "lipeng"
+    casename: "安装游戏-"
+    casedec: "安装游戏"
+    repeattime: "3"
+    reportname: "安装游戏"
+    step:
+        - ${test_uninstallGame()}
+        - ${test_installGame()}
+case2:
+    caseauthor: "lipeng"
+    casename: "用户登陆-"
+    casedec: "用户登陆描述"
+    repeattime: "3"
+    reportname: "用户登陆"
+    step:
+        - ${test_startgame(1)}
+        - ${test_newUserGuide()}
+        - ${test_discoverPopup()}
+        - ${pageTurn(4)}
+        - ${test_signin()}
+case3:
+    caseauthor: "lipeng"
+    casename: "视觉小说阅读"
+    casedec: "视觉小说阅读描述"
+    repeattime: "3"
+    reportname: "视觉小说阅读"
+    step:
+        - ${pageTurn(0)}
+        - ${test_bookchoose(Weekly, 0)}
+#        - ${test_bookPlay()}
+#        - ${test_bookload()}
+#        - ${test_bookread()}
+        - ${pageTurn()}
+
+case4:
+    caseauthor: "lipeng"
+    casename: "短信小说创作"
+    casedec: "短信小说创作"
+    repeattime: "3"
+    reportname: "短信小说创作"
+    step:
+        - ${pageTurn(2)}
+        - ${test_Creation()}
+        - ${test_ChapterEdit(lipengBook)}
+case5:
+    caseauthor: "lipeng"
+    casename: "短信小说阅读"
+    casedec: "短信小说阅读"
+    repeattime: "3"
+    reportname: "短信小说阅读"
+    step:
+        - ${pageTurn(2)}
+        - ${test_chooseUGCBook(0, 1)}
+        - ${test_ReadUGCBook(2)}
+case6:
+    caseauthor: "江浚朋"
+    casename: "个人信息"
+    casedec: "个人信息"
+    repeattime: "3"
+    reportname: "个人信息"
+    step:
+        - ${pageTurn(4)}
+        - ${test_ChangeUseravatar()}
+        - ${test_operationAchievement()}
+        - ${test_ChangeUseremoticons(0)}
+case7:
+    caseauthor: "江浚朋"
+    casename: "商城"
+    casedec: "商城"
+    repeattime: "3"
+    reportname: "商城"
+    step:
+        - ${test_shop_buy_ticket(1003)}
+        - ${test_shop_buy_diamond(1004)}
+        - ${test_shop_buy_member()}
