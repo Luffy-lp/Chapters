@@ -98,7 +98,7 @@ class IntroduceEdit(FindObject):
                     clickName = Upload_ImageData[val]
                     if type(clickName) == list:
                             touch(clickName)
-                    if type(clickName) == int:
+                    elif type(clickName) == int:
                             sleep(clickName)
                     else:
                         self.findClick_try(clickName, clickName, description=clickName, waitTime=2, sleeptime=3,pocotype="Androidpoco")
@@ -123,7 +123,7 @@ class IntroduceEdit(FindObject):
             #                            waitTime=5)
             # self.mysleep(6)
             COM_utilities.clock()
-            while self.find_try("LoadingFlower", description="判断加载是否完成"):
+            while self.find_try("LoadingPanel", description="加载图标"):
                 print("图片loading中")
                 sleep(1)
                 mytime = float(COM_utilities.clock("stop"))

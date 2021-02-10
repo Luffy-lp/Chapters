@@ -10,11 +10,11 @@ class Creation(FindObject):
         # self.workshop()
 
     def workshop(self):
-        self.find_object("LoopListView", description="作者小说列表界面", waitTime=3)
+        self.find_object("LuaUIStudio", description="作者小说列表界面", waitTime=10)
+        self.findClick_try("UIWriterIntroduceDlg", "BtnOK", description="创作小说条款",waitTime=3)
 
     def click_createNewBook(self):
         """创建新小说+"""
-        self.findClick_try("UIWriterIntroduceDlg", "BtnOK", description="创作小说条款",waitTime=3)
         POCO=self.poco("CoverMask").child("Text")
         clock()
         while not self.findchildobject_try(POCO,description="新增小说按钮",waitTime=1):
@@ -47,6 +47,7 @@ class Creation(FindObject):
         self.find_object("UINewBookRack", description="短信小说界面", waitTime=3)
 
     def process_createNewBook(self):
+        self.workshop()
         self.click_createNewBook()
         self.mysleep(2)
         self.select_genre()

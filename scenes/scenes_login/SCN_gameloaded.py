@@ -18,10 +18,10 @@ class GameLoaded(FindObject):
         self.mysleep(10)
         FindObject.__init__(self)
 
-    # def mainprocess(self, login=0):
-    #     self.gameloading()
-    #     self.Popup_login(login)
-    #     return True
+    def mainprocess(self, login=1):
+        self.gameloading()
+        self.Popup_login(login)
+        return True
 
     def gameloading(self,login=1):  # 游戏是否加载完成判断
         while self.poco("Slider").wait(1).exists():

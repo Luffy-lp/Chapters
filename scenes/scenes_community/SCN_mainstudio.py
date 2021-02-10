@@ -18,6 +18,7 @@ class MainStudio(FindObject):
         self.findClick_object("UINewBookRack", "CreateBtn", description="进入工作室", waitTime=1, sleeptime=2)
 
     def LuaUIStudio(self):
+        """的"""
         self.find_object("LuaUIStudio", description="工作室显示UI", waitTime=3)
         clock()
         while self.find_try("LuaUIGuide", description="新手引导界面"):
@@ -40,10 +41,10 @@ class MainStudio(FindObject):
             POCO = self.poco("Options").child("Button(Clone)")[0]
             self.findClick_childobject(POCO, description="选择Avatar Gallery")
             sleep(2)
-            if self.find_object("ConentPageView", description="等待刷新图像列表", waitTime=3):
+            if self.find_object("ConentPageView", description="等待刷新图像列表", waitTime=10):
                 POCO = self.poco("LoopStaggeredGridView1").child("Viewport").child("Content").child("Item(Clone)")[
                     self.chapterDlg]
-                self.findClick_childobject(POCO, description="选择一个图像", waitTime=3)
+                self.findClick_childobject(POCO, description="选择一个图像", waitTime=5)
                 self.chapterDlg = self.chapterDlg + 1
 
     def writeName(self, name="lipeng"):
@@ -177,7 +178,7 @@ class MainStudio(FindObject):
 
     def back_click(self):
         """返回上个界面按钮"""
-        self.findClick_childobject(self.poco("TopBar").child("BtnBack"), description="返回到上一个界面")
+        self.findClick_childobject(self.poco("TopBar").child("BtnBack"), description="返回到上一个界面",waitTime=2,sleeptime=2)
 
     def toolBar(self, type):
         """分支工具界面Img,Choice,Jump"""

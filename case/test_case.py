@@ -66,7 +66,7 @@ def test_startgame(login):
     myGameStart.starGame()
     # assert_equal(myGameStart.isStarGame, True, "启动游戏{0}".format(myGameStart.GameStart_info))
     myGameLoaded = GameLoaded()
-    actualValue = myGameLoaded.gameloading(login=login)
+    actualValue = myGameLoaded.mainprocess(login=login)
     if float(myGameLoaded.GameLoaded_info["loadtime"])>50:
         log(Exception("load游戏时间大于30s！加载时间为：{0}".format(myGameLoaded.GameLoaded_info["loadtime"])))
     assert_equal(actualValue, True, "启动游戏{0}".format(myGameLoaded.GameLoaded_info))
