@@ -20,7 +20,7 @@ class SignIn(FindObject):
         """判断是否完成登陆"""
         clock()
         GameLoaded1 = GameLoaded()
-        NewUserGuide1=NewUserGuide()
+        NewUserGuide1 = NewUserGuide()
         while not self.find_try("UserBackground", description="用户信息界面"):
             GameLoaded1.gameloading()
             NewUserGuide1.newUserPopUp()
