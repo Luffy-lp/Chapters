@@ -1,6 +1,6 @@
 import json
 from time import sleep
-
+import traceback
 import requests
 import sys, os, zipfile
 # from keras.utils.data_utils import get_file
@@ -23,12 +23,14 @@ class APiClass():
             try:
                 print("拉取{0}接口".format(name))  # 补充正则截取
                 self._response = requests.post(url=url, headers=headers, data=body, timeout=10)
+            except:
+                traceback.print_exc()
+                print("拉取{0}接口失败，重试".format(name))
+                sleep(1)
+            else:
                 dir = eval(self._response.text)
                 print("拉取{0}接口成功".format(name))
                 return dir
-            except:
-                print("拉取{0}接口失败，重试".format(name))
-                sleep(1)
     def registerApi5(self, bind_type="device",channel_id="AVG10005", device_id="490000000326402", device_platform="android"):
         """游戏用户登录注册接口v3"""
         url = self.url + 'registerApi5.Class.php?DEBUG=true'
@@ -223,7 +225,6 @@ class APiClass():
                     code.close()
                     file_zip = zipfile.ZipFile(path, 'r')
                     file_zip.extractall(pathbook)
-                    file_zip.close()
                     os.remove(path)
                     return
             except:

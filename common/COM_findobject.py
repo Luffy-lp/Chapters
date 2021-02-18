@@ -9,9 +9,11 @@ from common.COM_devices import CommonDevices
 from common.COM_path import *
 from common.COM_data import MyData
 from poco.drivers.unity3d import UnityPoco
+
+
 class FindObject(CommonDevices):
     poco: UnityPoco = None
-    androidpoco:AndroidUiautomationPoco = None
+    androidpoco: AndroidUiautomationPoco = None
     globals()
     Popuplist = []
     AlterTxt = {
@@ -25,7 +27,7 @@ class FindObject(CommonDevices):
         CommonDevices.__init__(self)
         if MyData.DeviceData_dir["poco"] == None:
             MyData.DeviceData_dir["poco"] = UnityPoco()
-            ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            ADBdevice = MyData.EnvData_dir["ADBdevice"]
             if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
                 MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
                 mylog.info("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
@@ -34,9 +36,10 @@ class FindObject(CommonDevices):
             print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
         self.poco = MyData.DeviceData_dir["poco"]
         self.androidpoco = MyData.DeviceData_dir["androidpoco"]
+
     def find_object(self, findName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """寻找目标"""
-        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         print("正在寻找{0}".format(description))
         if self.poco(findName).wait(waitTime).exists():
             print("发现{0}".format(description))
@@ -48,7 +51,7 @@ class FindObject(CommonDevices):
 
     def findClick_object(self, findName, ClickName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """用寻找目标，后并点击"""
-        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         print("正在寻找{0}".format(description))
         if self.poco(ClickName).wait(waitTime).exists():
             print("发现{0}元素，并点击".format(description))
@@ -64,9 +67,9 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def find_childobject(self, findPoco:poco, description="", waitTime=1, tryTime=3, sleeptime=0):
+    def find_childobject(self, findPoco: poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
-        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         if findPoco.wait(waitTime).exists():
             print("发现{0}".format(description))
             mylog.info("查找点击元素-【{}】--成功".format(description))
@@ -76,9 +79,10 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findClick_childobject(self, ClickPoco:poco, description="", waitTime=1, tryTime=1, sleeptime=0.1,clickPos=None):
+    def findClick_childobject(self, ClickPoco: poco, description="", waitTime=1, tryTime=1, sleeptime=0.1,
+                              clickPos=None):
         """用于关联父级才能点击到的元素"""
-        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         if ClickPoco.wait(waitTime).exists():
             print("发现{0}".format(description))
             mylog.info("查找点击元素-【{}】--成功".format(description))
@@ -96,7 +100,7 @@ class FindObject(CommonDevices):
 
     def click_object(self, clickName, waitTime=1, description="", sleeptime=0):
         """直接点击，不存在会报错"""
-        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         try:
             self.poco(clickName).wait(waitTime).click()
             mylog.info("点击元素-【{}】--成功".format(description))
@@ -109,7 +113,7 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findchildobject_try(self, findPoco:poco, description="", waitTime=0.2, tryTime=1, sleeptime=0):
+    def findchildobject_try(self, findPoco: poco, description="", waitTime=0.2, tryTime=1, sleeptime=0):
         """尝试寻找，不一定存在"""
         while (tryTime > 0):
             tryTime = tryTime - 1
@@ -123,6 +127,7 @@ class FindObject(CommonDevices):
                     mylog.info("尝试寻找-【{}】-元素成功".format(description))
                     return True
             except:
+
                 return False
 
     def find_try(self, findName, description="", waitTime=0.2, tryTime=1, sleeptime=0):
@@ -159,7 +164,7 @@ class FindObject(CommonDevices):
 
     def android_findClick(self, findName, ClickName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """用寻找目标，后并点击"""
-        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
@@ -185,23 +190,21 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,pocotype=None):
+    def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,
+                      pocotype=None):
         """尝试寻找并点击，不一定存在"""
-        if pocotype=="Androidpoco":
-            poco=self.androidpoco
-        else:poco=self.poco
+        if pocotype == "Androidpoco":
+            poco = self.androidpoco
+        else:
+            poco = self.poco
         try:
             print("尝试寻找{0}".format(description))
             # gameobject = self.poco(findName)
             if poco(findName).wait(waitTime).exists():
                 print("发现{0}".format(description))
-                if poco(ClickName).wait(waitTime+1).exists():
+                if poco(ClickName).wait(waitTime + 1).exists():
                     print("发现{0}按钮，并点击".format(ClickName))
                     poco(ClickName).click()
-                    sleep(sleeptime)
-                    self.Popuplist.append(description)
-                    mylog.info("尝试点击-【{}】-元素成功并加入弹框列表".format(description))
-                    return True
                 else:
                     mylog.info("尝试点击-【{}】-元素失败".format(description))
                     print("未触发点击")
@@ -209,13 +212,19 @@ class FindObject(CommonDevices):
             log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
-
-    def notchfit__Click_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True, POCOtype=None):
-        """解决上部分黑屏问题，更改渲染"""
-        if POCOtype=="Androidpoco":
-            poco=self.androidpoco
         else:
-            poco=self.poco
+            sleep(sleeptime)
+            self.Popuplist.append(description)
+            mylog.info("尝试点击-【{}】-元素成功并加入弹框列表".format(description))
+            return True
+
+    def notchfit__Click_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,
+                            POCOtype=None):
+        """解决上部分黑屏问题，更改渲染"""
+        if POCOtype == "Androidpoco":
+            poco = self.androidpoco
+        else:
+            poco = self.poco
             # ADBdevice=MyData.EnvData_dir["ADBdevice"]
             # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
             #     poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
@@ -226,7 +235,7 @@ class FindObject(CommonDevices):
                 print("发现{0}".format(description))
                 # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
                 #     poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
-                if poco(ClickName).wait(waitTime+1).exists():
+                if poco(ClickName).wait(waitTime + 1).exists():
                     print("发现{0}按钮，并点击".format(ClickName))
                     poco(ClickName).click()
                     sleep(sleeptime)
@@ -242,9 +251,9 @@ class FindObject(CommonDevices):
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
 
-    def notchfit_childobject(self, ClickPoco:poco, description="",  waitTime=0.5, tryTime=1, sleeptime=0, log=True):
+    def notchfit_childobject(self, ClickPoco: poco, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True):
         """用于关联父级才能点击到的元素"""
-        waitTime=waitTime+float(MyData.EnvData_dir["sleepLevel"])
+        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         # ADBdevice=MyData.EnvData_dir["ADBdevice"]
         # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
         #     self.poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
@@ -261,19 +270,21 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findClick_Image(self, filename, record_pos, description="图片", resolution=(1600, 2560), tryTime=1,waitTime=5):
+    def findClick_Image(self, filename, record_pos, description="图片", resolution=(1600, 2560), tryTime=1, waitTime=5):
         """点击图片"""
         width = G.DEVICE.display_info['width']
         height = G.DEVICE.display_info['height']
         file_path = os.path.join(path_RESOURCE_IMAGE, filename)  # 1080, 1920
         # record_pos = (0.432, 0.068),
         try:
-            pos=wait(Template((file_path), resolution=resolution),timeout=3)
+            pos = wait(Template((file_path), resolution=resolution), timeout=3)
             touch(pos)
             mylog.info("点击-【{}】-元素成功".format(description))
             print("点击-【{}】-元素成功".format(description))
             return True
-        except:return False
+        except:
+            return False
+
     def findSwipe_object(self, objectName, stopPos, POCOobject, swipeTye="y", beginPos=[0.5, 0.5]):
         """滑动元素，stopPos，swipeTye，beginPos"""
         find_element = POCOobject.wait(5)
@@ -346,12 +357,14 @@ class FindObject(CommonDevices):
                 else:
                     log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
                     raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
-    def mysleep(self, sleeptime:float):
+
+    def mysleep(self, sleeptime: float):
         """会根据设备或其他情况延迟睡眠时间方法"""
         mytime = float(MyData.EnvData_dir["sleepLevel"]) + sleeptime
         sleep(mytime)
+
     def UIAlterPoP(self):
-        if self.find_try("AlterView",description="文本弹框"):
+        if self.find_try("AlterView", description="文本弹框"):
             txt = self.poco("UIAlter").child("AlterView").child("Title").get_TMPtext()
             print("弹框类型：", txt)
             mylog.info("发现-【{}】-类型弹框".format(txt))

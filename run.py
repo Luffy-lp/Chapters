@@ -60,16 +60,16 @@ class Run(MyAnalysis):
         logspath = os.path.join(path_LOG_DIR, "logs.txt")
         # alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
         try:
-            log_file = open(self.logpath, "r")
+            with open(self.logpath, "r") as logfile:
+                log_file =logfile
             lines = log_file.readlines()
-            logs_file = open(logspath, "a")
+            with open(self.logspath, "a") as logsfile:
+                logs_file = logsfile
             for val in range(len(lines)):
                 # alllog_file = open(alllogspath, "a")
                 # alllog_file.write(lines[val])
                 # if "assert_equal" in lines[val] or "traceback" in lines[val]:
                 logs_file.write(lines[val])
-            logs_file.close()
-            log_file.close()
             print("转存log到logs成功")
         except:
             print("转存log到logs失败")
@@ -89,10 +89,11 @@ class Run(MyAnalysis):
             sleep(3)
             print(os.popen(pull))
             print("完成读取errorlog")
-            errorlog_file = open(errorLogpath, "r")
-            if errorlog_file:
-                lines = errorlog_file.readlines()
-                print("存在错误日志", errorlog_file.read())
+            with open(errorLogpath, "r") as  errorlogfile:
+                errorLog_file = errorlogfile
+            if errorLog_file:
+                lines = errorLog_file.readlines()
+                print("存在错误日志", errorLog_file.read())
                 # text_file = open(errorLogpath, "r")
                 for val in range(len(lines)):
                     time = 1612407756.9300864 + int(val)
@@ -100,7 +101,7 @@ class Run(MyAnalysis):
                     print("val", val)
                     print(lines[val])
                     log(Exception("Unity异常" + lines[val]), timestamp=time)
-            errorlog_file.close()
+            errorLog_file.close()
             # auto_setup(logdir=path_LOG_DIR)
             print("输出errorlog日志转化到log.txt中成功")
         except:

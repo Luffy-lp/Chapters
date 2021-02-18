@@ -79,19 +79,27 @@ class SignIn(FindObject):
             self.click_FaceBook()
             self.mysleep(5)
             if self.android_tryfind("m_login_email", description="faceBook未登录", waitTime=3):
-                # m_login_emailPOCO=self.androidpoco("m_login_email")
-                # self.findClick_childobject(m_login_emailPOCO,description="点击输入邮箱",waitTime=1,sleeptime=2)
                 self.androidpoco("m_login_email").set_text(MyData.UserData_dir["loginInfo"]["loginemail"])
                 sleep(2)
                 self.androidpoco("m_login_password").set_text(MyData.UserData_dir["loginInfo"]["loginpassword"])
                 self.mysleep(2)
+                if self.android_tryfind("android.widget.Button", description="登录", waitTime=1):
+                    self.android_findClick("android.widget.Button","android.widget.Button",description="登陆按钮",sleeptime=3)
                 if self.android_tryfind("登录 ", description="首次登录", waitTime=1):
                     loginPOCO = self.androidpoco("登录 ").wait(3)
                     self.findClick_childobject(loginPOCO, description="点击登录", waitTime=1, sleeptime=5)
+            elif self.androidpoco(nameMatches="^帐号.*").wait(1):#未添加Fackbook账号
+                 loginPOCO1=self.androidpoco(nameMatches="^帐号.*")
+                 loginPOCO1.set_text(MyData.UserData_dir["loginInfo"]["loginemail"])
+                 sleep(1)
+                 self.androidpoco(nameMatches="^密码.*").set_text(MyData.UserData_dir["loginInfo"]["loginpassword"])
+                 sleep(2)
+                 loginPOCO2 = self.androidpoco(nameMatches="^登录.*")
+                 self.findClick_childobject(loginPOCO2, description="登录",waitTime=1)
+            elif self.androidpoco(nameMatches="^u_0_1.*").wait(1):
+                 loginPOCO1=self.androidpoco(nameMatches="^u_0_1.*")
+                 self.findClick_childobject(loginPOCO1, description="继续",waitTime=1)
 
-                if self.android_tryfind("u_0_1", description="使用相同信息登录", waitTime=1):
-                    loginPOCO1 = self.androidpoco("u_0_1")[0]
-                    self.findClick_childobject(loginPOCO1, description="点击继续", waitTime=1, sleeptime=2)
 
     def bindLoginComfirm(self):
         """登陆Comfirm按钮判断"""

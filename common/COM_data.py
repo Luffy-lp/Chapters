@@ -52,7 +52,6 @@ class UserData(APiClass):
     def read_yaml(self, filepath):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
-            file.close()
         return value
 
     def yaml_case(self):
@@ -77,37 +76,35 @@ class UserData(APiClass):
 
     def yamldata_conf(self):
         # 读取yamlconf数据
-
         data = None
+        loginInfo = {}
         path = os.path.join(path_YAML_FILES, "conf.yml")
         with open(path, encoding="utf-8") as f:
             data = yaml.load(f.read(), Loader=yaml.Loader)
-            uuid = data["UserData"]["uuid"]
-            channel_id = data["UserData"]["channel_id"]
-            device_platform = data["UserData"]["device_platform"]
-            device_id = data["UserData"]["device_id"]
-            self.UserData_dir["device_id"] = device_id
-            self.UserData_dir["uuid"] = uuid
-            loginInfo = {}
-            loginInfo["loginGuide"] = data["UserData"]["loginGuide"]
-            loginInfo["loginemail"] = data["UserData"]["loginemail"]
-            loginInfo["loginpassword"] = data["UserData"]["loginpassword"]
-            self.UserData_dir["loginInfo"] = loginInfo
-            self.EnvData_dir["packagepath"] = os.path.join(path_resource, data["EnvData"]["APKpackage"])
-            print("EnvData_dir:", self.EnvData_dir["packagepath"])
-            self.EnvData_dir["packageName"] = data["EnvData"]["packageName"]
-            self.EnvData_dir["ADBdevice"] = data["EnvData"]["ADBdevice"]
-            self.EnvData_dir["ADBip"] = data["EnvData"]["ADBip"]
-            self.EnvData_dir["device"] = data["EnvData"]["device"]
-            self.EnvData_dir["method"] = data["EnvData"]["method"]
-            self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
-            self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
-            self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
-            self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
-            if self.UserData_dir["uuid"] is None:
-                self.UserData_dir["uuid"] = self.registerApi5(channel_id, device_id, device_platform)["uuid"]
-            print("用户ID：", self.UserData_dir["uuid"])
-            f.close()
+        uuid = data["UserData"]["uuid"]
+        channel_id = data["UserData"]["channel_id"]
+        device_platform = data["UserData"]["device_platform"]
+        device_id = data["UserData"]["device_id"]
+        self.UserData_dir["device_id"] = device_id
+        self.UserData_dir["uuid"] = uuid
+        loginInfo["loginGuide"] = data["UserData"]["loginGuide"]
+        loginInfo["loginemail"] = data["UserData"]["loginemail"]
+        loginInfo["loginpassword"] = data["UserData"]["loginpassword"]
+        self.UserData_dir["loginInfo"] = loginInfo
+        self.EnvData_dir["packagepath"] = os.path.join(path_resource, data["EnvData"]["APKpackage"])
+        print("EnvData_dir:", self.EnvData_dir["packagepath"])
+        self.EnvData_dir["packageName"] = data["EnvData"]["packageName"]
+        self.EnvData_dir["ADBdevice"] = data["EnvData"]["ADBdevice"]
+        self.EnvData_dir["ADBip"] = data["EnvData"]["ADBip"]
+        self.EnvData_dir["device"] = data["EnvData"]["device"]
+        self.EnvData_dir["method"] = data["EnvData"]["method"]
+        self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
+        self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
+        self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
+        self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
+        if self.UserData_dir["uuid"] is None:
+            self.UserData_dir["uuid"] = self.registerApi5(channel_id, device_id, device_platform)["uuid"]
+        print("用户ID：", self.UserData_dir["uuid"])
 
     def getbookData(self):
         """大厅书架信息"""
