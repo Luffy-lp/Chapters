@@ -16,3 +16,7 @@ version1.2
 注意项：
 1.阅读仅支持新存档不兼容老存档
 2.模拟器不会有录制文件
+
+常见问题：
+1.一直提示still waiting for uiautomation ready;频繁操作导致USB调试权限失效，需要重新开启USB调试权限
+2.sockect或者adb连接中断;检查adb是否连接正常或者游戏未启动。

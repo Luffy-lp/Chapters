@@ -21,6 +21,9 @@ class Run(MyAnalysis):
         MyAnalysis.__init__(self)
         self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
         self.logpath = os.path.join(path_LOG_DIR, "log.txt")
+        self.logspath = os.path.join(path_LOG_DIR, "logs.txt")
+        self.alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
+
 
     def initialize(self):
         """初始化"""
@@ -57,32 +60,32 @@ class Run(MyAnalysis):
 
     def writelogs(self):
         """转存log到logs"""
-        logspath = os.path.join(path_LOG_DIR, "logs.txt")
-        # alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
         try:
-            with open(self.logpath, "r") as logfile:
-                log_file =logfile
+            log_file= open(self.logpath, "r")
+            logs_file=open(self.logspath, "a")
             lines = log_file.readlines()
-            with open(self.logspath, "a") as logsfile:
-                logs_file = logsfile
             for val in range(len(lines)):
                 # alllog_file = open(alllogspath, "a")
                 # alllog_file.write(lines[val])
                 # if "assert_equal" in lines[val] or "traceback" in lines[val]:
                 logs_file.write(lines[val])
+        except Exception as e:
+            print("转存log到logs失败",e)
+            mylog.error("转存log到logs失败",e)
+        else:
             print("转存log到logs成功")
-        except:
-            print("转存log到logs失败")
+            mylog.info("转存log到logs成功")
+        finally:
+            log_file.close()
+            logs_file.close()
 
     def pull_errorLog(self):
         """输出errorlog日志转化到log.txt中"""
         errorLogpath = os.path.join(path_LOG_MY, "errorlog.txt")
         print("errorLogpath", errorLogpath)
+        pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + errorLogpath
+        connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
         try:
-            pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + errorLogpath
-            connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
-            print("pull", pull)
-            print("connected", connected)
             print(os.system(self.adbpath + " devices"))
             sleep(3)
             print(os.system(connected))
@@ -117,13 +120,12 @@ class Run(MyAnalysis):
             with open(logspath, 'r') as f1:
                 with open(logpath, 'w') as f2:
                     f2.write(f1.read())
-                    f1.close()
-                    f2.close()
             simple_report(__file__, logpath=path_LOG_DIR, output=htmlpath, MY_DEFAULT_LOG_FILE="logs.txt")
         except:
             print("未发现logs日志")
 
     def partReport(self, htmlname, k, __title__):
+        """分步报告"""
         mylog.info("-------------------------【{0}】执行完毕-----------------".format(__title__))
         print("-----执行完毕-----")
         outputpath = os.path.join(path_REPORT_DIR, htmlname)
