@@ -47,10 +47,10 @@ class SignIn(FindObject):
                             self.findClick_childobject(i, description="登录Google用户")
                             self.SignIn_info["Google用户"] = name
                             return True
-                        name = listname[0].get_text()
-                        print("未找到你想要登陆的用户，目前登陆用户:", name)
-                        self.findClick_childobject(listname[0], description="登录Google用户")
-                        self.SignIn_info["Google用户"] = name
+                    name = listname[0].get_text()
+                    print("未找到你想要登陆的用户，目前登陆用户:", name)
+                    self.findClick_childobject(listname[0], description="登录Google用户")
+                    self.SignIn_info["Google用户"] = name
                     self.bindLoginComfirm()
                 except:
                     pass
