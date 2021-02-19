@@ -83,6 +83,11 @@ class Shop(FindObject):
         touch(pos)
         # self.findClick_childobject(shopPOCO,description="购买礼包",waitTime=1)
 
+    def dealwith_error(self):
+        """购买商品错误"""
+        if self.androidpoco(text="错误").wait(5).exists():
+            self.click_affirm()
+
     def click_keytobuy(self):
         """点击安卓一键购买"""
         androidpoco=self.androidpoco(text="一键购买")
@@ -110,6 +115,3 @@ class Shop(FindObject):
         self.click_keytobuy()
         self.click_claim_shop()
 
-
-# tt=Shop()
-# tt.text()

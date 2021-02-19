@@ -182,7 +182,3 @@ class Profilemodule(Profile):
         """更换个人信息的头像"""
         self.changehead_step()
         return True
-
-
-# tt= Profilemodule()
-# tt.ChangeUseremoticons(2)

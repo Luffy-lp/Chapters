@@ -25,7 +25,7 @@ class Achievement(FindObject):
             else:print("failed")
         print(object.get_name())
         print("ccc:",object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
     #成就Half Hour Hero
     def click_half(self):
@@ -40,7 +40,7 @@ class Achievement(FindObject):
             else:print("failed")
         print(object.get_name())
         print("ccc:",object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
     # 成就Investor
     def click_investor(self):
@@ -56,7 +56,7 @@ class Achievement(FindObject):
                 print("failed")
         print(object.get_name())
         print("ccc:", object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
     #成就Technocrat
     def click_technocrat(self):
@@ -71,7 +71,7 @@ class Achievement(FindObject):
             else:print("failed")
         print(object.get_name())
         print("ccc:",object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
         # 成就Loyal Reader
     def click_loyalreader(self):
@@ -88,7 +88,7 @@ class Achievement(FindObject):
         print(object.get_name())
         self.name = object.get_TMPtext()
         print("ccc:", object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
         return self.name
 
     #成就Influencer
@@ -104,7 +104,7 @@ class Achievement(FindObject):
             else:print("failed")
         print(object.get_name())
         print("ccc:",object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
     # 成就Chatty Cathy
     def click_chattycathy(self):
@@ -120,7 +120,7 @@ class Achievement(FindObject):
                 print("failed")
         print(object.get_name())
         print("ccc:", object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
 
 
@@ -137,7 +137,7 @@ class Achievement(FindObject):
             else:print("failed")
         print(object.get_name())
         print("ccc:",object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().child("TitleImgLR").click()
 
     # 成就Early Bird
     def click_earlybird(self):
@@ -153,7 +153,7 @@ class Achievement(FindObject):
                 print("failed")
         print(object.get_name())
         print("ccc:", object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
         # 成就Nightingale
     def click_nightingale(self):
@@ -169,7 +169,7 @@ class Achievement(FindObject):
                 print("failed")
         print(object.get_name())
         print("ccc:", object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
     # 成就Marathoner
     def click_marathoner(self):
@@ -185,7 +185,7 @@ class Achievement(FindObject):
                 print("failed")
         print(object.get_name())
         print("ccc:", object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
         # 成就Story Master
     def click_storymaster(self):
@@ -201,21 +201,16 @@ class Achievement(FindObject):
                 print("failed")
         print(object.get_name())
         print("ccc:", object.parent().get_name())
-        object.parent().child("BGImage0").click()
+        object.parent().click()
 
     def click_Getreward(self):
         """点击GetRaward按钮"""
         if self.find_try("Button",description="可解锁/获取奖励"):
-            AchievementPOCO = self.poco("Center").child("ScrollView").offspring("Button")
-            AchievementPOCO.click([0.5,0.5])
+            AchievementPOCO = self.poco("Center").child("ScrollView").offspring("Text (TMP)")
+            AchievementPOCO.click([0.5,0.25])
             # self.findClick_childobject(AchievementPOCO, description="按钮",waitTime=1)
 
     def click_discoverback(self):
         """点击返回上一级"""
         discoverbackPOCO = self.poco("DiscoverBack").child("IgRed")
         self.findClick_childobject(discoverbackPOCO, description="点击返回", waitTime=1)
-
-# ccc1=Achievement()
-# ccc1.click_Getreward()
-#ccc1.swipe_Achievement_level4()
-#ccc1.click_discoverback()

@@ -228,7 +228,7 @@ class Profile(FindObject):
         """初始进入默认展示，没有移动"""
         x = 0
         y = random.randint(0,2)
-        print(x,y)
+        print("选择背景角色",x,y)
         bgroundPOCO = self.poco("PerRoleItems(Clone)")[x].child("PerRoleItem")[y]
         self.findClick_childobject(bgroundPOCO, description="随机角色形象", waitTime=1)
         self.Profile_info["_instanceId"] = bgroundPOCO.attr("_instanceId")
@@ -685,3 +685,4 @@ class Profile(FindObject):
         """编辑界面的back按钮"""
         editPOCO = self.poco("UIProfileEdit").offspring("Back")
         self.findClick_childobject(editPOCO, description="编辑面Back按钮", waitTime=3)
+

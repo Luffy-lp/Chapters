@@ -47,11 +47,10 @@ class SignIn(FindObject):
                             self.findClick_childobject(i, description="登录Google用户")
                             self.SignIn_info["Google用户"] = name
                             return True
-                        else:
-                            name = listname[0].get_text()
-                            print("未找到你想要登陆的用户，目前登陆用户:", name)
-                            self.findClick_childobject(listname[0], description="登录Google用户")
-                            self.SignIn_info["Google用户"] = name
+                        name = listname[0].get_text()
+                        print("未找到你想要登陆的用户，目前登陆用户:", name)
+                        self.findClick_childobject(listname[0], description="登录Google用户")
+                        self.SignIn_info["Google用户"] = name
                     self.bindLoginComfirm()
                 except:
                     pass
@@ -69,7 +68,6 @@ class SignIn(FindObject):
                     self.findClick_try("com.google.android.gms:id/sud_navbar_next",
                                        "com.google.android.gms:id/sud_navbar_next", description="Next", waitTime=1,
                                        sleeptime=3, pocotype="Androidpoco")
-
                     self.click_Google()
                     self.bindLoginComfirm()
             else:
@@ -88,6 +86,9 @@ class SignIn(FindObject):
                 if self.android_tryfind("登录 ", description="首次登录", waitTime=1):
                     loginPOCO = self.androidpoco("登录 ").wait(3)
                     self.findClick_childobject(loginPOCO, description="点击登录", waitTime=1, sleeptime=5)
+                if self.androidpoco(nameMatches="^u_0_1.*").wait(1):
+                    loginPOCO1 = self.androidpoco(nameMatches="^u_0_1.*")
+                    self.findClick_childobject(loginPOCO1, description="继续", waitTime=1)
             elif self.androidpoco(nameMatches="^帐号.*").wait(1):#未添加Fackbook账号
                  loginPOCO1=self.androidpoco(nameMatches="^帐号.*")
                  loginPOCO1.set_text(MyData.UserData_dir["loginInfo"]["loginemail"])
@@ -165,8 +166,8 @@ class SignIn(FindObject):
         return checkImage1
 
 # width = G.DEVICE.display_info['width']
-# SignIn1 = SignIn()
-# SignIn1.loginGuide()
+SignIn1 = SignIn()
+SignIn1.loginGuide()
 # if SignIn1.android_tryfind("com.google.android.gms:id/list", description="Google绑定用户选择", waitTime=3):
 #     print("ddddddddd")
 # elif SignIn1.android_tryfind("identifierId", description="Google新增用户", waitTime=3):

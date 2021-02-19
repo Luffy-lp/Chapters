@@ -19,11 +19,14 @@ class Run(MyAnalysis):
 
     def __init__(self):
         MyAnalysis.__init__(self)
+        print(path_BASE_DIR)
         self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
+        print("path_BASE_DIR",self.adbpath)
         self.logpath = os.path.join(path_LOG_DIR, "log.txt")
+        print(self.logpath)
         self.logspath = os.path.join(path_LOG_DIR, "logs.txt")
         self.alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
-
+        self.errorLogpath = os.path.join(path_LOG_MY, "errorlog.txt")
 
     def initialize(self):
         """初始化"""
@@ -81,10 +84,14 @@ class Run(MyAnalysis):
 
     def pull_errorLog(self):
         """输出errorlog日志转化到log.txt中"""
-        errorLogpath = os.path.join(path_LOG_MY, "errorlog.txt")
-        print("errorLogpath", errorLogpath)
-        pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + errorLogpath
+        print(path_BASE_DIR)
+        print(self.adbpath)
+        pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + self.errorLogpath
         connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
+        print(pull)
+        print(connected)
+        with open(self.errorLogpath, "w") as errorLog_file:
+            pass
         try:
             print(os.system(self.adbpath + " devices"))
             sleep(3)
@@ -92,23 +99,21 @@ class Run(MyAnalysis):
             sleep(3)
             print(os.popen(pull))
             print("完成读取errorlog")
-            with open(errorLogpath, "r") as  errorlogfile:
-                errorLog_file = errorlogfile
-            if errorLog_file:
-                lines = errorLog_file.readlines()
-                print("存在错误日志", errorLog_file.read())
-                # text_file = open(errorLogpath, "r")
-                for val in range(len(lines)):
-                    time = 1612407756.9300864 + int(val)
-                    print(type(time))
-                    print("val", val)
-                    print(lines[val])
-                    log(Exception("Unity异常" + lines[val]), timestamp=time)
-            errorLog_file.close()
-            # auto_setup(logdir=path_LOG_DIR)
-            print("输出errorlog日志转化到log.txt中成功")
-        except:
-            print("输出errorlog日志转化到log.txt中失败")
+            # if errorLog_file:
+            #     lines = errorLog_file.readlines()
+            #     print("存在错误日志", errorLog_file.read())
+            #     # text_file = open(errorLogpath, "r")
+            #     for val in range(len(lines)):
+            #         time = 1612407756.9300864 + int(val)
+            #         print(type(time))
+            #         print("val", val)
+            #         print(lines[val])
+            #         log(Exception("Unity异常" + lines[val]), timestamp=time)
+            # errorLog_file.close()
+            # # auto_setup(logdir=path_LOG_DIR)
+            # print("输出errorlog日志转化到log.txt中成功")
+        except BaseException as e:
+            print("输出errorlog日志转化到log.txt中失败",e)
 
     def togetherReport(self):
         """生成最后的合成日志"""
@@ -160,7 +165,6 @@ class Run(MyAnalysis):
         with open(path, 'w') as f1:
             f1.seek(0)
             f1.truncate()
-            f1.close()
         mylog.info("完成文件清空")
 
     def runing(self):
