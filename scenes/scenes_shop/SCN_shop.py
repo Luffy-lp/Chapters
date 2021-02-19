@@ -174,5 +174,3 @@ class Shopmodule(Shop):
         self.buy_ticket_step(nString=number)
         return True
 
-# tt=Shopmodule()
-# tt.shop_buy_diamond(num="1004")
