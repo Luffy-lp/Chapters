@@ -44,6 +44,7 @@ class Shopmodule(Shop):
             self.click_affirm()
         self.mysleep(3)
         self.click_claim_shop()
+        self.click_top_back()
         # 购买完后展示用户信息
         MyData.getUsercurrency()
         # mylog.info("用户信息【{}】".format(MyData.UserData_dir))
@@ -177,5 +178,4 @@ class Shopmodule(Shop):
         print(number)
         self.buy_ticket_step(nString=number)
         return True
-
 
