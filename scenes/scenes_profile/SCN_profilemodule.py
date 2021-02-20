@@ -162,9 +162,7 @@ class Profilemodule(Profile):
             7 : "Smile",
             8 : "Flirty"
         }
-        print(expression2.get(num2))
         expression = expression2.get(num2)
-        print("4dadad",expression)
         self.changeemoticons_step(expression)
         return True
 
@@ -182,7 +180,3 @@ class Profilemodule(Profile):
         """更换个人信息的头像"""
         self.changehead_step()
         return True
-
-
-# tt= Profilemodule()
-# tt.ChangeUseremoticons(2)
