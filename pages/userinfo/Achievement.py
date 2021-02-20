@@ -137,8 +137,7 @@ class Achievement(FindObject):
             else:print("failed")
         print(object.get_name())
         print("ccc:",object.parent().get_name())
-        object.parent().child("TitleImgLR").click()
-
+        object.parent().child(nameMatches="TitleImgL.*").click()
     # 成就Early Bird
     def click_earlybird(self):
         """点击成就Early Bird"""

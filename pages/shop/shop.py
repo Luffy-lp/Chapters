@@ -10,17 +10,17 @@ class Shop(FindObject):
     def click_credit_enter(self):
         """点击枫叶币进入商店"""
         shopPOCO = self.poco("Upper").child("CreditBtn")
-        self.findClick_childobject(shopPOCO, description="枫叶币数量", waitTime=1)
+        self.findClick_childobject(shopPOCO, description="枫叶币入口", waitTime=1)
 
     def click_ticket_enter(self):
         """点击票进入商店"""
         shopPOCO = self.poco("Upper").child("TicketBtn")
-        self.findClick_childobject(shopPOCO, description="票的数量", waitTime=1)
+        self.findClick_childobject(shopPOCO, description="商城票卷入口", waitTime=1)
 
     def click_diamond_enter(self):
         """点击钻石进入商店"""
         shopPOCO = self.poco("Upper").child("DiamondBtn")
-        self.findClick_childobject(shopPOCO, description="钻石的数量", waitTime=1)
+        self.findClick_childobject(shopPOCO, description="商城钻石入口", waitTime=1)
 
     def click_top_back(self):
         """点击顶部返回"""

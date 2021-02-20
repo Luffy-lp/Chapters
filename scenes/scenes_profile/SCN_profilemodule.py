@@ -162,9 +162,7 @@ class Profilemodule(Profile):
             7 : "Smile",
             8 : "Flirty"
         }
-        print(expression2.get(num2))
         expression = expression2.get(num2)
-        print("4dadad",expression)
         self.changeemoticons_step(expression)
         return True
 
