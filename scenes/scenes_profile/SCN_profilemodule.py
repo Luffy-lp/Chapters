@@ -125,6 +125,7 @@ class Profilemodule(Profile):
             while i :
                 self.click_maybel()
                 i = self.click_maybel()
+                self.mysleep(2)
                 #     def click_maybel(self):
                 #         """检测是否有提醒弹窗并进行-稍后变换"""
                 #         if self.find_try("LaterBtn",description="检测是否有弹框提醒解锁新物品"):
