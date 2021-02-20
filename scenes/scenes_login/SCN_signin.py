@@ -60,9 +60,9 @@ class SignIn(FindObject):
                 self.androidpoco("android.widget.EditText").set_text(MyData.UserData_dir["loginInfo"]["loginpassword"])
                 self.android_findClick("passwordNext", "passwordNext", description="下一步", waitTime=1, sleeptime=2)
                 self.android_findClick("signinconsentNext", "signinconsentNext", description="同意", waitTime=1,
-                                       sleeptime=1)
-                if self.findClick_try("android.widget.Button", "android.widget.Button", description="接受", waitTime=2,
-                                      sleeptime=1, pocotype="Androidpoco"):
+                                       sleeptime=5)
+                if self.findClick_try("android.widget.Button", "android.widget.Button", description="接受", waitTime=5,
+                                      sleeptime=3, pocotype="Androidpoco"):
                     print("添加账号成功")
                 else:
                     self.findClick_try("com.google.android.gms:id/sud_navbar_next",
