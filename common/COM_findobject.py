@@ -304,6 +304,7 @@ class FindObject(CommonDevices):
                     print("x:", x)
                     print("y:", y)
                     if y < stopPos + 0.1 and y > stopPos - 0.1:
+                        mylog.info("滑动查找元素-【{0}】-成功".format(objectName))
                         return True
                     if y < stopPos:
                         # 元素在上半页面，向下滑动到中间
