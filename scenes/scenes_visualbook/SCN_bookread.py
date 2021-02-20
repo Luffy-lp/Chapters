@@ -120,7 +120,7 @@ class BookRead(FindObject):
                 if self.ReadBook_info["异常次数"] > 50:
                     print("卡顿或异常次数较多", self.ReadBook_info["异常次数"])
                     mylog.error("异常次数过多读书可能卡死")
-                    log(Exception("异常次数过多读书可能卡死"))
+                    log(Exception("异常次数过多读书可能卡死"),snapshot=True)
                     raise Exception
                     return False
         else:

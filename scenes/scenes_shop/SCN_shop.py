@@ -110,7 +110,7 @@ class Shopmodule(Shop):
                 mytime = float(clock("stop"))
                 if mytime>30:
                     mylog.error("未发现订阅返回按钮")
-                    log(Exception("未发现订阅返回按钮"))
+                    log(Exception("未发现订阅返回按钮"),snapshot=True)
             try:
                 self.click_top_back()
             except:

@@ -22,7 +22,7 @@ class Creation(FindObject):
             mytime = float(clock("stop"))
             if mytime > 60:
                 print("查找新增小说按钮失败")
-                log(Exception("查找新增小说按钮失败"))
+                log(Exception("查找新增小说按钮失败"),snapshot=True)
                 raise Exception("查找新增小说按钮失败")
 
         createMask = self.poco("CoverMask").child("Text")

@@ -26,7 +26,7 @@ class SignIn(FindObject):
             NewUserGuide1.newUserPopUp()
             mytime = float(clock("stop"))
             if mytime > 120:
-                log(Exception("检测是否登陆成功失败"))
+                log(Exception("检测是否登陆成功失败"),snapshot=True)
                 self.SignIn_info["用户登陆状态"] = "尝试登陆失败"
                 raise Exception("检测是否登陆成功失败")
         self.SignIn_info["用户登陆状态"] = "完成登陆"

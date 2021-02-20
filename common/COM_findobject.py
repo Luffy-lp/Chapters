@@ -46,7 +46,7 @@ class FindObject(CommonDevices):
             sleep(sleeptime)
             mylog.info("等待元素-【{}】--加载成功".format(description))
             return True
-        log(PocoNoSuchNodeException("等待-【{}】-元素超时".format(description)), desc="等待元素超时")
+        log(PocoNoSuchNodeException("等待-【{}】-元素超时".format(description)), desc="等待元素超时",snapshot=True)
         raise PocoNoSuchNodeException("等待-【{}】-元素超时".format(description))
 
     def findClick_object(self, findName, ClickName, description="", waitTime=1, tryTime=1, sleeptime=0):
@@ -64,7 +64,7 @@ class FindObject(CommonDevices):
         else:
             print("查找{0}失败".format(description))
             mylog.error("查找点击元素-【{}】--失败".format(findName))
-        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def find_childobject(self, findPoco: poco, description="", waitTime=1, tryTime=3, sleeptime=0):
@@ -76,7 +76,7 @@ class FindObject(CommonDevices):
             return True
         else:
             mylog.error("查找-【{}】-元素失败".format(description))
-        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def findClick_childobject(self, ClickPoco: poco, description="", waitTime=1, tryTime=1, sleeptime=0.1,
@@ -95,7 +95,7 @@ class FindObject(CommonDevices):
             return True
         else:
             mylog.error("查找-【{}】-元素失败".format(description))
-        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def click_object(self, clickName, waitTime=1, description="", sleeptime=0):
@@ -110,7 +110,7 @@ class FindObject(CommonDevices):
         except Exception as e:
             mylog.error("点击【{0}】出现未知错误，{1}".format(description, e))
             return False
-        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def findchildobject_try(self, findPoco: poco, description="", waitTime=0.2, tryTime=1, sleeptime=0):
@@ -187,7 +187,7 @@ class FindObject(CommonDevices):
             except Exception as e:
                 mylog.error("查找【{0}】出现未知错误，{1}".format(description, e))
                 return False
-        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,
@@ -209,7 +209,7 @@ class FindObject(CommonDevices):
                     mylog.info("尝试点击-【{}】-元素失败".format(description))
                     print("未触发点击")
         except:
-            log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+            log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
         else:
@@ -247,7 +247,7 @@ class FindObject(CommonDevices):
                     mylog.info("尝试点击-【{}】-元素失败".format(description))
                     print("未触发点击")
         except:
-            log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+            log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
 
@@ -267,7 +267,7 @@ class FindObject(CommonDevices):
             return True
         else:
             mylog.error("查找-【{}】-元素失败".format(description))
-        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败")
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败",snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def findClick_Image(self, filename, record_pos, description="图片", resolution=(1600, 2560), tryTime=1, waitTime=5):
@@ -295,7 +295,7 @@ class FindObject(CommonDevices):
             while True:
                 print(clock("stop"))
                 if float(clock("stop")) > 30:
-                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
+                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败",snapshot=True)
                     raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
                 if find_element.exists():
                     # 将元素滚动到屏幕中间
@@ -323,13 +323,13 @@ class FindObject(CommonDevices):
                     # poco.swipe((50, 800), (50, 200), duration=500)
                     swipe_time = swipe_time + 1
                 else:
-                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
+                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败",snapshot=True)
                     raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
         else:
             while True:
                 print(clock("stop"))
                 if float(clock("stop")) > 30:
-                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败")
+                    log(Exception("滑动-【{0}】-元素超时".format(objectName)), desc="点击元素失败",snapshot=True)
                     raise Exception("滑动{0}超时{1}".format(objectName, clock("stop")))
                 if find_element.exists():
                     # 将元素滚动到屏幕中间
@@ -356,7 +356,7 @@ class FindObject(CommonDevices):
                     # poco.swipe((50, 800), (50, 200), duration=500)
                     swipe_time = swipe_time + 1
                 else:
-                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败")
+                    log(Exception("查找滑动-【{0}】-元素超时".format(objectName)), desc="查找元素失败",snapshot=True)
                     raise Exception("查找滑动-【{0}】-元素超时".format(objectName))
 
     def mysleep(self, sleeptime: float):

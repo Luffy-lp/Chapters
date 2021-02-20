@@ -26,7 +26,7 @@ class MainStudio(FindObject):
             mytime = float(clock("stop"))
             if mytime > 80:
                 print("新手引导界面异常")
-                log(Exception("查找新手引导界面异常"))
+                log(Exception("查找新手引导界面异常"),snapshot=True)
                 raise Exception("查找新手引导界面异常")
 
     def storiesPOP(self):

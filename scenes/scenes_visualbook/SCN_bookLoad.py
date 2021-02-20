@@ -21,7 +21,7 @@ class BookLoad(FindObject):
                 sleep(3)
                 if self.find_try("Discover",description="是否返回大厅",waitTime=1):
                     mylog.error("加载书籍异常")
-                    log(Exception("加载书籍异常，自动返回到大厅"))
+                    log(Exception("加载书籍异常，自动返回到大厅"),snapshot=True)
                     raise Exception("加载书籍异常，自动返回到大厅")
                 print("书籍加载中", loadtime)
                 if loadtime > 360:
