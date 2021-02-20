@@ -166,8 +166,8 @@ class SignIn(FindObject):
         return checkImage1
 
 # width = G.DEVICE.display_info['width']
-SignIn1 = SignIn()
-SignIn1.loginGuide()
+# SignIn1 = SignIn()
+# SignIn1.loginGuide()
 # if SignIn1.android_tryfind("com.google.android.gms:id/list", description="Google绑定用户选择", waitTime=3):
 #     print("ddddddddd")
 # elif SignIn1.android_tryfind("identifierId", description="Google新增用户", waitTime=3):
