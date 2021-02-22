@@ -35,7 +35,7 @@ class Shopmodule(Shop):
         self.click_buy_ticket(nString)
         self.mysleep(2)
         self.dealwith_error()
-        self.mysleep(5)
+        self.mysleep(3)
         self.click_keytobuy()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[1]
@@ -113,7 +113,7 @@ class Shopmodule(Shop):
                         self.findClick_childobject(androidpoco, description="一律启用", waitTime=1, sleeptime=1)
                         self.mysleep(3)
                         self.click_affirm()
-                    time.sleep(5)
+                    self.mysleep(3)
                     try:
                         self.poco("BtnReturn").click()
                         boolis=False
@@ -157,9 +157,9 @@ class Shopmodule(Shop):
         MyData.getUsercurrency()
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
         self.click_buy_diamondcard()
-        time.sleep(10)
+        self.mysleep(3)
         self.click_keytobuy()
-        self.mysleep(5)
+        self.mysleep(3)
         self.click_claim_shop()
         #购买完后的用户数据
         MyData.getUsercurrency()
@@ -170,9 +170,9 @@ class Shopmodule(Shop):
         MyData.getUsercurrency()
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
         self.click_buy_packges1()
-        time.sleep(10)
+        self.mysleep(3)
         self.click_keytobuy()
-        time.sleep(20)
+        self.mysleep(3)
         self.click_claim_shop()
         #购买完后的用户数据
         MyData.getUsercurrency()

@@ -70,6 +70,7 @@ class Profilemodule(Profile):
         self.click_profile()
         self.click_background()
         self.click_emoticons()
+        # self.swipe_expression(sTing=expression)
         self.click_expression(sTing=expression)
         self.Profilemodule_info["emoticons"] = self.Profile_info
         sleep(3)
