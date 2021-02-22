@@ -1,4 +1,4 @@
-version1.5
+version1.6
 须知：
 1.检查yamlfiles\conf.yml的**号项目必须配置正确
 2.保证google框架正常，支付等需要配置正常支付账号否则导致异常.
