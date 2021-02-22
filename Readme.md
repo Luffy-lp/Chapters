@@ -19,6 +19,6 @@ version1.6
 2.模拟器不会有录制文件
 
 常见问题：
-1.一直提示still waiting for uiautomation ready;频繁操作导致USB调试权限失效，需要重新开启USB调试权限
+1.一直提示still waiting for uiautomation ready;频繁操作导致插件异常，卸载移动设备上的pocoservice和Yosemite
 2.sockect或者adb连接中断;检查adb是否连接正常或者游戏未启动。
 3.conf中用户ID未填写正确会导致无法阅读

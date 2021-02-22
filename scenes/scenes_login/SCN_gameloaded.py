@@ -29,7 +29,7 @@ class GameLoaded(FindObject):
             self.Popup_login(login=1)
             if float(COM_utilities.clock("stop")) > 360:
                 print("游戏加载失败。。。")
-                log(Exception("游戏加载失败。。。"))
+                log(Exception("游戏加载失败。。。"),snapshot=True)
                 raise Exception
         if self.GameLoaded_info["loadtime"] is None:
             self.GameLoaded_info["loadtime"] = float(COM_utilities.clock("stop")) - 2

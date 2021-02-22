@@ -115,7 +115,7 @@ class IntroduceEdit(FindObject):
                 mytime = float(COM_utilities.clock("stop"))
                 if mytime > 50:
                     print("图片选择失败，请检查权限问题")
-                    log(Exception("图片选择失败，请检查权限问题"))
+                    log(Exception("图片选择失败，请检查权限问题"),snapshot=True)
                     raise Exception("图片选择失败，请检查权限问题")
 
         else:
