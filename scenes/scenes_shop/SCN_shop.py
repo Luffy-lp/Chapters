@@ -88,7 +88,6 @@ class Shopmodule(Shop):
         if self.poco(nameMatches=".*SubBtn").wait(5).exists():
             self.click_subs()#点击订阅会员按钮
             self.mysleep(3)
-            self.click_subscribed()
             if self.androidpoco(text="错误").wait(5).exists():
                 self.click_affirm()
                 try:
@@ -105,6 +104,7 @@ class Shopmodule(Shop):
                 self.Shopmodule_info["member_type_old"] = MyData.UserData_dir["member_type_old"]
                 return self.Shopmodule_info
             else:
+                self.click_subscribed()
                 boolis = True
                 clock()
                 while boolis:
