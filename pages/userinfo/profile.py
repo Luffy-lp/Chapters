@@ -257,7 +257,7 @@ class Profile(FindObject):
         object.parent().click()
         return self.Profile_info
 
-    def swipe_expression(self,sTing=""):
+    def swipe_expression_down(self,sTing=""):
         """对表情进行滑动（预留一下）"""
         object = None
         list = self.poco("EmoticonsItem").child("Name")
@@ -268,9 +268,24 @@ class Profile(FindObject):
                 break
             else:
                 print("failed")
-            self.Profile_info = object.get_TMPtext()
-            self.findSwipe_object("xxx",0.85,object.parent(),swipeTye="y",beginPos=[0.5,0.85])
-            return self.Profile_info
+        self.Profile_info = object.get_TMPtext()
+        self.findSwipe_object("xxx",0.89,object.parent(),swipeTye="y",beginPos=[0.5,0.85])
+        return self.Profile_info
+
+    def swipe_expression_up(self,sTing=""):
+        """对表情进行滑动（预留一下）"""
+        object = None
+        list = self.poco("EmoticonsItem").child("Name")
+        for i in list:
+            if i.get_TMPtext() == sTing:
+                print(i.get_TMPtext())
+                object = i
+                break
+            else:
+                print("failed")
+        self.Profile_info = object.get_TMPtext()
+        self.findSwipe_object("xxx",0.77,object.parent(),swipeTye="y",beginPos=[0.5,0.85])
+        return self.Profile_info
 
     def click_angry(self):
         """选择表情--生气"""
