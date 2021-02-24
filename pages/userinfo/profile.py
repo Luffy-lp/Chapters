@@ -284,7 +284,7 @@ class Profile(FindObject):
             else:
                 print("failed")
         self.Profile_info = object.get_TMPtext()
-        self.findSwipe_object("xxx",0.77,object.parent(),swipeTye="y",beginPos=[0.5,0.85])
+        self.findSwipe_object("xxx",0.75,object.parent(),swipeTye="y",beginPos=[0.5,0.85])
         return self.Profile_info
 
     def click_angry(self):
