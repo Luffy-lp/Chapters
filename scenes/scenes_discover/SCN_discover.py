@@ -13,9 +13,14 @@ class Discover(FindObject):
         """大厅弹框检查"""
         self.Popuplist=[]
         poplist = MyData.popup_dir[0]
+        otherPoplist = MyData.popup_dir[2]
         havePopup = True
         self.UIAlterPoP()
         COM_utilities.clock()  # 插入计时器
+        if otherPoplist:
+            for k in otherPoplist:
+                self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,
+                                   tryTime=1, sleeptime=2)
         while havePopup:
             print("进入弹框判断")
             mytime = float(COM_utilities.clock("stop"))
