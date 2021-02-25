@@ -65,16 +65,74 @@ class Profilemodule(Profile):
         self.click_topback()
         return self.Profilemodule_info["name"]
 
-    def changeemoticons_step(self,expression):
+    def ChangeUseremoticons(self,num):
+        """更换个人信息表情"""
+        print(num)
+        num2 = int(num)
+        width = G.DEVICE.display_info['width']
+        height = G.DEVICE.display_info['height']
+        scale = height / width
+        expression2 = {
+            0 : "Angry",
+            1 : "Cry",
+            2 : "Laughing",
+            3 : "Neutral",
+            4 : "Sad",
+            5 : "Shock",
+            6 : "Shy",
+            7 : "Smile",
+            8 : "Flirty"
+        }
+        expression = expression2.get(num2)
+        print("果然。。。。",expression)
+        self.changeemoticons_step(expression,num2)
+        return True
+
+    def changeemoticons_step(self,expression,num2):
         """变换表情步骤"""
         self.click_profile()
         self.click_background()
         self.click_emoticons()
+        self.mysleep(3)
+        if num2 < 6:
+            print("132465")
+            expression2 = {
+                0: "Angry",
+                1: "Cry",
+                2: "Laughing",
+                3: "Neutral",
+                4: "Sad",
+                5: "Shock",
+                6: "Shy",
+                7: "Smile",
+                8: "Flirty"
+            }
+            num2 = 4
+            expression3 = expression2.get(num2)
+            self.swipe_expression_down(sTing=expression3)
+            self.mysleep(3)
+        if num2 > 5:
+            print("qweqrr")
+            expression2 = {
+                0: "Angry",
+                1: "Cry",
+                2: "Laughing",
+                3: "Neutral",
+                4: "Sad",
+                5: "Shock",
+                6: "Shy",
+                7: "Smile",
+                8: "Flirty"
+            }
+            num2 = 4
+            expression3 = expression2.get(num2)
+            self.swipe_expression_up(sTing=expression3)
+            self.mysleep(3)
         self.click_expression(sTing=expression)
         self.Profilemodule_info["emoticons"] = self.Profile_info
-        sleep(3)
+        self.mysleep(3)
         if self.click_save():
-            sleep(3)
+            self.mysleep(3)
             return self.Profilemodule_info["emoticons"]
         else:
             self.click_back()
@@ -143,28 +201,6 @@ class Profilemodule(Profile):
     def ChangeUseravatar(self):
         """更换个人信息背景角色"""
         self.changeavatar_step()
-        return True
-
-    def ChangeUseremoticons(self,num):
-        """更换个人信息表情"""
-        print(num)
-        num2 = int(num)
-        width = G.DEVICE.display_info['width']
-        height = G.DEVICE.display_info['height']
-        scale = height / width
-        expression2 = {
-            0 : "Angry",
-            1 : "Cry",
-            2 : "Laughing",
-            3 : "Neutral",
-            4 : "Sad",
-            5 : "Shock",
-            6 : "Shy",
-            7 : "Smile",
-            8 : "Flirty"
-        }
-        expression = expression2.get(num2)
-        self.changeemoticons_step(expression)
         return True
 
     def nameedit(self,name=""):
