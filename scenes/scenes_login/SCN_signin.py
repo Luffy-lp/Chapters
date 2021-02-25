@@ -37,7 +37,7 @@ class SignIn(FindObject):
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "Google":
             self.click_Google()
             self.mysleep(5)
-            if self.android_tryfind("com.google.android.gms:id/list", description="Google绑定用户选择", waitTime=3):
+            if self.android_tryfind("com.google.android.gms:id/account_name", description="Google绑定用户选择", waitTime=3):
                 try:
                     listname = self.androidpoco("com.google.android.gms:id/account_name")
                     for i in listname:
