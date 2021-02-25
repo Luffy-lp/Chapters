@@ -69,6 +69,7 @@ case6:
         - ${test_ChangeUseravatar()}
         - ${test_operationAchievement()}
         - ${test_ChangeUseremoticons(0)}
+        - ${test_nameedit(guigui)}
 case7:
     caseauthor: "江浚朋"
     casename: "商城"
