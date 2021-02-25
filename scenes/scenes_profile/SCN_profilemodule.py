@@ -94,40 +94,40 @@ class Profilemodule(Profile):
         self.click_background()
         self.click_emoticons()
         self.mysleep(3)
-        if num2 < 6:
-            print("132465")
-            expression2 = {
-                0: "Angry",
-                1: "Cry",
-                2: "Laughing",
-                3: "Neutral",
-                4: "Sad",
-                5: "Shock",
-                6: "Shy",
-                7: "Smile",
-                8: "Flirty"
-            }
-            num2 = 4
-            expression3 = expression2.get(num2)
-            self.swipe_expression_down(sTing=expression3)
-            self.mysleep(3)
-        if num2 > 5:
-            print("qweqrr")
-            expression2 = {
-                0: "Angry",
-                1: "Cry",
-                2: "Laughing",
-                3: "Neutral",
-                4: "Sad",
-                5: "Shock",
-                6: "Shy",
-                7: "Smile",
-                8: "Flirty"
-            }
-            num2 = 4
-            expression3 = expression2.get(num2)
-            self.swipe_expression_up(sTing=expression3)
-            self.mysleep(3)
+        # if num2 < 6:
+        #     print("132465")
+        #     expression2 = {
+        #         0: "Angry",
+        #         1: "Cry",
+        #         2: "Laughing",
+        #         3: "Neutral",
+        #         4: "Sad",
+        #         5: "Shock",
+        #         6: "Shy",
+        #         7: "Smile",
+        #         8: "Flirty"
+        #     }
+        #     num2 = 4
+        #     expression3 = expression2.get(num2)
+        #     self.swipe_expression_down(sTing=expression3)
+        #     self.mysleep(3)
+        # if num2 > 5:
+        #     print("qweqrr")
+        #     expression2 = {
+        #         0: "Angry",
+        #         1: "Cry",
+        #         2: "Laughing",
+        #         3: "Neutral",
+        #         4: "Sad",
+        #         5: "Shock",
+        #         6: "Shy",
+        #         7: "Smile",
+        #         8: "Flirty"
+        #     }
+        #     num2 = 4
+        #     expression3 = expression2.get(num2)
+        #     self.swipe_expression_up(sTing=expression3)
+        #     self.mysleep(3)
         self.click_expression(sTing=expression)
         self.Profilemodule_info["emoticons"] = self.Profile_info
         self.mysleep(3)
