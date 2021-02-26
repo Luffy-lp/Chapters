@@ -1,6 +1,6 @@
+from common.COM_data import MyData
 from common.COM_findobject import FindObject
 from scenes.scenes_discover.SCN_discover import Discover
-
 
 class PageTurn(FindObject):
     def __init__(self):
@@ -9,9 +9,9 @@ class PageTurn(FindObject):
     def Bottom_click(self, index):
         """0~4对应底部主场景"""
         index = str(index)
-        if self.find_object("Bottom", description="底部跳转",waitTime=3):
+        if self.find_object("Bottom", description="底部跳转",waitTime=float(MyData.EnvData_dir["sleepLevel"])):
             Bottom = self.poco("Bottom").child(index)
-            self.findClick_childobject(Bottom, description="底部跳转到" + index, waitTime=2)
+            self.findClick_childobject(Bottom, description="底部跳转到" + index,waitTime=3+float(MyData.EnvData_dir["sleepLevel"]))
             if index == "0":  # 如果跳转到大厅后需要检查弹框
                 myDiscover = Discover()
                 myDiscover.discoverPopup()

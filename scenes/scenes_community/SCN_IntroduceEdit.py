@@ -33,7 +33,7 @@ class IntroduceEdit(FindObject):
             self.findClick_childobject(self.poco("Age").child("BtnCheck"), "年龄确认")
             self.findClick_childobject(self.poco("Code").child("BtnCheck"), "行为规范", sleeptime=1)
             self.findClick_childobject(self.poco("Bottom").child("BtnOK"), "提交审核", sleeptime=2)
-        if self.find_try("UIEnjoyChapter", description="是否首次审核"):
+        if self.find_try("UIEnjoyChapter", description="是否首次审核",waitTime=3):
             self.click_object("LaterBtn", description="再说")  # ("RateBtn")
 
     def editDesc(self):
