@@ -34,9 +34,8 @@
 - 2:
     Popupscene: "Popup"
     Poputype: "none"
-    Popupdec: "其他大厅弹框"
+    Popupdec: "FullScreenPanel"
     import_module_functions:
         - case.case_test
     step:
         - ${月签到(UISignActivity, Back)}
-#        - ${道具卡使用指导(UIPassGuide, Popup)}
