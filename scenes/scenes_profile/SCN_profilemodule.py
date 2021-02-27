@@ -6,6 +6,7 @@ from airtest.core.api import touch
 from airtest.core.cv import Template
 import sys
 from common.COM_utilities import *
+import random
 
 class Profilemodule(Profile):
     Profilemodule_info = {}
@@ -67,11 +68,10 @@ class Profilemodule(Profile):
 
     def ChangeUseremoticons(self,num):
         """更换个人信息表情"""
-        print(num)
         num2 = int(num)
-        width = G.DEVICE.display_info['width']
-        height = G.DEVICE.display_info['height']
-        scale = height / width
+        if num == 9:
+            y = random.randint(0, 8)
+            num2 = int(num)
         expression2 = {
             0 : "Angry",
             1 : "Cry",
@@ -84,7 +84,6 @@ class Profilemodule(Profile):
             8 : "Flirty"
         }
         expression = expression2.get(num2)
-        print("果然。。。。",expression)
         self.changeemoticons_step(expression,num2)
         return True
 
@@ -92,42 +91,72 @@ class Profilemodule(Profile):
         """变换表情步骤"""
         self.click_profile()
         self.click_background()
+        self.mysleep(2)
+        self.refuse_member_renew()
+        self.mysleep(2)
         self.click_emoticons()
         self.mysleep(3)
-        # if num2 < 6:
-        #     print("132465")
-        #     expression2 = {
-        #         0: "Angry",
-        #         1: "Cry",
-        #         2: "Laughing",
-        #         3: "Neutral",
-        #         4: "Sad",
-        #         5: "Shock",
-        #         6: "Shy",
-        #         7: "Smile",
-        #         8: "Flirty"
-        #     }
-        #     num2 = 4
-        #     expression3 = expression2.get(num2)
-        #     self.swipe_expression_down(sTing=expression3)
-        #     self.mysleep(3)
-        # if num2 > 5:
-        #     print("qweqrr")
-        #     expression2 = {
-        #         0: "Angry",
-        #         1: "Cry",
-        #         2: "Laughing",
-        #         3: "Neutral",
-        #         4: "Sad",
-        #         5: "Shock",
-        #         6: "Shy",
-        #         7: "Smile",
-        #         8: "Flirty"
-        #     }
-        #     num2 = 4
-        #     expression3 = expression2.get(num2)
-        #     self.swipe_expression_up(sTing=expression3)
-        #     self.mysleep(3)
+        width = G.DEVICE.display_info['width']
+        height = G.DEVICE.display_info['height']
+        scale = height / width
+        if scale < 1.65:
+            """"""
+            if num2 < 3:
+                object = None
+                list = self.poco("EmoticonsItem").child("Name")
+                for i in list:
+                    if i.get_TMPtext() == "Sad":
+                        print(i.get_TMPtext())
+                        object = i
+                        break
+                    else:
+                        print("failed")
+                self.Profile_info = object.get_TMPtext()
+                self.findSwipe_object("xxx", 1.15, object.parent(), swipeTye="y", beginPos=[0.5, 0.85])
+            elif num2 > 5:
+                object = None
+                list = self.poco("EmoticonsItem").child("Name")
+                for i in list:
+                    if i.get_TMPtext() == "Sad":
+                        print(i.get_TMPtext())
+                        object = i
+                        break
+                    else:
+                        print("failed")
+                self.Profile_info = object.get_TMPtext()
+                self.findSwipe_object("xxx", 0.69, object.parent(), swipeTye="y", beginPos=[0.5, 0.85])
+            else:
+                """"""
+                object = None
+                list = self.poco("EmoticonsItem").child("Name")
+                for i in list:
+                    if i.get_TMPtext() == "Sad":
+                        print(i.get_TMPtext())
+                        object = i
+                        break
+                    else:
+                        print("failed")
+                self.Profile_info = object.get_TMPtext()
+                self.findSwipe_object("xxx", 0.85, object.parent(), swipeTye="y", beginPos=[0.5, 0.85])
+        else:
+            expression2 = {
+                0 : "Angry",
+                1 : "Cry",
+                2 : "Laughing",
+                3 : "Neutral",
+                4 : "Sad",
+                5 : "Shock",
+                6 : "Shy",
+                7 : "Smile",
+                8 : "Flirty"
+            }
+            num3 = 4
+            expression3 = expression2.get(num3)
+            if num2 < 3:
+                self.swipe_expression_down(expression3)
+            if num2 > 5:
+                self.swipe_expression_up(expression3)
+        #直接点击所选表情
         self.click_expression(sTing=expression)
         self.Profilemodule_info["emoticons"] = self.Profile_info
         self.mysleep(3)
@@ -145,10 +174,9 @@ class Profilemodule(Profile):
         sleep(2)
         self.editNickname(Nickname=nameString)
         sleep(1)
-        print(self.Profile_info)
+        print("名字：",self.Profile_info)
         self.Profilemodule_info["name"] = self.Profile_info
         if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
-            print("1346165312")
             pass
         else:
             self.android_findClick("com.mars.avgchapters:id/btn_send","com.mars.avgchapters:id/btn_send",description="点击提交按钮")

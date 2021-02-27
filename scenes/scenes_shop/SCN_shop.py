@@ -34,8 +34,8 @@ class Shopmodule(Shop):
         self.click_ticket_enter()
         self.click_buy_ticket(nString)
         self.mysleep(2)
-        self.dealwith_error()
-        self.mysleep(3)
+        # self.dealwith_error()
+        # self.mysleep(3)
         self.click_keytobuy()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[1]
@@ -59,8 +59,8 @@ class Shopmodule(Shop):
         increment = MyData.UserData_dir["diamond"]
         self.click_buy_diamond(nString)
         self.mysleep(3)
-        self.dealwith_error()
-        self.mysleep(3)
+        # self.dealwith_error()
+        # self.mysleep(3)
         self.click_keytobuy()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[0]

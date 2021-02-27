@@ -10,7 +10,7 @@ class Achievement(FindObject):
     def click_achievement(self):
         """点击跳到个人信息的achievement"""
         AchievementPOCO=self.poco("ToptGroup").child("Achievement").child("Label")
-        self.findClick_childobject(AchievementPOCO, description="achievement按钮", waitTime=1)
+        self.findClick_childobject(AchievementPOCO, description="achievement按钮并点击", waitTime=1)
 
     #成就Baby Steps
     def click_babysteps(self):
@@ -60,7 +60,7 @@ class Achievement(FindObject):
 
     #成就Technocrat
     def click_technocrat(self):
-        """点击成就Technocrat"""
+        print("点击成就Technocrat")
         object = None
         list = self.poco("RightItem").child("Title")
         for i in list:
@@ -212,4 +212,4 @@ class Achievement(FindObject):
     def click_discoverback(self):
         """点击返回上一级"""
         discoverbackPOCO = self.poco("DiscoverBack").child("IgRed")
-        self.findClick_childobject(discoverbackPOCO, description="点击返回", waitTime=1)
+        self.findClick_childobject(discoverbackPOCO, description="返回按钮并点击", waitTime=1)
