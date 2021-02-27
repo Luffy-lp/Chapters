@@ -231,8 +231,8 @@ class APiClass():
                 print("下载书籍资源失败重试")
         raise Exception("下载书籍资源失败")
 
-# APiClass1=APiClass()
-# APiClass1.avgcontentApi("10001")
+APiClass1=APiClass()
+APiClass1.summaryApi3("10001")
 # data=APiClass1.registerApi5(bind_type="googleplus",bind_id="42682")
 # print(data)
 # http://chapters-cdn.stardustgod.com/avgContent-test/10009001_shenzhen_a2d65d8cacf402a5435d408d58a4f483.zip

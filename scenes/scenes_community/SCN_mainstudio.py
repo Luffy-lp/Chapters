@@ -159,7 +159,8 @@ class MainStudio(FindObject):
         """type:A，B选项选择进入选项场景"""
         Option = "Option" + type
         OptionNextPOCP = self.poco(Option).child("Next")
-        self.findClick_childobject(OptionNextPOCP, description="A选择选项分支场景",waitTime=8)
+        sleep(2)
+        self.findClick_childobject(OptionNextPOCP, description=type+"选择选项分支场景",waitTime=5,sleeptime=2)
 
     def creatCharacter(self, name, characterType="supporting"):
         """name：角色名称characterType：角色类型main,supporting

@@ -13,15 +13,22 @@ class Discover(FindObject):
         """大厅弹框检查"""
         self.Popuplist=[]
         poplist = MyData.popup_dir[0]
+        FullScreenPanellist = MyData.popup_dir[2]
         havePopup = True
         self.UIAlterPoP()
         COM_utilities.clock()  # 插入计时器
+
         while havePopup:
             print("进入弹框判断")
             mytime = float(COM_utilities.clock("stop"))
             if mytime > 60:
                 log(Exception("弹框处理超时...."),snapshot=True)
                 raise Exception
+            if self.poco("FullScreenPanel").children():
+                if FullScreenPanellist:
+                    for k in FullScreenPanellist:
+                        self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,
+                                           tryTime=1, sleeptime=2)
             if self.poco("PopupPanel").children():
                 print("进入PopupPanel弹框判断")
                 child = self.poco("PopupPanel").child(nameMatches="^UI.*", visible=True)

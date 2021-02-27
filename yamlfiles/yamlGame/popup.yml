@@ -2,7 +2,7 @@
 - 0:
     Popupscene: "Discover"
     Poputype: "none"
-    Popupdec: "大厅弹框配置"
+    Popupdec: "大厅弹框配置，PopupPanel和PopUpPanel"
     import_module_functions:
         - case.case_test
     step:
@@ -20,6 +20,7 @@
         - ${内容推送弹框(UITextPopup, Btn)}
         - ${推送礼包(UIGiftPopup, Popup)}
         - ${DayPass详情弹框(UIDayPassState, Button)}
+        - ${书籍详情页(UIBookNewDetail, Button)}
 
 - 1:
     Popupscene: "bookdetail"
@@ -33,9 +34,8 @@
 - 2:
     Popupscene: "Popup"
     Poputype: "none"
-    Popupdec: "其他大厅弹框"
+    Popupdec: "FullScreenPanel"
     import_module_functions:
         - case.case_test
     step:
         - ${月签到(UISignActivity, Back)}
-#        - ${道具卡使用指导(UIPassGuide, Popup)}
