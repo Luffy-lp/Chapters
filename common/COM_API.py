@@ -220,19 +220,23 @@ class APiClass():
                 print("pathbook",pathbook)
                 with open(path, "wb") as code:
                     code.write(r.content)
-                    sleep(5)
-                    print(type(code))
-                    code.close()
-                    file_zip = zipfile.ZipFile(path, 'r')
-                    file_zip.extractall(pathbook)
-                    os.remove(path)
-                    return
-            except:
-                print("下载书籍资源失败重试")
-        raise Exception("下载书籍资源失败")
+                    print("打开书籍资源")
+                sleep(5)
+                code.close()
+                file_zip = zipfile.ZipFile(path, 'r')
+                sleep(2)
+                file_zip.extractall(pathbook)
+                file_zip.close()
+                os.remove(path)
+                return
+            except BaseException as e :
+                print("书籍资源读取失败,重试",e)
+            else:
+                print("书籍资源读取成功")
+        # raise Exception("下载书籍资源失败")
 
-APiClass1=APiClass()
-APiClass1.summaryApi3("10001")
+# APiClass1=APiClass()
+# APiClass1.avgcontentApi("10001")
 # data=APiClass1.registerApi5(bind_type="googleplus",bind_id="42682")
 # print(data)
 # http://chapters-cdn.stardustgod.com/avgContent-test/10009001_shenzhen_a2d65d8cacf402a5435d408d58a4f483.zip

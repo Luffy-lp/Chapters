@@ -12,6 +12,7 @@ from airtest.core.api import connect_device, sleep
 
 class CommonDevices():
     def __init__(self):
+        ok=True
         if G.DEVICE == None:
             if not cli_setup():
                 conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[

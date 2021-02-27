@@ -16,6 +16,7 @@ from common.COM_utilities import *
 # from  airtest.core.android.adb import *
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
+    file_stream_path=[]
 
     def __init__(self):
         MyAnalysis.__init__(self)
@@ -37,6 +38,16 @@ class Run(MyAnalysis):
         except:
             pass
         self.clear()
+        OK = True
+        while OK:
+            try:
+                print(os.system(self.adbpath + " devices"))
+            except:
+                print("连接失败,重试")
+                sleep(1)
+            else:
+                print("连接成功")
+                OK = False
         CommonDevices()
 
     def get_eval_value(self, args, func_name):
@@ -81,7 +92,20 @@ class Run(MyAnalysis):
         finally:
             log_file.close()
             logs_file.close()
-
+    def get_fileist(self):
+        # print(os.system(self.adbpath + " devices"))
+        connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
+        print(os.system(connected))
+        sleep(3)
+        with open("errorfilelist.txt", 'w+') as file:
+            file.truncate(0)
+        file_list = self.adbpath + " shell ls %s >>errorfilelist.txt 2>&1"
+        self.file_stream_path = []
+        os.system(file_list % MyData.UserPath_dir["errorLogpath"])
+        with open("errorfilelist.txt", 'r+') as sl:
+            for line in sl:
+                self.file_stream_path.append(line)
+        # if self.file_stream_path
     def pull_errorLog(self):
         """输出errorlog日志转化到log.txt中"""
         print(path_BASE_DIR)
@@ -125,7 +149,7 @@ class Run(MyAnalysis):
             with open(logspath, 'r') as f1:
                 with open(logpath, 'w') as f2:
                     f2.write(f1.read())
-            simple_report(__file__, logpath=path_LOG_DIR, output=htmlpath, MY_DEFAULT_LOG_FILE="logs.txt")
+            simple_report(__file__, logpath=path_LOG_DIR, output=htmlpath)
         except:
             print("未发现logs日志")
 
@@ -210,5 +234,5 @@ if __name__ == '__main__':
         log(e, "------出现异常--------")
     # myRun.pull_errorLog()
     # myRun.writelogs()
+    # myRun.get_fileist()
     myRun.togetherReport()
-    #111111111

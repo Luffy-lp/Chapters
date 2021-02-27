@@ -54,10 +54,8 @@ class Profilemodule(Profile):
         """展示成就变更的步骤"""
         self.click_profile()
         self.swipe_head()
-        print("1111")
         sleep(5)
         self.swipe_Card()
-        print("222")
         sleep(5)
         self.click_Achievement_button()
         self.click_showloyalreader()

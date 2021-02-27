@@ -57,7 +57,6 @@ def test_installGame():
     actualValue = myGameStart.installGame()
     assert_equal(actualValue, True, "安装游戏")
 
-
 def test_startgame(login):
     """启动游戏"""
     myGameStart = GameStart()
@@ -77,7 +76,7 @@ def test_discoverPopup():
     """大厅弹框"""
     myDiscover = Discover()
     actualValue = myDiscover.discoverPopup()
-    assert_equal(True, actualValue, "大厅弹框列表{0}".format(myDiscover.discoverPopup_info))
+    assert_equal(True, actualValue, "大厅弹框列表{0}".format(myDiscover.Popuplist))
     sleep(3)
 
 

@@ -71,7 +71,7 @@ class BookRead(FindObject):
     def dialogueCourseJudge(self):
         """对话处理"""
         achatProgress = str(self.ReadBook_info["chatProgress"])
-        print("MyData.Story_cfg_chapter_dir", MyData.Story_cfg_chapter_dir)
+        # print("MyData.Story_cfg_chapter_dir", MyData.Story_cfg_chapter_dir)
         print("achatProgress", achatProgress)
         chat_type = MyData.Story_cfg_chapter_dir[achatProgress]["chat_type"]  # 当前选项chat_type值
         select_id = MyData.Story_cfg_chapter_dir[achatProgress]["select_id"]  # select_id值

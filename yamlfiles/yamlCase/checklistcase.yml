@@ -33,9 +33,9 @@ case3:
     step:
         - ${pageTurn(0)}
         - ${test_bookchoose(Weekly, 0)}
-#        - ${test_bookPlay()}
-#        - ${test_bookload()}
-#        - ${test_bookread()}
+        - ${test_bookPlay()}
+        - ${test_bookload()}
+        - ${test_bookread()}
         - ${pageTurn()}
 
 case4:
