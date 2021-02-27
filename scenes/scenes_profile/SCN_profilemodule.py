@@ -71,7 +71,7 @@ class Profilemodule(Profile):
         num2 = int(num)
         if num == 9:
             y = random.randint(0, 8)
-            num2 = int(num)
+            num2 = int(y)
         expression2 = {
             0 : "Angry",
             1 : "Cry",
