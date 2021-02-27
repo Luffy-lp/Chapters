@@ -69,9 +69,10 @@ class Profilemodule(Profile):
     def ChangeUseremoticons(self,num):
         """更换个人信息表情"""
         num2 = int(num)
-        if num == 9:
+        if num2 == 9:
             y = random.randint(0, 8)
-            num2 = int(y)
+            num2 = y
+            print(y)
         expression2 = {
             0 : "Angry",
             1 : "Cry",
@@ -84,6 +85,7 @@ class Profilemodule(Profile):
             8 : "Flirty"
         }
         expression = expression2.get(num2)
+        print(expression)
         self.changeemoticons_step(expression,num2)
         return True
 
@@ -157,6 +159,7 @@ class Profilemodule(Profile):
             if num2 > 5:
                 self.swipe_expression_up(expression3)
         #直接点击所选表情
+        print(expression)
         self.click_expression(sTing=expression)
         self.Profilemodule_info["emoticons"] = self.Profile_info
         self.mysleep(3)
