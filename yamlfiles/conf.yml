@@ -1,13 +1,13 @@
 UserData:
-  uuid: "41447"   #******用户ID需要修改正确的配置*********** 41447 43551
+  uuid: "43551"   #******用户ID需要修改正确的配置*********** 41447 43551
   channel_id: "AVG10005" #配置渠道
   device_id: "490000000326402" #设备ID
   device_platform: "android" #平台类型
   loginGuide: "Google" #绑定方式
-  loginemail: "huangwanqiuh@gmail.com" #绑定用户名
-  loginpassword: "2017864108wq" #绑定密码
+  loginemail: "lipeng66976658@gmail.com" #绑定用户名
+  loginpassword: "yo5161381" #绑定密码
 EnvData:
-  APKpackage: "Chapters_614_170_601a13ff11429.apk" #安装包名称
+  APKpackage: "Chapters_615_180_603e289fe3766.apk" #安装包名称
   packageName: "com.mars.avgchapters" #apk包名称
   ADBip: "127.0.0.1:5037" #连接adb运行地址
   ADBdevice: "127.0.0.1:62001" #******连接ADB设备ID需要修改正确的配置***********R52M90DYELT，KPS4C19122001081

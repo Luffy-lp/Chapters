@@ -108,18 +108,19 @@ class UserData(APiClass):
 
     def getbookData(self):
         """大厅书架信息"""
-        bookData = self.summaryApi3(self.UserData_dir["uuid"])
+        bookData = self.summaryApi3(self.UserData_dir["uuid"])#es-ES,en-US
         areaData = bookData["area_data"]
         bannerData = bookData["banner_data"]
         story_ids = bannerData["story_ids"]
         self.Bookshelf__dir["banner_data"] = story_ids
+        print(self.Bookshelf__dir["banner_data"])
         # 获得大厅Weekly Update书籍列表
         for i in areaData:
             for k, v in i.items():
                 if v == "Weekly Update":
                     story_ids = i["story_ids"]
                     self.Bookshelf__dir[v] = story_ids
-
+        # 获得大厅banner_data书籍列表
     def getreadprogress(self, bookid):
         """获取用户阅读进度返回chapterProgress和chatProgress"""
         datalist = self.getCommonDataApi(self.UserData_dir["uuid"])  # 调用通用接口0.章节进度，1.对话进度

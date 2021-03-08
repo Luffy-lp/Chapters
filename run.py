@@ -170,7 +170,8 @@ class Run(MyAnalysis):
             pass
         else:
             mylog.info("----------正在进行异常重启------")
-            test_startgame(0)
+            test_startgame()
+            test_GameLoaded(1)
             test_discoverPopup()
         mylog.info("--------完成异常重启------")
 

@@ -20,6 +20,7 @@ from scenes.scenes_community.SCN_readUGCbook import ReadUGCBook
 from scenes.scenes_shop.SCN_shop import Shopmodule
 from scenes.scenes_profile.SCN_profilemodule import Profilemodule
 from scenes.scenes_profile.SCN_achievementmodule import Achievementmodule
+from scenes.scenes_SidePanel.SCN_LanguagePanel import LanguagePanel
 from common.COM_data import MyData
 import logging
 
@@ -32,16 +33,20 @@ import logging
 # Airtest提供了assert_exists和assert_not_exists两个接口，来断言一张图片存在或不存在于当前画面中。
 # 同时，还提供了assert_equal和assert_not_equal两个语句，来断言传入的两个值相等或者不相等。
 
-def pageTurn(index=None):
-    """界面切换"""
+def pageTurn(type="Bottom",index=None,index1=None):
+    """界面切换 Bottom，Upper"""
     PageTurn1 = PageTurn()
-    if index == None:
-        PageTurn1.click_close()
-        return True
-    else:
-        PageTurn1.Bottom_click(index)
+    if type=="Bottom":
+        if index == None:
+            PageTurn1.click_close()
+            return True
+        else:
+            PageTurn1.Bottom_click(index)
+    elif type=="Upper":
+        PageTurn1.Upper_click(index)
+    elif type == "POS":
+        PageTurn1.click_pos(index,index1)
     sleep(2)
-
 
 def test_uninstallGame():
     """卸载游戏"""
@@ -57,13 +62,15 @@ def test_installGame():
     actualValue = myGameStart.installGame()
     assert_equal(actualValue, True, "安装游戏")
 
-def test_startgame(login):
+def test_startgame():
     """启动游戏"""
     myGameStart = GameStart()
     myGameStart.stopGame()
     sleep(1)
     myGameStart.starGame()
-    # assert_equal(myGameStart.isStarGame, True, "启动游戏{0}".format(myGameStart.GameStart_info))
+    assert_equal(myGameStart.isStarGame, True, "启动游戏{0}".format(myGameStart.GameStart_info))
+
+def test_GameLoaded(login):
     myGameLoaded = GameLoaded()
     actualValue = myGameLoaded.mainprocess(login=login)
     if float(myGameLoaded.GameLoaded_info["loadtime"])>50:
@@ -121,12 +128,6 @@ def test_bookload(BookID=None):
 
 def test_bookread(BookID=None):
     """读书"""
-    # if BookID == None:
-    #     BookID == MyData.UserData_dir["bookDetailInfo"]["BookID"]
-    # else:
-    #     MyData.UserData_dir["bookDetailInfo"]["BookID"] = BookID
-    #     print(MyData.UserData_dir["bookDetailInfo"])
-    #     print(MyData.UserData_dir["bookDetailInfo"]["BookID"])
     myVisual = BookRead()
     actualValue = myVisual.bookRead(BookID)
     assert_equal(actualValue, True, "阅读详情{0}".format(myVisual.ReadBook_info))
@@ -163,6 +164,26 @@ def test_ReadUGCBook(time=2):
     myReadUGCBook.click_Read()
     actualValue = myReadUGCBook.bookRead(time)
     assert_equal(actualValue, True, "短信小说阅读{0}".format(myReadUGCBook.ReadUGCBook_info))
+
+def test_LanguageChoose(language):
+    """切换语言"""
+    myLanguagePanel=LanguagePanel()
+    myLanguagePanel.click_language()  # 进入选择语言界面
+    actualValue= myLanguagePanel.chooseLanguage(language)
+    if myLanguagePanel.LanguagePanel_info["switch"]:
+        test_GameLoaded(1)
+    myLanguagePanel.click_back()
+    myLanguagePanel.click_pos()
+    assert_equal(actualValue, True, "切换语言{0}".format(myLanguagePanel.LanguagePanel_info))
+def test_checkLanguageChoose(language):
+    """检查语言"""
+    myLanguagePanel=LanguagePanel()
+    myLanguagePanel.click_language()  # 进入选择语言界面
+    myLanguagePanel.checkLanguageChoose(language) #检查语言是设置语言
+    myLanguagePanel.click_back()
+    myLanguagePanel.click_pos()
+    actualValue = (myLanguagePanel.LanguagePanel_info["当前语言"] == language and True or False)
+    assert_equal(actualValue, True, "语言检查{0}".format(myLanguagePanel.LanguagePanel_info))
 
 
 def test_ChangeUseravatar():

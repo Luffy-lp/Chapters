@@ -51,13 +51,6 @@ class GameLoaded(FindObject):
                 finally:
                     self.findClick_object("StartGame", "StartGame", description="点击Play Now按钮", waitTime=2)
                     self.GameLoaded_info["游戏登陆弹框"] = "跳过登陆"
-            # elif login == 2:
-            #     SignIn1 = SignIn()
-            #     SignIn1.loginGuide_login_process()
-            #     sleep(3)
-            #     self.GameLoaded_info["游戏登陆弹框"] = "登陆"
-            #     self.GameLoaded_info["登陆状态"] = SignIn1.SignIn_info["用户登陆状态"]
-            #     self.PageTurn.Bottom_click(0)
         return self.GameLoaded_info
 
     def Popo_Errorinfo(self):

@@ -4,7 +4,8 @@ version1.6
 2.保证google框架正常，支付等需要配置正常支付账号否则导致异常.
 3.使用模拟器拷贝根目录下airtest\core\android\static\adb\windows中的全部内容覆盖到模拟器adb目录下
 4.开启USB调试并勾选一直允许连接设备
-5.尽量使用手机mobileconf.yml中
+5.resource目录下更换包,并在在yamlfiles\conf.yml\APKpackage 修改成对应的包名
+6.部分手机的兼容性如果有问题请提单
 包放在英文路径下双击根目录下的run.exe
 
 目录说明：
@@ -19,6 +20,6 @@ version1.6
 2.模拟器不会有录制文件
 
 常见问题：
-1.一直提示still waiting for uiautomation ready;频繁操作导致插件异常，卸载移动设备上的pocoservice和Yosemite
-2.sockect或者adb连接中断;检查adb是否连接正常或者游戏未启动。
+1.一直提示still waiting for uiautomation ready;插件异常，卸载移动设备上的pocoservice和Yosemite。
+2.error: cannot connect to daemon;无法连接到adb，重启模拟器或重新开始手机的USB调试认证，或adb设备ID填写错误。
 3.conf中用户ID未填写正确会导致无法阅读

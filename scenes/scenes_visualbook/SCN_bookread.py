@@ -31,7 +31,7 @@ class BookRead(FindObject):
         self.getReadBook_info(bookid)
         if self.poco("UIDialogue").wait(5).exists():
             if self.ReadBook_info["chatProgress"] == 10001:
-                self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2, sleeptime=100)
+                self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2, sleeptime=3)
             clock()
             sleep(1)
             print(int(MyData.UserData_dir["bookDetailInfo"]["BookID"]))

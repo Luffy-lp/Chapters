@@ -34,6 +34,9 @@ class BookNewDetail(FindObject):
         if bookShelf == "Banner":
             # print("数据库中大厅banner书籍以及阅读进度", self.Bookshelf__dir["readprogressList"])
             self.find_object("ScrollHot", description="大厅banner的书籍滑动控件")  # 获取第一个大厅banner的书籍滑动控件type :  ScrollRect
+            POCO=self.poco("ScrollView").child("Viewport").offspring("ScrollHot").offspring("Content").child("0")[1]
+            if self.findchildobject_try(POCO,description="大厅banner"):
+                self.findClick_childobject(POCO,description="大厅banner")
             banner_list = self.poco("ScrollHot").child("Viewport").child("Content").children()
             for i in banner_list:
                 print("banner滑动图", i.get_name())
