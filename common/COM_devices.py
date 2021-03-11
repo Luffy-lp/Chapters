@@ -12,7 +12,6 @@ from airtest.core.api import connect_device, sleep
 
 class CommonDevices():
     def __init__(self):
-        ok=True
         if G.DEVICE == None:
             if not cli_setup():
                 conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
@@ -21,23 +20,17 @@ class CommonDevices():
                 if "127" in  MyData.EnvData_dir["ADBdevice"]:
                     method= MyData.EnvData_dir["simulator"]
                 auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
-                if MyData.DeviceData_dir["androidpoco"] == None:
+                if MyData.DeviceData_dir["androidpoco"] is None:
                     MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
                     mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
                     print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                    # ADBdevice = MyData.EnvData_dir["ADBdevice"]
-                    # print(MyData.mobileconf_dir["Notch_Fit"])
-                    # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-                    #     print("报错把刚开始了解")
-                    #     MyData.DeviceData_dir["androidpoco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][
-                    #         ADBdevice])
-                    #     mylog.info("androidpoco完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
-                    #     print("androidpoco完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
                 print("DEVIEC:", G.DEVICE)
     def getdevlist(self):
         devlist = []
+        print("dddddddddddd")
         connectfile = os.popen('adb devices')
         list = connectfile.readlines()
+        print("eeeeeeeeeee")
         print(list)
         # for i in range(len(list)):
         #     if list[i].find('\tdevice') != -1:
@@ -69,3 +62,4 @@ class CommonDevices():
                 print(f'设备{i + 1} SN: {connectinfolist[i]}')
             return True
 # CommonDevices1=CommonDevices()
+# CommonDevices1.getdevlist()

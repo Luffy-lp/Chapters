@@ -3,6 +3,19 @@
 #字典参数：${func(a=1, b=2)}
 #混合类型参数：${func(1, 2, a=3, b=4)}
 #单个用例可以#号全部注释，未注释用例step里面最少有一个，用例说明参考“测试步骤配置说明”
+case8:
+    caseauthor: "lipeng"
+    casename: "语言切换-"
+    casedec: "语言切换"
+    repeattime: "3"
+    reportname: "语言切换"
+    step:
+        - ${pageTurn(Upper,chapter)} #选择切换到侧边栏
+        - ${test_LanguageChoose(Spanish)} #如果语言不同切换语言并重启，SidePanel,English,Spanish,German,French,Korean,Portuguese,Russian,Italian,Japanese"
+        - ${pageTurn(POS,9,5)} #点击屏幕坐标百分比去掉0.比如点击中级位置(5,5)
+        - ${pageTurn(Upper,chapter)}
+        - ${test_checkLanguageChoose(Spanish)} #检查语言是否为设置语言
+        - ${pageTurn(POS,9,5)} #点击屏幕坐标百分比去掉0.比如点击中级位置(5,5)
 #case1:
 #    caseauthor: "lipeng"
 #    casename: "安装游戏-"
@@ -19,36 +32,26 @@
 #    repeattime: "3"
 #    reportname: "用户登陆"
 #    step:
-#        - ${test_startgame()}
-#        - ${test_newUserGuide()}
-#        - ${test_discoverPopup()}
-#        - ${pageTurn(4)}
-#        - ${test_signin()}
-case8:
+#        - ${test_startgame()} #启动游戏
+#        - ${test_GameLoaded(1)} #游戏加载处理
+#        - ${test_newUserGuide()} #游戏新手引导
+#        - ${test_discoverPopup()} #大厅弹框
+#        - ${pageTurn(Bottom,4)} #底部切换到个人信息
+#        - ${test_signin()} #用户登录
+#
+case3:
     caseauthor: "lipeng"
-    casename: "语言切换-"
-    casedec: "语言切换"
+    casename: "视觉小说阅读"
+    casedec: "视觉小说阅读描述"
     repeattime: "3"
-    reportname: "语言切换"
+    reportname: "视觉小说阅读"
     step:
-        - ${pageTurn(POS,9,5)} #点击屏幕坐标百分比去掉0.比如点击中级位置(5,5)
-#        - ${pageTurn(Upper,chapter)} #选择切换到侧边栏
-#        - ${test_LanguageChoose(Spanish)} #如果语言不同切换语言SidePanel,English,Spanish,German,French,Korean,Portuguese,Russian,Italian,Japanese"
-#        - ${pageTurn(Upper,chapter)}
-#        - ${test_checkLanguageChoose(Spanish)} #检查语言是否为设置语言
-#case3:
-#    caseauthor: "lipeng"
-#    casename: "视觉小说阅读"
-#    casedec: "视觉小说阅读描述"
-#    repeattime: "3"
-#    reportname: "视觉小说阅读"
-#    step:
-#        - ${pageTurn(Bottom,0)}
-#        - ${test_bookchoose(Weekly, 0)} #
-#        - ${test_bookPlay()}
-#        - ${test_bookload()}
-#        - ${test_bookread()}
-#        - ${pageTurn(Bottom)}
+        - ${pageTurn(Bottom,0)}
+        - ${test_bookchoose(Weekly, 1)} #
+        - ${test_bookPlay()}
+        - ${test_bookload()}
+        - ${test_bookread()}
+        - ${pageTurn(Bottom)}
 #
 #case4:
 #    caseauthor: "lipeng"
@@ -92,3 +95,4 @@ case8:
 #        - ${test_shop_buy_ticket(1003)}
 #        - ${test_shop_buy_diamond(1004)}
 #        - ${test_shop_buy_member()}
+

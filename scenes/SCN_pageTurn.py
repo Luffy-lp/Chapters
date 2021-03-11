@@ -41,7 +41,9 @@ class PageTurn(FindObject):
     def click_close(self):
         self.findClick_object("Mask", "Button", description="关闭按钮")
 
-    def click_pos(self,x,y):
-        x=float("0."+x)
-        y=float("0."+y)
-        touch(COM_utilities.PosTurn([x,y]))
+    def click_pos(self, x, y):
+        x = float("0." + x)
+        y = float("0." + y)
+        pos = [x, y]
+        touch(COM_utilities.PosTurn(pos))
+        print("点击位置:", COM_utilities.PosTurn(pos))

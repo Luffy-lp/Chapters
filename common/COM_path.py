@@ -39,7 +39,7 @@ path_RESOURCE_IMAGE = os.path.join(path_BASE_DIR, "resource/IMAGE")
 path_YAML_FILES = os.path.join(path_BASE_DIR, "yamlfiles")
 
 # 测试用例的目录路径
-path_CASE_DIR = os.path.join(path_BASE_DIR, "case/testcases")
+path_CASE_DIR = os.path.join(path_BASE_DIR, "step/testcases")
 
 # 测试结果的目录路径
 path_REPORT_DIR = os.path.join(path_BASE_DIR, "result")

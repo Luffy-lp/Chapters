@@ -4,7 +4,7 @@
     Poputype: "none"
     Popupdec: "大厅弹框配置，PopupPanel和PopUpPanel"
     import_module_functions:
-        - case.case_test
+        - step.case_test
     step:
         - ${文本弹框(UIAlter, Popup)}
         - ${24小时新手礼包(UITwentyFourHourReward, BtnGet)} #- ${弹框名称(弹框标识元素, 出现弹框后点击按钮元素)}UIBookNewDetail
@@ -27,7 +27,7 @@
     Poputype: "none"
     Popupdec: "书籍详情页弹框配置"
     import_module_functions:
-        - case.case_test
+        - step.case_test
     step:
         - ${详情页文本弹框(UIAlter, Popup)}
 #        - ${道具卡使用指导(UIPassGuide, Popup)}
@@ -36,6 +36,7 @@
     Poputype: "none"
     Popupdec: "FullScreenPanel"
     import_module_functions:
-        - case.case_test
+        - step.case_test
     step:
         - ${月签到(UISignActivity, Back)}
+        - ${周签到(FullScreenPanel, BtnClosed)}

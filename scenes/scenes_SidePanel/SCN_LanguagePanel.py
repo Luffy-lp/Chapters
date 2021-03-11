@@ -7,8 +7,8 @@ class LanguagePanel(SidePanel):
         SidePanel.__init__(self)
     def chooseLanguage(self,language="English"):
         """SidePanel,English,Spanish,German,French,Korean,Portuguese,Russian,Italian,Japanese"""
-        self.checkLanguageChoose(language)
-        if list==language:
+        name=self.checkLanguageChoose(language)
+        if name==language:
             print("不需要切换:",language)
             self.LanguagePanel_info["switch"]=False
             return True
@@ -16,12 +16,13 @@ class LanguagePanel(SidePanel):
         self.findClick_object("LeftBtn","LeftBtn",description="切换语言")
         self.LanguagePanel_info["切换语言"] = language
         self.LanguagePanel_info["switch"] = True
+        # MyData.DeviceData_dir["poco"] = None
         return True
     def checkLanguageChoose(self,language):
         """检查当前的语言"""
         name = self.poco("icon", texture="dagou-icon").parent().get_name()
         self.LanguagePanel_info["当前语言"] = name
-        print("当前语言:", list)
+        print("当前语言:", name)
         return name
 
 

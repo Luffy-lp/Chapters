@@ -1,6 +1,4 @@
-# from asyncio import sleep
 from time import sleep
-# from scenes.scenes_login.SCN_signin import SignIn
 from common import COM_utilities
 from common.COM_findobject import FindObject
 from scenes.scenes_login.SCN_newuser import NewUserGuide

@@ -1,28 +1,30 @@
-import logging
+"""步骤方法"""
+from step.test_login_step import *
+from step.test_profile_step import *
+from step.test_shop_step import *
+from step.test_UGC_step import *
+from step.test_VisualRead_step import *
+from step.test_common_step import *
 
-from common.COM_path import *
-from common.COM_findobject import FindObject
-from airtest.report import report
+import logging
+from common.COM_data import MyData
+# from common.COM_path import *
+# from common.COM_findobject import FindObject
 from airtest.report.report import simple_report
-from case.test_case import *
-# from importlib_metadata.docs import conf
-import shutil
 from common.COM_analysis import MyAnalysis
 from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
 
 
-# from  airtest.core.android.adb import *
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
-    file_stream_path=[]
+    file_stream_path = []
 
     def __init__(self):
         MyAnalysis.__init__(self)
         print(path_BASE_DIR)
         self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
-        print("path_BASE_DIR",self.adbpath)
         self.logpath = os.path.join(path_LOG_DIR, "log.txt")
         print(self.logpath)
         self.logspath = os.path.join(path_LOG_DIR, "logs.txt")
@@ -31,23 +33,43 @@ class Run(MyAnalysis):
 
     def initialize(self):
         """初始化"""
-        try:
-            print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
-            print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
-            sleep(3)
-        except:
-            pass
+        # try:
+        #     print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
+        #     print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
+        #     sleep(10)
+        # except:
+        #     pass
         self.clear()
-        OK = True
-        while OK:
-            try:
-                print(os.system(self.adbpath + " devices"))
-            except:
-                print("连接失败,重试")
-                sleep(1)
-            else:
-                print("连接成功")
-                OK = False
+        # i = 10
+        # while i>=0:
+        #     i=i-1
+        #     try:
+        #         # print(os.open(self.adbpath + " devices"))
+        #         print(self.adbpath)
+        #         connectfile = os.popen(self.adbpath + ' devices')
+        #         devlist = connectfile.readlines()
+        #         print("连接的设备",devlist[1])
+        #         # for i in range(len(list)):
+        #         #     if list[i].find('\tdevice') != -1:
+        #         #         temp = list[i].split('\t')
+        #         #         devlist.append(temp[0])
+        #         # print(devlist)
+        #         # return devlist
+        #     except:
+        #         sleep(8)
+        #         print("查询设备信息异常")
+        #     else:
+        #         break
+            #     if list is None:
+            #         print("aaaaaaaaaaaaaaa")
+            #         raise
+            #     else:print("ddddddddddaaaaaaaaaa")
+            # except:
+            #     print("adb devices连接失败,重试")
+            #     sleep(1)
+            # else:
+            #     print("adb devices正常")
+            #     OK = False
         CommonDevices()
 
     def get_eval_value(self, args, func_name):
@@ -75,8 +97,8 @@ class Run(MyAnalysis):
     def writelogs(self):
         """转存log到logs"""
         try:
-            log_file= open(self.logpath, "r")
-            logs_file=open(self.logspath, "a")
+            log_file = open(self.logpath, "r")
+            logs_file = open(self.logspath, "a")
             lines = log_file.readlines()
             for val in range(len(lines)):
                 # alllog_file = open(alllogspath, "a")
@@ -84,14 +106,15 @@ class Run(MyAnalysis):
                 # if "assert_equal" in lines[val] or "traceback" in lines[val]:
                 logs_file.write(lines[val])
         except Exception as e:
-            print("转存log到logs失败",e)
-            mylog.error("转存log到logs失败",e)
+            print("转存log到logs失败", e)
+            mylog.error("转存log到logs失败", e)
         else:
             print("转存log到logs成功")
             mylog.info("转存log到logs成功")
         finally:
             log_file.close()
             logs_file.close()
+
     def get_fileist(self):
         # print(os.system(self.adbpath + " devices"))
         connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
@@ -106,6 +129,7 @@ class Run(MyAnalysis):
             for line in sl:
                 self.file_stream_path.append(line)
         # if self.file_stream_path
+
     def pull_errorLog(self):
         """输出errorlog日志转化到log.txt中"""
         print(path_BASE_DIR)
@@ -137,7 +161,7 @@ class Run(MyAnalysis):
             # # auto_setup(logdir=path_LOG_DIR)
             # print("输出errorlog日志转化到log.txt中成功")
         except BaseException as e:
-            print("输出errorlog日志转化到log.txt中失败",e)
+            print("输出errorlog日志转化到log.txt中失败", e)
 
     def togetherReport(self):
         """生成最后的合成日志"""
@@ -185,7 +209,7 @@ class Run(MyAnalysis):
                 if os.path.isfile(filepath):
                     os.remove(filepath)
                 # elif os.path.isdir(filepath):
-                #     shutil.rmtree(filepath, True)
+                # shutil.rmtree(filepath, True)
         path = os.path.join(path_LOG_MY, "logging.log")
         with open(path, 'w') as f1:
             f1.seek(0)
@@ -236,4 +260,4 @@ if __name__ == '__main__':
     # myRun.pull_errorLog()
     # myRun.writelogs()
     # myRun.get_fileist()
-    myRun.togetherReport()
+    # myRun.togetherReport()
