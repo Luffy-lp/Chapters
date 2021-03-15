@@ -44,7 +44,7 @@ class ChapterEdit(FindObject):
     def process_creationStoryFlow(self, bookname):
         """创作室主流程"""
         MainStudio1 = MainStudio()
-        MainStudio1.mainprocess()
+        MainStudio1.branchprocess()
         self.into_IntroduceEdit()
         IntroduceEdit1 = IntroduceEdit()
         IntroduceEdit1.mainprocess(bookname)

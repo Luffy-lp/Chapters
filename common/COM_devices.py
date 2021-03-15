@@ -27,10 +27,8 @@ class CommonDevices():
                 print("DEVIEC:", G.DEVICE)
     def getdevlist(self):
         devlist = []
-        print("dddddddddddd")
         connectfile = os.popen('adb devices')
         list = connectfile.readlines()
-        print("eeeeeeeeeee")
         print(list)
         # for i in range(len(list)):
         #     if list[i].find('\tdevice') != -1:
@@ -47,7 +45,6 @@ class CommonDevices():
         1. 是否有连接上手机？请连接上手机选并重新check连接性!
         2. 是否有开启"开发者选项\\USB调试模式"?\n'''
         connectinfolist = self.getdevlist()
-
         if len(connectinfolist) == 0:
             return False
         if len(connectinfolist) == 1:

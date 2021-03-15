@@ -16,12 +16,14 @@ class LanguagePanel(SidePanel):
         self.findClick_object("LeftBtn","LeftBtn",description="切换语言")
         self.LanguagePanel_info["切换语言"] = language
         self.LanguagePanel_info["switch"] = True
+        MyData.UserData_dir["当前语言"]=language
         # MyData.DeviceData_dir["poco"] = None
         return True
     def checkLanguageChoose(self,language):
         """检查当前的语言"""
         name = self.poco("icon", texture="dagou-icon").parent().get_name()
         self.LanguagePanel_info["当前语言"] = name
+        MyData.UserData_dir["当前语言"] = name
         print("当前语言:", name)
         return name
 

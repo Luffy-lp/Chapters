@@ -8,7 +8,6 @@ from common.COM_API import APiClass
 
 
 # TODO:书架需要考虑新手手书架情况
-
 class UserData(APiClass):
     _instance = None
     storyoptions_dir = {}
@@ -21,6 +20,7 @@ class UserData(APiClass):
         self.UserData_dir = {}  # 用户基本数据表
         self.UserData_dir["bookDetailInfo"] = {}
         self.UserData_dir["bookDetailInfo"]["BookID"] = None
+        self.UserData_dir["当前语言"] = None
         self.UserPath_dir = {}  # 用户自定义路径
         self.Bookshelf__dir = {}  # readprogressList 书籍列表
         self.Story_cfg_chapter_dir = {}  # 章节总信息表
@@ -28,8 +28,9 @@ class UserData(APiClass):
         self.readprogressList_dir = {}  # {'chapterProgress': 10108001, 'chatProgress': 10006} 书籍进度表
         self.chat_type_dir = {}  # 对话类型配置表
         self.popup_dir = {}  # 弹框配置表
+        self.chat_type_dir = {}  # 对话类型配置表
         self.Element_dir = {}
-        self.mobileconf_dir = {}
+        self.language_dir = {}
         self.getdata()
         self.downloadbook_sign = {}
         mylog.info("完成数据初始化")
@@ -37,11 +38,12 @@ class UserData(APiClass):
 
     def getdata(self):
         self.yamldata_conf()
-        self.getbookData()
         self.stroy_data()
         self.yaml_stroy()
         self.yaml_chattype()
         self.yaml_mobileconf()
+        self.yaml_language()
+        self.getbookData()
         print(self.Bookshelf__dir)
 
     def __new__(cls):
@@ -73,6 +75,12 @@ class UserData(APiClass):
         self.mobileconf_dir = self.read_yaml(mobileconfpath)
         print(self.mobileconf_dir)
         return self.mobileconf_dir
+
+    def yaml_language(self):
+        yamllanguagepath = os.path.join(path_YAML_FILES, "yamllanguage/language_basics.yml")
+        self.language_dir = self.read_yaml(yamllanguagepath)
+        print("dssssssssssssddd",self.language_dir)
+        return self.language_dir
 
     def yamldata_conf(self):
         # 读取yamlconf数据
@@ -106,9 +114,14 @@ class UserData(APiClass):
             self.UserData_dir["uuid"] = self.registerApi5(channel_id, device_id, device_platform)["uuid"]
         print("用户ID：", self.UserData_dir["uuid"])
 
-    def getbookData(self):
+    def getbookData(self, language="en-US"):
         """大厅书架信息"""
-        bookData = self.summaryApi3(self.UserData_dir["uuid"])#es-ES,en-US
+        self.UserData_dir["当前语言"]="Spanish"
+        language = self.UserData_dir["当前语言"]
+        for i in self.language_dir:
+            if i == language:
+                language = self.language_dir[i]["formatName"]
+        bookData = self.summaryApi3(self.UserData_dir["uuid"], language)  # es-ES,en-US
         areaData = bookData["area_data"]
         bannerData = bookData["banner_data"]
         story_ids = bannerData["story_ids"]
@@ -121,6 +134,7 @@ class UserData(APiClass):
                     story_ids = i["story_ids"]
                     self.Bookshelf__dir[v] = story_ids
         # 获得大厅banner_data书籍列表
+
     def getreadprogress(self, bookid):
         """获取用户阅读进度返回chapterProgress和chatProgress"""
         datalist = self.getCommonDataApi(self.UserData_dir["uuid"])  # 调用通用接口0.章节进度，1.对话进度
@@ -163,6 +177,7 @@ class UserData(APiClass):
         with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
             data = f.read()
         data = eval(data)["data"]
+        print(data)
         for i in data:
             for j in i:
                 self.Stroy_data_dir[i["story_id"]] = i["title"]
@@ -206,3 +221,5 @@ class UserData(APiClass):
 
 
 MyData = UserData()
+MyData.getbookData(language="en-ES")
+print("ling", MyData.Bookshelf__dir["Weekly Update"])

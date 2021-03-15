@@ -51,4 +51,4 @@ class Creation(FindObject):
         self.click_createNewBook()
         self.mysleep(2)
         self.select_genre()
-        return  True
+        return True

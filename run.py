@@ -147,19 +147,7 @@ class Run(MyAnalysis):
             sleep(3)
             print(os.popen(pull))
             print("完成读取errorlog")
-            # if errorLog_file:
-            #     lines = errorLog_file.readlines()
-            #     print("存在错误日志", errorLog_file.read())
-            #     # text_file = open(errorLogpath, "r")
-            #     for val in range(len(lines)):
-            #         time = 1612407756.9300864 + int(val)
-            #         print(type(time))
-            #         print("val", val)
-            #         print(lines[val])
-            #         log(Exception("Unity异常" + lines[val]), timestamp=time)
-            # errorLog_file.close()
-            # # auto_setup(logdir=path_LOG_DIR)
-            # print("输出errorlog日志转化到log.txt中成功")
+
         except BaseException as e:
             print("输出errorlog日志转化到log.txt中失败", e)
 

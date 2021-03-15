@@ -59,11 +59,11 @@ class APiClass():
         dir = eval(response.text)
         return dir["data"]["status"]
 
-    def summaryApi3(self, UUID):
+    def summaryApi3(self, UUID,language="en-US"):
         """获取书架信息接口"""
         url = self.url + "summaryApi3.Class.php?DEBUG=true"
         Header = {"TIMECLOSE": "1",
-                  "language": "en-US"}
+                  "language": language}
         body = {"channel_id": "AVG10005",
                 "uuid": UUID,
                 }
@@ -143,7 +143,6 @@ class APiClass():
         url = self.url + "TodayCheckNewPushApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-
         data = self.try_APIlink(url=url, headers=self.Header, body=body,name="todayCheckNewPushApi")
         print(data)
         return data
@@ -236,7 +235,5 @@ class APiClass():
         # raise Exception("下载书籍资源失败")
 
 # APiClass1=APiClass()
-# APiClass1.getCommonDataApi("43551")
-# data=APiClass1.registerApi5(bind_type="googleplus",bind_id="42682")
-# print(data)
-# http://chapters-cdn.stardustgod.com/avgContent-test/10009001_shenzhen_a2d65d8cacf402a5435d408d58a4f483.zip
+# data=APiClass1.getCommonDataApi("44346")
+# print("data111111",data)
