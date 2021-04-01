@@ -24,7 +24,7 @@ class GameLoaded(FindObject):
     def gameloading(self,login=1):  # 游戏是否加载完成判断
         while self.poco("Slider").wait(1).exists():
             self.Popo_Errorinfo()
-            self.Popup_login(login=1)
+            # self.Popup_login(login=1)
             if float(COM_utilities.clock("stop")) > 360:
                 print("游戏加载失败。。。")
                 log(Exception("游戏加载失败。。。"),snapshot=True)

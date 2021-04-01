@@ -1,16 +1,12 @@
-import time
-from airtest.core.api import *
-from common.COM_findobject import FindObject
 from pages.shop.shop import *
-from common.COM_API import *
-from common.COM_data import *
+from date.Chapters_data import *
 from common.my_log import mylog
 from common.COM_utilities import *
 # from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 class Shopmodule(Shop):
     Shopmodule_info ={}
-    #滑动商品
+
     def swipe_diamonds(self):
         """滑动钻石商品"""
         shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring("29-1004")[0]
@@ -42,6 +38,9 @@ class Shopmodule(Shop):
             self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
             self.mysleep(3)
             self.click_affirm()
+        # if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
+        # poco("com.android.vending:id/0_resource_name_obfuscated").child(
+        #     "com.android.vending:id/0_resource_name_obfuscated")[0].click()
         self.mysleep(3)
         self.click_claim_shop()
         # 购买完后展示用户信息

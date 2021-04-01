@@ -16,22 +16,27 @@ class APiClass():
     def __init__(self):
         print("调用接口类")
 
-    def try_APIlink(self, url, headers, body,name,trytime=100,timeout=10):
+    def try_APIlink(self, url, headers, body, name, trytime=100, timeout=10):
         """requests公共方法"""
         while (trytime >= 0):
             trytime = trytime - 1
             try:
                 print("拉取{0}接口".format(name))  # 补充正则截取
                 self._response = requests.post(url=url, headers=headers, data=body, timeout=10)
+
             except:
                 traceback.print_exc()
                 print("拉取{0}接口失败，重试".format(name))
                 sleep(1)
             else:
                 dir = eval(self._response.text)
+                # print(self._response.text)
+                # my_re=\n[\s\S]*
                 print("拉取{0}接口成功".format(name))
                 return dir
-    def registerApi5(self, bind_type="device",channel_id="AVG10005", device_id="490000000326402", device_platform="android"):
+
+    def registerApi5(self, bind_type="device", channel_id="AVG10005", device_id="490000000326402",
+                     device_platform="android"):
         """游戏用户登录注册接口v3"""
         url = self.url + 'registerApi5.Class.php?DEBUG=true'
         body = {"device_platform": device_platform,
@@ -45,7 +50,7 @@ class APiClass():
                 "account_id": "tourists",
                 "account_type": "tourists"
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="registerApi5")
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="registerApi5")
         return data
 
     def LoginStatusApi(self, UUID, deviceId):
@@ -59,7 +64,7 @@ class APiClass():
         dir = eval(response.text)
         return dir["data"]["status"]
 
-    def summaryApi3(self, UUID,language="en-US"):
+    def summaryApi3(self, UUID, language="en-US"):
         """获取书架信息接口"""
         url = self.url + "summaryApi3.Class.php?DEBUG=true"
         Header = {"TIMECLOSE": "1",
@@ -67,7 +72,23 @@ class APiClass():
         body = {"channel_id": "AVG10005",
                 "uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10,name="summaryApi3")
+        data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10, name="summaryApi3")
+        return data
+
+    def story_v1_hall(self, UUID, language="en-US"):
+        """获取书架信息接口ja-JP  en-US"""
+        UUID=43090
+        url = "http://dev-chapters-int.stardustgod.com" + "/na/story/v1/hall?debug=true"
+        # url = self.url + "/na/story/v1/hall?debug=true"
+        print(url)
+        Header = {"platform":"android",
+                  "Accept":"application/json",
+                  "language": language}
+        body = {"channel_id": "AVG50005",
+                "uuid": UUID,
+                }
+        data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10, name="story_v1_hall")
+        data=1
         return data
 
     def getStoryAllChapterInfoApi(self, UUID, story_id):
@@ -77,7 +98,7 @@ class APiClass():
         body = {"story_id": story_id,
                 "uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, data=body, timeout=10,name="getStoryAllChapterInfoApi")
+        data = self.try_APIlink(url=url, headers=self.Header, data=body, timeout=10, name="getStoryAllChapterInfoApi")
         print(data)
 
     def getCommonDataApi(self, UUID):
@@ -91,7 +112,7 @@ class APiClass():
                 "my_book_updated_at": time,
                 "read_progress_updated_at": time,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body, trytime=10, timeout=1,name="getCommonDataApi")
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, trytime=10, timeout=1, name="getCommonDataApi")
         return data
 
     def getAllStoryInfoApi(self, UUID):
@@ -99,7 +120,7 @@ class APiClass():
         url = self.url + "getAllStoryInfoApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, data=body, timeout=10,name="getAllStoryInfoApi")
+        data = self.try_APIlink(url=url, headers=self.Header, data=body, timeout=10, name="getAllStoryInfoApi")
         story_info = data["data"]["list"][0]
         return story_info
 
@@ -111,7 +132,7 @@ class APiClass():
                 "device_id": device_id,
                 "big_version": "991"
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="heartbeatsApi3")
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="heartbeatsApi3")
         return data
 
     def getAllStoryInfoApi(self, UUID):
@@ -119,10 +140,10 @@ class APiClass():
         url = self.url + "getAllStoryInfoApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="getAllStoryInfoApi")
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="getAllStoryInfoApi")
         return data
 
-    def syncValueApi(self, UUID, value_type, channel_id="AVG10005",valuechange=0):
+    def syncValueApi(self, UUID, value_type, channel_id="AVG10005", valuechange=0):
         """虚拟币类型，值有：diamond，ticket"""
         url = self.url + "syncValueApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
@@ -134,7 +155,7 @@ class APiClass():
                 "valuechange": valuechange
                 }
 
-        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="syncValueApi")
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="syncValueApi")
         print(data)
         return data
 
@@ -143,17 +164,16 @@ class APiClass():
         url = self.url + "TodayCheckNewPushApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="todayCheckNewPushApi")
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="todayCheckNewPushApi")
         print(data)
         return data
-
 
     def memberInfoApi(self, UUID):
         """diamond，ticket"""
         url = self.url + "Controllers/member/GetMemberInfoApi.php?DEBUG=true"
         body = {"uuid": UUID,
                 }
-        data = self.try_APIlink(url=url, headers=self.Header, body=body,name="memberInfoApi")
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="memberInfoApi")
         return data
 
     def unzip_file(self, fz_name, path):
@@ -182,7 +202,7 @@ class APiClass():
     def downloardurl(self, address):
         # zp = None
         # source_dir = os.getcwd()
-        path = "D:/ChaptersApp_Auto/resource"
+        path = "/resource"
         try:
             r = requests.get(address, stream=True)
             print("下载成功")
@@ -195,28 +215,28 @@ class APiClass():
             zip_file.extract(f, folder_abs)
         zip_file.close()
 
-    def avgcontentApi(self,bookid):
+    def avgcontentApi(self, bookid):
         """获取章节资源下载地址"""
         url = self.url + "avgcontentApi.Class.php?DEBUG=true"
         body = {"chapter_id": bookid,
                 "source_type": "t0"
                 }
-        response = self.try_APIlink(url=url, headers=self.Header, body=body,name="avgcontentApi")
-        address:str = response["address"]
-        addresslist=address.split('/')
+        response = self.try_APIlink(url=url, headers=self.Header, body=body, name="avgcontentApi")
+        address: str = response["address"]
+        addresslist = address.split('/')
         print(address)
-        address=address.replace("\\","")
+        address = address.replace("\\", "")
         print(address)
         print(type(address))
-        time=5
-        while(time>1):
-            time=time-1
+        time = 5
+        while (time > 1):
+            time = time - 1
             try:
                 r = requests.get(address)
-                path=os.path.join(path_resource,addresslist[len(addresslist)-1])
-                print("path",path)
-                pathbook=os.path.join(path_resource,bookid)
-                print("pathbook",pathbook)
+                path = os.path.join(path_resource, addresslist[len(addresslist) - 1])
+                print("path", path)
+                pathbook = os.path.join(path_resource, bookid)
+                print("pathbook", pathbook)
                 with open(path, "wb") as code:
                     code.write(r.content)
                     print("打开书籍资源")
@@ -228,12 +248,12 @@ class APiClass():
                 file_zip.close()
                 os.remove(path)
                 return
-            except BaseException as e :
-                print("书籍资源读取失败,重试",e)
+            except BaseException as e:
+                print("书籍资源读取失败,重试", e)
             else:
                 print("书籍资源读取成功")
         # raise Exception("下载书籍资源失败")
 
 # APiClass1=APiClass()
-# data=APiClass1.getCommonDataApi("44346")
+# data=APiClass1.story_v1_hall("44346")
 # print("data111111",data)

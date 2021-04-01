@@ -1,7 +1,6 @@
-from time import sleep
 from airtest.core.api import log
 from common import COM_utilities
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from common.COM_findobject import FindObject
 
 class Discover(FindObject):
@@ -69,4 +68,3 @@ class Discover(FindObject):
                 havePopup = False
             self.discoverPopup_info["弹框列表："]=FindObject.Popuplist
         return True
-

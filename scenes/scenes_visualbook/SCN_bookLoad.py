@@ -1,7 +1,7 @@
 from airtest.core.api import *
 from common.COM_findobject import FindObject
 from common.my_log import mylog
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 class BookLoad(FindObject):
     BookLoad_info={}
     def __init__(self):

@@ -60,18 +60,10 @@ class Achievement(FindObject):
 
     #成就Technocrat
     def click_technocrat(self):
-        print("点击成就Technocrat")
+        # print("点击成就Technocrat")
         object = None
-        list = self.poco("RightItem").child("Title")
-        for i in list:
-            if i.get_TMPtext() == "Technocrat":
-                print(i.get_TMPtext())
-                object = i
-                break
-            else:print("failed")
-        print(object.get_name())
-        print("ccc:",object.parent().get_name())
-        object.parent().click()
+        POCO = self.poco("LeftItem").child("Title")[0]
+        self.findClick_childobject(POCO,description="选择第一个成就",sleeptime=2)
 
         # 成就Loyal Reader
     def click_loyalreader(self):
@@ -204,9 +196,11 @@ class Achievement(FindObject):
 
     def click_Getreward(self):
         """点击GetRaward按钮"""
-        if self.find_try("Button",description="可解锁/获取奖励"):
-            AchievementPOCO = self.poco("Center").child("ScrollView").offspring("Text (TMP)")
-            AchievementPOCO.click([0.5,0.25])
+        # if self.find_try("Button",description="可解锁/获取奖励"):
+        #     self.click_object("Button")
+        self.findClick_try("Button","Button",description="可解锁/获取奖励",waitTime=2,sleeptime=2)
+            # AchievementPOCO = self.poco("Center").child("ScrollView").offspring("Text (TMP)")
+            # AchievementPOCO.click([0.5,0.25])
             # self.findClick_childobject(AchievementPOCO, description="按钮",waitTime=1)
 
     def click_discoverback(self):

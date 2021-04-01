@@ -1,7 +1,6 @@
-from airtest.core.api import *
 from common.COM_findobject import FindObject
 from common import COM_utilities
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from common.COM_utilities import *
 # TODO:图像选择存在兼容性问题
 import time
@@ -33,7 +32,7 @@ class IntroduceEdit(FindObject):
             self.findClick_childobject(self.poco("Age").child("BtnCheck"), "年龄确认")
             self.findClick_childobject(self.poco("Code").child("BtnCheck"), "行为规范", sleeptime=1)
             self.findClick_childobject(self.poco("Bottom").child("BtnOK"), "提交审核", sleeptime=2)
-        if self.find_try("UIEnjoyChapter", description="是否首次审核",waitTime=3):
+        if self.find_try("UIEnjoyChapter", description="是否首次审核", waitTime=3):
             self.click_object("LaterBtn", description="再说")  # ("RateBtn")
 
     def editDesc(self):
@@ -91,18 +90,19 @@ class IntroduceEdit(FindObject):
                                        "com.android.packageinstaller:id/permission_allow_button",
                                        description="检查开启图库权限", waitTime=1
                                        )
-            ADBdevice=MyData.EnvData_dir["ADBdevice"]
+            ADBdevice = MyData.EnvData_dir["ADBdevice"]
             if ADBdevice in MyData.mobileconf_dir["Upload_Image"]:
-                Upload_ImageData=MyData.mobileconf_dir["Upload_Image"][ADBdevice]
+                Upload_ImageData = MyData.mobileconf_dir["Upload_Image"][ADBdevice]
                 for val in range(0, len(Upload_ImageData)):
                     clickName = Upload_ImageData[val]
                     if type(clickName) == list:
-                            touch(clickName)
-                            print("点击",clickName)
+                        touch(clickName)
+                        print("点击", clickName)
                     elif type(clickName) == int:
-                            sleep(clickName)
+                        sleep(clickName)
                     else:
-                        self.findClick_try(clickName, clickName, description=clickName, waitTime=5, sleeptime=3,pocotype="Androidpoco")
+                        self.findClick_try(clickName, clickName, description=clickName, waitTime=5, sleeptime=3,
+                                           pocotype="Androidpoco")
             elif "127" in MyData.EnvData_dir["ADBdevice"]:
                 print("模拟器类型")
                 self.mumu()
@@ -115,7 +115,7 @@ class IntroduceEdit(FindObject):
                 mytime = float(COM_utilities.clock("stop"))
                 if mytime > 50:
                     print("图片选择失败，请检查权限问题")
-                    log(Exception("图片选择失败，请检查权限问题"),snapshot=True)
+                    log(Exception("图片选择失败，请检查权限问题"), snapshot=True)
                     raise Exception("图片选择失败，请检查权限问题")
 
         else:
@@ -150,6 +150,4 @@ class IntroduceEdit(FindObject):
         self.editCategory()
         self.editCoverIcon()
         self.topBar("Release")
-#
-# IntroduceEdit1=IntroduceEdit()
-# IntroduceEdit1.editCoverIcon()
+        return True

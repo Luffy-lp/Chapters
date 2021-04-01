@@ -8,7 +8,6 @@ def test_ChangeUseravatar():
     actualValue = myProfilemodule.ChangeUseravatar()
     assert_equal(actualValue, True, "更换背景角色情况{0}".format(myProfilemodule.Profilemodule_info))
 
-
 def test_operationAchievement():
     """对成就进行操作"""
     myAchievementmodule = Achievementmodule()

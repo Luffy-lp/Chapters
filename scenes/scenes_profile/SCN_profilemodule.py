@@ -123,7 +123,7 @@ class Profilemodule(Profile):
                         break
                     else:
                         print("failed")
-                self.Profile_info = object.get_TMPtext()
+                # self.Profile_info = object.get_TMPtext()
                 self.findSwipe_object("xxx", 0.69, object.parent(), swipeTye="y", beginPos=[0.5, 0.85])
             else:
                 """"""

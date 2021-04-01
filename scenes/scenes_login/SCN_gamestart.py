@@ -1,8 +1,6 @@
-import sys
-
 from airtest.core.api import *
 from pathlib import Path
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from common.my_log import mylog
 
 class GameStart():
@@ -70,4 +68,3 @@ class GameStart():
     def clearGame(self):
         clear_app(MyData.EnvData_dir["packageName"])
         print("清理设备上的游戏数据")
-

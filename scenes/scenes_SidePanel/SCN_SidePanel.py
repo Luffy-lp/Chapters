@@ -1,7 +1,5 @@
-from common import COM_utilities
-from common.COM_data import MyData
 from common.COM_findobject import FindObject
-from common.COM_utilities import *
+
 
 class SidePanel(FindObject):
     def __init__(self):

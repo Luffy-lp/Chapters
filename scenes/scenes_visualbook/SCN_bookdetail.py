@@ -2,8 +2,7 @@ import time
 
 from airtest.core.api import assert_equal
 from common.COM_findobject import FindObject
-from pages.bookdetail.page_bookdetail import PagBookDetail
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 
 # TODO:概率出现未成功点击书籍的
 
@@ -16,6 +15,7 @@ class BookNewDetail(FindObject):
 
     def bookNewDetailPOP(self):
         # self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)
+        print(MyData.popup_dir)
         print("详情页弹框配置：",MyData.popup_dir[1])
         poplist = MyData.popup_dir[1]
         for k in poplist:
@@ -27,6 +27,37 @@ class BookNewDetail(FindObject):
                     self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
             else:
                 self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
+    # def bookChoose(self):
+    def bookChoose_Shelf(self,bookShelf,index):
+        """找到书架招数WeekView"""
+        index = int(index)
+        View=bookShelf+"View"
+        Scr=bookShelf+"Scr"
+        Myboopoco = self.poco(bookShelf)
+        self.find_object(bookShelf, description=bookShelf+"书架")
+        self.findSwipe_object(bookShelf, 0.5, POCOobject=Myboopoco, swipeTye="y") #滑动找书架
+        while (True):
+            try:
+                thebook = \
+                    self.poco(View).child(Scr).child("Viewport").child("Content").child("0(Clone)")[
+                        index].wait(5)
+                UIbookName = thebook.child("TextName").wait(2).get_TMPtext()
+                print("页面显示的书籍名称：", UIbookName)
+                POCOclik = thebook.child("Image")
+                print("POCOclik:", POCOclik.get_position())
+                BookID = MyData.Bookshelf__dir["Weekly Update"][index]
+                print("BookID:", BookID)
+                Bookname = self.getBookNewDetail_info(BookID, UIbookName)
+                self.findClick_childobject(POCOclik, description="点击书籍封面", waitTime=5, sleeptime=1)
+                self.bookNewDetailPOP()
+                return True, Bookname, self.BookNewDetail_info  # 接口书籍名称，当前详情页书籍信息
+            except:
+                print("未能点击对应的书籍")
+                if index <= 5:
+                    index = index + 1
+                else:
+                    return False, None
+        time.sleep(3)
 
     def bookChoose(self, bookShelf, index=0):
         """Discover Banner,Weekly,Mybook，Search，testSearh"""
@@ -57,8 +88,8 @@ class BookNewDetail(FindObject):
         if bookShelf == "Weekly":
             # "获取书籍的名称"
             Myboopoco = self.poco("WeekView")
-            self.find_object("WeekView", description="周排行书架")
-            self.findSwipe_object("WeekView", 0.5, POCOobject=Myboopoco, swipeTye="y")
+            self.find_object("WeekView", description="周排行书架") #找书架
+            self.findSwipe_object("WeekView", 0.5, POCOobject=Myboopoco, swipeTye="y") #滑动找书架
             time.sleep(3)
             while (True):
                 try:
@@ -120,12 +151,26 @@ class BookNewDetail(FindObject):
     #     Booklist.append({"Bookname": Bookname})
     #     return True, Booklist
 
-    def book_Play(self):
-        self.findClick_object("Play", "Play", description="Play按钮")
+    def book_Play(self,index=None):
+        print(index)
+        if index:
+            try:
+                POCO=self.poco("chapterBtn(Clone)")[int(index)-1]
+                self.findClick_childobject(POCO,description="选择第{}章".format(index),waitTime=3)
+            except:
+                self.click_close()
+                self.click_object("SearchBtn", description="bookid搜索按钮",waitTime=1)
+                self.bookNewDetailPOP()
+                POCO=self.poco("chapterBtn(Clone)")[int(index)-1]
+                self.findClick_childobject(POCO,description="选择第{}章".format(index),waitTime=3)
+        if self.find_try("Play", description="Play按钮",waitTime=1):
+           self.findClick_object("Play", "Play", description="Play按钮",waitTime=1)
+        else:
+            self.findClick_object("DaypassPlay", "DaypassPlay", description="Daypass按钮",waitTime=1)
         return True
 
     def click_close(self):
-        if self.findClick_object("Mask", "Button", description="关闭详情页按钮"):
+        if self.findClick_try("Mask", "Button", description="关闭详情页按钮",sleeptime=1):
             return True
 
     def click_Reset(self, type="SetBook"):

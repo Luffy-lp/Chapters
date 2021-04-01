@@ -1,4 +1,4 @@
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from scenes.scenes_SidePanel.SCN_SidePanel import SidePanel
 
 class LanguagePanel(SidePanel):

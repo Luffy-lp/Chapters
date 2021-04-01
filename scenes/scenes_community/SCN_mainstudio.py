@@ -1,13 +1,14 @@
 from airtest.core.api import *
 from common.COM_findobject import FindObject
 from common.COM_utilities import *
-from common.COM_Error import MyException
+from common.COM_Error import ResourceError
 
 
 # TODO:返回到上一个界面应该用树代替
 
 class MainStudio(FindObject):
     """作家工作室"""
+    MainStudio={}
     chapterDlg = 0
 
     def __init__(self):
@@ -179,7 +180,7 @@ class MainStudio(FindObject):
         self.findClick_childobject(self.poco("TopBar").child("BtnBack"), description="返回到上一个界面", waitTime=2,
                                    sleeptime=2)
 
-    def toolBar(self, type, Index=3):
+    def toolBar(self, type, Index=4):
         """分支工具界面
         Img ->添加图片
         Choice ->创建选项
@@ -189,11 +190,11 @@ class MainStudio(FindObject):
         int(Index)
         self.click_object("BtnTool", description="点击工具按钮")
         if type == "Img":
-            self.findClick_childobject(self.poco("ToolBar").child("BtnImg"), description="创建图片")
+            self.findClick_childobject(self.poco("BtnImg"), description="创建图片")
         if type == "Choice":
-            self.findClick_childobject(self.poco("ToolBar").child("BtnChoice"), description="创建选项")
-        if type == "Jump" and Index == 3:
-            self.findClick_childobject(self.poco("ToolBar").child("BtnJump"), description="创建跳转")
+            self.findClick_childobject(self.poco("BtnChoice"), description="创建选项")
+        if type == "Jump":
+            self.findClick_childobject(self.poco("BtnJump"), description="创建跳转",waitTime=2)
             setEnd = self.poco("UIBottomForm").child("Buttons").child("Options").child("Button(Clone)")[Index]
             self.findClick_childobject(setEnd, description="设置章节结束", sleeptime=2)
         else:
@@ -251,17 +252,17 @@ class MainStudio(FindObject):
         """封装好分支创作工作室流程"""
         txt = "abcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghi" \
               "jklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyz"
-        self.LuaUIStudio()
-        self.creatCharacter("lipeng", "main")
-        self.creatCharacter("lilei")
+        self.LuaUIStudio()#新手引导界面检查
+        self.creatCharacter("lipeng", "main")#创建角色流程
+        self.creatCharacter("lilei")#创建角色流程
         time = 2
         while (time > 0):
             time = time - 1
             self.talk("Narration", str(time))
             self.talk("lipeng", txt)
             self.talk("lilei", txt)
-        self.branchprocess()
+        self.branchprocess() #分成创作页面流程
 
 
-MainStudio1 = MainStudio()
-MainStudio1.commonprocess()
+# MainStudio1 = MainStudio()
+# MainStudio1.commonprocess()

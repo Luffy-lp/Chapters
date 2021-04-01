@@ -1,13 +1,10 @@
-import logging
 from airtest.cli.parser import cli_setup
-from airtest.core.android.adb import ADB
 from airtest.core.api import *
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from common.COM_path import *
 from common.my_log import mylog
-from airtest.core.api import connect_device, sleep
 
 
 class CommonDevices():
@@ -17,13 +14,17 @@ class CommonDevices():
                 conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
                     "ADBdevice"]
                 method = MyData.EnvData_dir["method"]
-                if "127" in  MyData.EnvData_dir["ADBdevice"]:
-                    method= MyData.EnvData_dir["simulator"]
-                auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
-                if MyData.DeviceData_dir["androidpoco"] is None:
-                    MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
-                    mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                    print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+                try:
+                    if "127" in  MyData.EnvData_dir["ADBdevice"]:
+                        method= MyData.EnvData_dir["simulator"]
+                    auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
+                    if MyData.DeviceData_dir["androidpoco"] is None:
+                        MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
+                        mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+                        print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+                except:
+                    pass
+                    # MyData.DeviceData_dir["ADBdevice"]
                 print("DEVIEC:", G.DEVICE)
     def getdevlist(self):
         devlist = []

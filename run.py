@@ -1,21 +1,21 @@
 """步骤方法"""
 from step.test_login_step import *
-from step.test_profile_step import *
-from step.test_shop_step import *
-from step.test_UGC_step import *
-from step.test_VisualRead_step import *
 from step.test_common_step import *
+from step.test_UGC_step import *
+from step.test_profile_step import *
+from step.test_VisualRead_step import *
+from step.test_shop_step import *
+from scenes.SCN_pageTurn import *
+from common.COM_findobject import FindObject
 
 import logging
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 # from common.COM_path import *
-# from common.COM_findobject import FindObject
 from airtest.report.report import simple_report
 from common.COM_analysis import MyAnalysis
 from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
-
 
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
@@ -33,6 +33,29 @@ class Run(MyAnalysis):
 
     def initialize(self):
         """初始化"""
+        i = 10
+        while i>=0:
+            i=i-1
+            try:
+                # print(os.open(self.adbpath + " devices"))
+                print(self.adbpath)
+                connectfile = os.popen(self.adbpath + ' devices')
+                devlist = connectfile.readlines()
+                print("连接的设备",devlist[1])
+                list=devlist[1].split("	device")
+                MyData.EnvData_dir["ADBdevice"]=list[0]
+                # for i in range(len(list)):
+                #     if list[i].find('\tdevice') != -1:
+                #         temp = list[i].split('\t')
+                #         devlist.append(temp[0])
+                # print("dddddd",devlist)
+            except:
+                sleep(8)
+                print("查询设备信息异常")
+            else:
+                print("adb devices正常")
+                OK = False
+                break
         # try:
         #     print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
         #     print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
@@ -40,37 +63,7 @@ class Run(MyAnalysis):
         # except:
         #     pass
         self.clear()
-        # i = 10
-        # while i>=0:
-        #     i=i-1
-        #     try:
-        #         # print(os.open(self.adbpath + " devices"))
-        #         print(self.adbpath)
-        #         connectfile = os.popen(self.adbpath + ' devices')
-        #         devlist = connectfile.readlines()
-        #         print("连接的设备",devlist[1])
-        #         # for i in range(len(list)):
-        #         #     if list[i].find('\tdevice') != -1:
-        #         #         temp = list[i].split('\t')
-        #         #         devlist.append(temp[0])
-        #         # print(devlist)
-        #         # return devlist
-        #     except:
-        #         sleep(8)
-        #         print("查询设备信息异常")
-        #     else:
-        #         break
-            #     if list is None:
-            #         print("aaaaaaaaaaaaaaa")
-            #         raise
-            #     else:print("ddddddddddaaaaaaaaaa")
-            # except:
-            #     print("adb devices连接失败,重试")
-            #     sleep(1)
-            # else:
-            #     print("adb devices正常")
-            #     OK = False
-        CommonDevices()
+        # CommonDevices()
 
     def get_eval_value(self, args, func_name):
 
@@ -147,7 +140,6 @@ class Run(MyAnalysis):
             sleep(3)
             print(os.popen(pull))
             print("完成读取errorlog")
-
         except BaseException as e:
             print("输出errorlog日志转化到log.txt中失败", e)
 
@@ -177,6 +169,7 @@ class Run(MyAnalysis):
         mylog.info("完成html测试报告，等待生产录制文件需要一定时间")
 
     def resetEnv(self, k):
+        """重跑"""
         print(self.Runlist_dir[k])
         if "登陆" in self.Case_info[k]["casename"]:
             pass
@@ -203,6 +196,7 @@ class Run(MyAnalysis):
             f1.seek(0)
             f1.truncate()
         mylog.info("完成文件清空")
+        print("完成文件清空")
 
     def runing(self):
         for k, v in self.Runlist_dir.items():
@@ -248,4 +242,4 @@ if __name__ == '__main__':
     # myRun.pull_errorLog()
     # myRun.writelogs()
     # myRun.get_fileist()
-    # myRun.togetherReport()
+    myRun.togetherReport()

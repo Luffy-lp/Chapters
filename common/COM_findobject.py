@@ -1,17 +1,19 @@
 # -*- encoding=utf8 -*-
 from time import sleep
+
 from airtest.core.api import *
-from poco.exceptions import PocoNoSuchNodeException, PocoException
+from poco.exceptions import PocoNoSuchNodeException
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 from common.COM_utilities import clock
 from common.my_log import mylog
 from common.COM_devices import CommonDevices
 from common.COM_path import *
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from poco.drivers.unity3d import UnityPoco
 
 
 class FindObject(CommonDevices):
+    _instance = None
     poco: UnityPoco = None
     androidpoco: AndroidUiautomationPoco = None
     globals()
@@ -20,7 +22,8 @@ class FindObject(CommonDevices):
         "Please Update Latest Chapter": "CenterBtn",
         "Attention": "LeftBtn",
         "TRIGGER WARNING": "CenterBtn",
-        "Info": "CenterBtn"
+        "Info": "CenterBtn",
+        "IMPORTANT": "CenterBtn"
     }
 
     def __init__(self):
@@ -36,6 +39,12 @@ class FindObject(CommonDevices):
             print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
         self.poco = MyData.DeviceData_dir["poco"]
         self.androidpoco = MyData.DeviceData_dir["androidpoco"]
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = object.__new__(cls)
+            MyData.DeviceData_dir["FindObject"] =cls._instance
+        return cls._instance
 
     def find_object(self, findName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """寻找目标"""
@@ -143,6 +152,7 @@ class FindObject(CommonDevices):
                     self.Popuplist.append(description)
                     mylog.info("尝试寻找-【{}】-元素成功".format(description))
                     return True
+                else:return False
             except:
                 return False
 
@@ -365,11 +375,12 @@ class FindObject(CommonDevices):
         sleep(mytime)
 
     def UIAlterPoP(self):
-        if self.find_try("AlterView", description="文本弹框"):
-            txt = self.poco("UIAlter").child("AlterView").child("Title").get_TMPtext()
+        AlterTxt=MyData.newPoP_dir["UIAlter"]
+        if self.find_try("AlterView", description="文本弹框",waitTime=1):
+            txt = self.poco("UIAlter").offspring("Title").get_TMPtext()
             print("弹框类型：", txt)
             mylog.info("发现-【{}】-类型弹框".format(txt))
-            Btn = self.AlterTxt.get(txt)
+            Btn = AlterTxt.get(txt)
             self.Popuplist.append(txt)
             print("准备点击按钮", Btn)
             try:

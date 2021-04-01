@@ -1,16 +1,26 @@
 from airtest.core.api import log
 from airtest.core.api import assert_equal, wake
 from time import sleep
+from common.COM_findobject import FindObject
 from scenes.scenes_login.SCN_gameloaded import GameLoaded
 from scenes.scenes_login.SCN_newuser import NewUserGuide
 from scenes.scenes_discover.SCN_discover import Discover
 from scenes.SCN_pageTurn import PageTurn
 from scenes.scenes_SidePanel.SCN_LanguagePanel import LanguagePanel
 
+def test_click(findName,clickName,description):
+    """点击按钮"""
+    MYclikObject=FindObject()
+    MYclikObject.findClick_object(findName=findName,ClickName=clickName,description=description)
+
+def test_sleep(sleeptime):
+    """睡眠时间"""
+    sleep(float(sleeptime))
+
 def pageTurn(type="Bottom",index=None,index1=None):
     """界面切换 Bottom，Upper"""
     PageTurn1 = PageTurn()
-    if type=="Bottom":
+    if type == "Bottom":
         if index == None:
             PageTurn1.click_close()
             return True
@@ -34,6 +44,12 @@ def test_discoverPopup():
     myDiscover = Discover()
     actualValue = myDiscover.discoverPopup()
     assert_equal(True, actualValue, "大厅弹框列表{0}".format(myDiscover.Popuplist))
+    sleep(3)
+
+def test_discoverPopup_noassert():
+    """大厅弹框"""
+    myDiscover = Discover()
+    myDiscover.discoverPopup()
     sleep(3)
 
 def test_LanguageChoose(language):
@@ -61,3 +77,4 @@ def test_newUserGuide():
     myNewUserGuide = NewUserGuide()
     actualValue = myNewUserGuide.newUserPopUp()
     assert_equal(actualValue, True, "新手引导{0}".format(myNewUserGuide.NewUserGuide_info))
+

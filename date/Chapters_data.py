@@ -1,16 +1,14 @@
-import json
 import yaml
-import shutil
-from common.COM_path import *
 from common.COM_path import *
 from common.my_log import mylog
-from common.COM_API import APiClass
+from date.Chapters_API import APiClass
 
 
 # TODO:书架需要考虑新手手书架情况
 class UserData(APiClass):
     _instance = None
     storyoptions_dir = {}
+    bookread_result = {}
 
     def __init__(self):
         self.DeviceData_dir = {}  # 设备信息配置表
@@ -31,6 +29,9 @@ class UserData(APiClass):
         self.chat_type_dir = {}  # 对话类型配置表
         self.Element_dir = {}
         self.language_dir = {}
+        self.newPoP_dir=[]
+        self.book_list=[]
+        self.bookresult_dir={}
         self.getdata()
         self.downloadbook_sign = {}
         mylog.info("完成数据初始化")
@@ -38,12 +39,15 @@ class UserData(APiClass):
 
     def getdata(self):
         self.yamldata_conf()
-        self.stroy_data()
+        # self.stroy_data()
         self.yaml_stroy()
         self.yaml_chattype()
         self.yaml_mobileconf()
         self.yaml_language()
         self.getbookData()
+        self.yaml_bookinfo()
+        self.yaml_newpopup()
+        self.yaml_bookread_result()
         print(self.Bookshelf__dir)
 
     def __new__(cls):
@@ -79,8 +83,37 @@ class UserData(APiClass):
     def yaml_language(self):
         yamllanguagepath = os.path.join(path_YAML_FILES, "yamllanguage/language_basics.yml")
         self.language_dir = self.read_yaml(yamllanguagepath)
-        print("dssssssssssssddd",self.language_dir)
         return self.language_dir
+
+    def yaml_bookinfo(self):
+        yamlbook_listpath = os.path.join(path_YAML_FILES, "bookread_result.yml")
+        self.book_list = self.read_yaml(yamlbook_listpath)
+        return self.book_list
+
+    def yaml_newpopup(self):
+        yamlnewpopup_path = os.path.join(path_YAML_FILES, "yamlGame/newpopup.yml")
+        with open(yamlnewpopup_path, encoding='utf-8') as file:
+            self.newPoP_dir = yaml.safe_load(file)
+        return self.newPoP_dir
+
+    def yaml_bookread_result(self):
+        file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
+        with open(file_path, encoding='utf-8') as file:
+            self.bookresult_dir = yaml.safe_load(file)
+        return self.bookresult_dir
+
+    def set_yaml(self,chapter,result):
+        file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
+        # mybool=self.bookresult_dir.__contains__(chapter)
+        # self.bookresult_dir= dict(self.bookresult_dir)
+        if type(self.bookresult_dir)!=dict:
+            self.bookresult_dir={}
+        self.bookresult_dir[chapter]=result
+        with open(file_path, 'w+', encoding="utf-8") as f:
+            # allow_unicode不加此参数，写入中文会出现乱码
+            yaml.dump(self.bookresult_dir, f, allow_unicode=True)
+        print("self.bookresult_dir", self.bookresult_dir)
+        return self.bookresult_dir
 
     def yamldata_conf(self):
         # 读取yamlconf数据
@@ -116,18 +149,23 @@ class UserData(APiClass):
 
     def getbookData(self, language="en-US"):
         """大厅书架信息"""
-        self.UserData_dir["当前语言"]="Spanish"
-        language = self.UserData_dir["当前语言"]
+        # self.UserData_dir["当前语言"]="Spanish"
+        # language = self.UserData_dir["当前语言"]
         for i in self.language_dir:
             if i == language:
                 language = self.language_dir[i]["formatName"]
         bookData = self.summaryApi3(self.UserData_dir["uuid"], language)  # es-ES,en-US
         areaData = bookData["area_data"]
+        discover_data = bookData["discover_data"]
         bannerData = bookData["banner_data"]
         story_ids = bannerData["story_ids"]
         self.Bookshelf__dir["banner_data"] = story_ids
-        print(self.Bookshelf__dir["banner_data"])
         # 获得大厅Weekly Update书籍列表
+        for i in areaData:
+            for k, v in i.items():
+                if v == "Weekly Update":
+                    story_ids = i["story_ids"]
+                    self.Bookshelf__dir[v] = story_ids
         for i in areaData:
             for k, v in i.items():
                 if v == "Weekly Update":
@@ -138,10 +176,14 @@ class UserData(APiClass):
     def getreadprogress(self, bookid):
         """获取用户阅读进度返回chapterProgress和chatProgress"""
         datalist = self.getCommonDataApi(self.UserData_dir["uuid"])  # 调用通用接口0.章节进度，1.对话进度
-        readprogress = datalist["data"]["readprogress"]
-        chapter_id = datalist["data"]["readprogress"][bookid]["chatProgress"]
+        try:
+            readprogress = datalist["data"]["readprogress"]
+        except:
+            raise Exception("请检查存档是否使用新存档，目前仅支持新存档")
+        # chapter_id = datalist["data"]["readprogress"][bookid]["chatProgress"]
         # self.readprogressList_dir = readprogress
         return readprogress
+
 
     def download_bookresource(self, bookid):
         """拉取书籍资源"""
@@ -177,7 +219,6 @@ class UserData(APiClass):
         with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
             data = f.read()
         data = eval(data)["data"]
-        print(data)
         for i in data:
             for j in i:
                 self.Stroy_data_dir[i["story_id"]] = i["title"]
@@ -221,5 +262,15 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-MyData.getbookData(language="en-ES")
-print("ling", MyData.Bookshelf__dir["Weekly Update"])
+# MyData.set_yaml("100223",False)
+# print(MyData.bookresult_dir)
+# if "1002213" in MyData.bookresult_dir:
+#     print("ddddddddddddddd")
+# if 100010 in MyData.bookresult_dir:
+#     print("ddddddddddddddddd")
+# MyData.read_story_cfg_chapter("10019","10019002")
+# print(MyData.popup_dir)  # 弹框配置表
+# date=MyData.yaml_bookinfo()
+# print(date)
+# MyData.getreadprogress("10042")
+# print("ling", MyData.Bookshelf__dir["Weekly Update"])
