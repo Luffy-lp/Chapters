@@ -9,6 +9,8 @@ from scenes.scenes_visualbook.SCN_bookdetail import BookNewDetail
 from scenes.scenes_visualbook.SCN_bookfind import Bookfind
 # from common.COM_analysis import MyAnalysis
 from common.COM_Error import ResourceError
+
+
 class BookRead(FindObject):
     isstopRead = True  # 阅读状态
     isbookLoad = False
@@ -18,7 +20,7 @@ class BookRead(FindObject):
     ReadBook_info = {}
     getstoryoptionslist = {}
     ReadBook_info["storyoption"] = {}
-    ReadBook_info["resource"]=True
+    ReadBook_info["resource"] = True
     Story_cfg_chapter_dir = {}
 
     def __init__(self):
@@ -52,7 +54,7 @@ class BookRead(FindObject):
         #     MyData.UserData_dir["bookDetailInfo"]["BookID"] = BookID
         #     MyData.download_bookresource(MyData.UserData_dir["bookDetailInfo"]["BookID"])
         # else:
-        #BookID = MyData.UserData_dir["bookDetailInfo"]["BookID"]
+        # BookID = MyData.UserData_dir["bookDetailInfo"]["BookID"]
         readprogress = MyData.getreadprogress(BookID)  # 获取书籍进度
         print("readprogress", readprogress[BookID])
         chapterProgress = readprogress[BookID]["chapterProgress"]  # 获取章节进度
@@ -73,23 +75,24 @@ class BookRead(FindObject):
         """对话处理"""
         achatProgress = str(self.ReadBook_info["chatProgress"])
         # print("MyData.Story_cfg_chapter_dir", MyData.Story_cfg_chapter_dir)
-        option_info= MyData.Story_cfg_chapter_dir[achatProgress] #选项配置
+        option_info = MyData.Story_cfg_chapter_dir[achatProgress]  # 选项配置
         chat_type = option_info["chat_type"]  # 当前选项chat_type值
         select_id = option_info["select_id"]  # select_id值
         print("当前选项chat_type值", chat_type)
         print("当前选项select_id值", select_id)
         print("本章总页数:", self.ReadBook_info["chat_num"])
         print("记录选项进度:", achatProgress)
-        self.resource_judgment(option_info,achatProgress) #选项资源判断
+        self.resource_judgment(option_info, achatProgress)  # 选项资源判断
         self.chat_typeconf(chat_type, select_id)  # 处理特殊选择类型
         self.progressjudge(achatProgress)
         if int(achatProgress) == self.ReadBook_info["chat_num"]:
             self.dialogueEndPOP()  # 阅读结束弹框判断
 
-    def resource_judgment(self,option_info,achatProgress):
+    def resource_judgment(self, option_info, achatProgress):
         """选项资源判断"""
-        pos_id=option_info["pos_id"] #当前选项pos_id值
-        chat_type= option_info["chat_type"]
+        pos_id = option_info["pos_id"]  # 当前选项pos_id值
+        chat_type = int(option_info["chat_type"])
+        print("chat_type", type(chat_type))
         if self.poco("SceneBG").wait(2).exists():
             try:
                 if self.poco("SceneBG").wait(2).attr("SpriteRenderer"):
@@ -97,7 +100,8 @@ class BookRead(FindObject):
                 else:
                     self.ReadBook_info[achatProgress] = "背景的SpriteRenderer为flase"
                     self.ReadBook_info["resource"] = False
-                    log(ResourceError(errorMessage="背景的SpriteRenderer为flase"), desc="背景的SpriteRenderer为flase", snapshot=True)
+                    log(ResourceError(errorMessage="背景的SpriteRenderer为flase"), desc="背景的SpriteRenderer为flase",
+                        snapshot=True)
             except ResourceError as e:
                 self.ReadBook_info[achatProgress] = "背景的SpriteRenderer丢失"
                 self.ReadBook_info["resource"] = False
@@ -105,47 +109,71 @@ class BookRead(FindObject):
         else:
             self.ReadBook_info[achatProgress] = "背景的SpriteRenderer未被渲染"
             self.ReadBook_info["resource"] = False
-            log(ResourceError(errorMessage="{0}背景未被渲染".format(achatProgress)), desc="{0}背景未被渲染".format(achatProgress), snapshot=True)
-        if pos_id==1:
-            if self.poco("NormalSayRoleRight").offspring("Body").exists():
-                if self.poco("NormalSayRoleRight").offspring("Cloth").wait(2).attr("SpriteRenderer"):
-                    print("右1角色Cloth资源正常")
-                else:
-                    self.ReadBook_info[achatProgress] = "Cloth的SpriteRenderer丢失"
-                    self.ReadBook_info["resource"] = False
-                    log(ResourceError(errorMessage="Cloth的SpriteRenderer丢失"), desc="Cloth的SpriteRenderer丢失",
-                        snapshot=True)
-
-            if self.poco("NormalSayRoleRight2").offspring("Body").exists():
-                if self.poco("NormalSayRoleRight2").offspring("Cloth").wait(2).attr("SpriteRenderer"):
-                    print("右2角色Cloth资源正常")
-                else:
-                    self.ReadBook_info[achatProgress] = "右1角色Cloth资源正常"
-                    self.ReadBook_info["resource"] = False
-                    log(ResourceError(errorMessage="右1角色Cloth资源正常"), desc="右1角色Cloth资源正常",
-                        snapshot=True)
-        if pos_id==2:
-           if self.poco("NormalSayRoleLeft").offspring("Cloth").wait(2).attr("SpriteRenderer"):
-               print("左角色Cloth正常")
-           else:
-               self.ReadBook_info[achatProgress] = "左边Cloth的资源丢失"
-               self.ReadBook_info["resource"] = False
-               log(ResourceError(errorMessage="左边Cloth的资源丢失"), desc="左边Cloth的资源丢失", snapshot=True)
-
-        if chat_type==4 or chat_type==5 or chat_type==6 or chat_type==9 or chat_type==10:
+            log(ResourceError(errorMessage="{0}背景未被渲染".format(achatProgress)), desc="{0}背景未被渲染".format(achatProgress),
+                snapshot=True)
+        if chat_type == 4 or chat_type == 5 or chat_type == 6 or chat_type == 9 or chat_type == 10:
+            print("检测角色换装资源")
             try:
                 list = self.poco("Viewport").offspring("Cloth").wait(2)
-                for key,vlus in enumerate(list):
+                for key, vlus in enumerate(list):
                     if vlus.attr("texture"):
-                        print("第{0}个肤色图片资源为：{1}".format(key,vlus.attr("texture")))
+                        print("第{0}个肤色图片资源为：{1}".format(key, vlus.attr("texture")))
                     else:
                         print("角色装扮图片资源异常")
                         self.ReadBook_info[achatProgress] = "角色装扮图片资源异常"
                         self.ReadBook_info["resource"] = False
-                        log(ResourceError(errorMessage="{0}第{1}角色装扮图片资源异常".format(achatProgress,key)),desc="{0}第{1}角色装扮图片资源异常".format(achatProgress,key), snapshot=True)
+                        log(ResourceError(errorMessage="{0}第{1}角色装扮图片资源异常".format(achatProgress, key)),
+                            desc="{0}第{1}角色装扮图片资源异常".format(achatProgress, key), snapshot=True)
             except ResourceError as e:
-                log(e,desc="未找到Cloth元素")
+                log(e, desc="未找到Cloth元素")
+        elif pos_id == 2:
+            try:
+                NormalSayRoleLeft_bool = self.poco("NormalSayRoleLeft").offspring("Cloth").attr("SpriteRenderer")
+                if NormalSayRoleLeft_bool == True:
+                    print("左角色Cloth正常")
+                else:
+                    self.ReadBook_info[achatProgress] = "左边Cloth的资源丢失"
+                    self.ReadBook_info["resource"] = False
+                    log(ResourceError(errorMessage="左边Cloth的资源丢失"), desc="左边Cloth的资源丢失", snapshot=True)
+            except:
+                self.ReadBook_info[achatProgress] = "左边Cloth的资源丢失"
+                self.ReadBook_info["resource"] = False
+                log(ResourceError(errorMessage="左边Cloth的资源丢失"), desc="左边Cloth的资源丢失", snapshot=True)
 
+        elif pos_id == 1:
+            if self.poco("NormalSayRoleRight").offspring("Body").wait(0.2).exists():
+                try:
+                    NormalSayRoleRight = self.poco("NormalSayRoleRight").offspring("Cloth").wait(2).attr(
+                        "SpriteRenderer")
+                    if NormalSayRoleRight:
+                        print("右1角色Cloth资源正常")
+                    else:
+                        self.ReadBook_info[achatProgress] = "右1角色Cloth资源正常"
+                        self.ReadBook_info["resource"] = False
+                        log(ResourceError(errorMessage="右1角色Cloth资源丢失"), desc="右1角色Cloth资源丢失",
+                            snapshot=True)
+                except:
+                    self.ReadBook_info[achatProgress] = "右1角色Cloth资源丢失"
+                    self.ReadBook_info["resource"] = False
+                    log(ResourceError(errorMessage="右1角色Cloth资源丢失"), desc="右1角色Cloth资源丢失",
+                        snapshot=True)
+
+            if self.poco("NormalSayRoleRight2").offspring("Body").wait(0.2).exists():
+                try:
+                    NormalSayRoleRight2 = self.poco("NormalSayRoleRight2").offspring("Cloth").wait(2).attr(
+                        "SpriteRenderer")
+                    if NormalSayRoleRight2:
+                        print("右1角色Cloth资源正常")
+                    else:
+                        self.ReadBook_info[achatProgress] = "右2角色Cloth资源正常"
+                        self.ReadBook_info["resource"] = False
+                        log(ResourceError(errorMessage="右2角色Cloth资源丢失"), desc="右2角色Cloth资源丢失",
+                            snapshot=True)
+                except:
+                    self.ReadBook_info[achatProgress] = "右2角色Cloth资源丢失"
+                    self.ReadBook_info["resource"] = False
+                    log(ResourceError(errorMessage="右2角色Cloth资源丢失"), desc="右2角色Cloth资源丢失",
+                        snapshot=True)
 
     def chat_typeconf(self, chat_id, select_id):
         """选项判断"""
@@ -153,7 +181,7 @@ class BookRead(FindObject):
             description = MyData.chat_type_dir[chat_id][0]
             print("description", description)
             mylog.info("description")
-            print("chat_id",chat_id)
+            print("chat_id", chat_id)
             for val in range(1, len(MyData.chat_type_dir[chat_id])):
                 clickname = MyData.chat_type_dir[chat_id][val]
                 if type(clickname) == int:
@@ -162,8 +190,8 @@ class BookRead(FindObject):
                     self.findClick_try(clickname, clickname, description=description, waitTime=2, sleeptime=2)
         if select_id == 0:
             touch(self._POS)
+            sleep(0.1)
             print("普通点击")
-            sleep(0.2)
         else:
             if self.poco("UIChapterSelectList").child("Item").exists():  # "UISelectList")老版本
                 Item0 = self.poco("UIChapterSelectList").child("Item")[0]
@@ -186,7 +214,7 @@ class BookRead(FindObject):
                 if self.ReadBook_info["卡顿次数"] > 20:
                     print("卡顿或异常次数较多", self.ReadBook_info["卡顿次数"])
                     mylog.error("异常次数过多或检查启用新存档是否失败")
-                    log(Exception("异常次数过多或检查启用新存档是否失败"),snapshot=True)
+                    log(Exception("异常次数过多或检查启用新存档是否失败"), snapshot=True)
                     raise Exception
                     return False
         else:
@@ -217,15 +245,3 @@ class BookRead(FindObject):
             self.ReadBook_info["阅读弹框"] = self.Popuplist
             self.ReadBook_info["阅读情况"] = "完成阅读"
             return True
-    # def roleDressJudge(self):
-    #     if self.find_try("UIOldSetName", description="老的角色名称设置", waitTime=0.1, tryTime=1):  # "UISetName"
-    #         self.poco("InputField").click()
-    #         text("RoleName")
-    #         self.poco("ConfirmBtn").click(sleep_interval=0.2)
-    #         self.poco("ConfirmBtn").click()
-    #         # poco("UIQuickPayFrame")快速购买
-# BookRead1 = BookRead()
-# MyAnalysis1=MyAnalysis()
-# BookRead1.bookRead_traversal()
-# print(BookNewDetail1.ReadBook_info)
-# BookNewDetail1.bookChoose("Weekly",index=0)

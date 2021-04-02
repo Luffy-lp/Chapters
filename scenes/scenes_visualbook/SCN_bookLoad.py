@@ -9,7 +9,7 @@ class BookLoad(FindObject):
 
     def bookLoad(self,bookid=None):
         """书籍加载"""
-        if self.find_try("DefaultBg", description="书籍加载界面", waitTime=3, tryTime=3):
+        if self.find_try("DefaultBg", description="书籍加载界面", waitTime=2, tryTime=2):
             startime = time.time()
             while self.poco("DefaultBg").wait(3).exists():
                 loadtime = time.time() - startime
@@ -18,7 +18,7 @@ class BookLoad(FindObject):
                 else:
                     MyData.UserData_dir["bookDetailInfo"]["BookID"]=bookid
                     MyData.download_bookresource(bookid)
-                sleep(3)
+                sleep(2)
                 if self.find_try("Discover",description="是否返回大厅",waitTime=1):
                     mylog.error("加载书籍异常")
                     log(Exception("加载书籍异常，自动返回到大厅"),snapshot=True)

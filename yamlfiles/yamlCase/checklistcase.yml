@@ -112,5 +112,5 @@ booktraversal:
     reportname: "视觉小说遍历"
     step:
         - ${pageTurn(Bottom,0)}
-        - ${test_booktraversal(10099020)}
+        - ${test_booktraversal(41652001)}
         - ${test_booktraversal(10099021)}

@@ -262,15 +262,3 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# MyData.set_yaml("100223",False)
-# print(MyData.bookresult_dir)
-# if "1002213" in MyData.bookresult_dir:
-#     print("ddddddddddddddd")
-# if 100010 in MyData.bookresult_dir:
-#     print("ddddddddddddddddd")
-# MyData.read_story_cfg_chapter("10019","10019002")
-# print(MyData.popup_dir)  # 弹框配置表
-# date=MyData.yaml_bookinfo()
-# print(date)
-MyData.getreadprogress("10099")
-# print("ling", MyData.Bookshelf__dir["Weekly Update"])

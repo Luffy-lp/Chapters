@@ -25,7 +25,7 @@ class APiClass():
                 self._response = requests.post(url=url, headers=headers, data=body, timeout=10)
 
             except:
-                traceback.print_exc()
+                # traceback.print_exc()
                 print("拉取{0}接口失败，重试".format(name))
                 sleep(1)
             else:
