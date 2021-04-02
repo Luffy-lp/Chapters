@@ -272,5 +272,5 @@ MyData = UserData()
 # print(MyData.popup_dir)  # 弹框配置表
 # date=MyData.yaml_bookinfo()
 # print(date)
-# MyData.getreadprogress("10042")
+MyData.getreadprogress("10099")
 # print("ling", MyData.Bookshelf__dir["Weekly Update"])

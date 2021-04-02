@@ -24,17 +24,17 @@ class BookRead(FindObject):
     def __init__(self):
         FindObject.__init__(self)
         self.myShop = Shop()
-        self._POS = COM_utilities.PosTurn([0.5 , 0.65])
+        self._POS = COM_utilities.PosTurn([0.5, 0.6])
 
     def bookRead(self, bookid=None):
         """视觉小说阅读"""
         self.isstopRead = False
         self.Popuplist = []  # 清空之前的弹框列表
         self.ReadBook_info["卡顿次数"] = 0
-        self.getReadBook_info(bookid)
         if self.poco("UIDialogue").wait(5).exists():
-            if self.ReadBook_info["chatProgress"] == 10001:
-                self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=5, sleeptime=3)
+            self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2, sleeptime=3)
+            # if self.ReadBook_info["chatProgress"] == 10001:
+            self.getReadBook_info(bookid)
             clock()
             sleep(1)
             # touch(self._POS)
@@ -92,8 +92,7 @@ class BookRead(FindObject):
         chat_type= option_info["chat_type"]
         if self.poco("SceneBG").wait(2).exists():
             try:
-                mybool=self.poco("SceneBG").wait(2).attr("SpriteRenderer")
-                if mybool:
+                if self.poco("SceneBG").wait(2).attr("SpriteRenderer"):
                     print("背景正常")
                 else:
                     self.ReadBook_info[achatProgress] = "背景的SpriteRenderer为flase"
@@ -107,20 +106,31 @@ class BookRead(FindObject):
             self.ReadBook_info[achatProgress] = "背景的SpriteRenderer未被渲染"
             self.ReadBook_info["resource"] = False
             log(ResourceError(errorMessage="{0}背景未被渲染".format(achatProgress)), desc="{0}背景未被渲染".format(achatProgress), snapshot=True)
-
-        if self.poco("RoleSay").offspring("Body").wait(1).exists():
-            if self.poco("RoleSay").offspring("Cloth").wait(2).exists():
-                if self.poco("RoleSay").offspring("Cloth").wait(2).attr("SpriteRenderer"):
-                    print("角色Cloth正常")
+        if pos_id==1:
+            if self.poco("NormalSayRoleRight").offspring("Body").exists():
+                if self.poco("NormalSayRoleRight").offspring("Cloth").wait(2).attr("SpriteRenderer"):
+                    print("右1角色Cloth资源正常")
                 else:
-                    self.ReadBook_info[achatProgress]="Cloth的SpriteRenderer丢失"
+                    self.ReadBook_info[achatProgress] = "Cloth的SpriteRenderer丢失"
                     self.ReadBook_info["resource"] = False
-                    log(ResourceError(errorMessage="Cloth的SpriteRenderer丢失"), desc="Cloth的SpriteRenderer丢失", snapshot=True)
-            else:
-                print("角色Cloth未被渲染")
-                self.ReadBook_info[achatProgress] = "角色Cloth未被渲染"
-                self.ReadBook_info["resource"] = False
-                log(ResourceError(errorMessage="{0}对应body的未被渲染".format(achatProgress)), desc="{0}对应body的未被渲染".format(achatProgress), snapshot=True)
+                    log(ResourceError(errorMessage="Cloth的SpriteRenderer丢失"), desc="Cloth的SpriteRenderer丢失",
+                        snapshot=True)
+
+            if self.poco("NormalSayRoleRight2").offspring("Body").exists():
+                if self.poco("NormalSayRoleRight2").offspring("Cloth").wait(2).attr("SpriteRenderer"):
+                    print("右2角色Cloth资源正常")
+                else:
+                    self.ReadBook_info[achatProgress] = "右1角色Cloth资源正常"
+                    self.ReadBook_info["resource"] = False
+                    log(ResourceError(errorMessage="右1角色Cloth资源正常"), desc="右1角色Cloth资源正常",
+                        snapshot=True)
+        if pos_id==2:
+           if self.poco("NormalSayRoleLeft").offspring("Cloth").wait(2).attr("SpriteRenderer"):
+               print("左角色Cloth正常")
+           else:
+               self.ReadBook_info[achatProgress] = "左边Cloth的资源丢失"
+               self.ReadBook_info["resource"] = False
+               log(ResourceError(errorMessage="左边Cloth的资源丢失"), desc="左边Cloth的资源丢失", snapshot=True)
 
         if chat_type==4 or chat_type==5 or chat_type==6 or chat_type==9 or chat_type==10:
             try:
@@ -152,6 +162,7 @@ class BookRead(FindObject):
                     self.findClick_try(clickname, clickname, description=description, waitTime=2, sleeptime=2)
         if select_id == 0:
             touch(self._POS)
+            print("普通点击")
             sleep(0.2)
         else:
             if self.poco("UIChapterSelectList").child("Item").exists():  # "UISelectList")老版本
