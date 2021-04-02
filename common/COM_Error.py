@@ -13,8 +13,6 @@ class ResourceError(MYError):
     """
     书籍资源类异常
     """
-    def __init__(self):
-        ResourceError.__init__(self)
     def __init__(self,errorMessage,bookid=None,chapterProgress=None,chatProgress=None,type=None):
         self.errorMessage = errorMessage
         self.booid=bookid
@@ -22,7 +20,7 @@ class ResourceError(MYError):
         self.chatProgress=chatProgress
         self.type=type
     def __str__(self):
-      return f"书籍资源异常"
+      return f"书籍资源异常:{0}".format(self.errorMessage)
 # try:
 #     if 1 < 4:
         # raise ResourceError("ddddd", "11111", "10003", "10003002", "10dfasf")

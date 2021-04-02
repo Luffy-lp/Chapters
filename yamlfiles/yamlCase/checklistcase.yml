@@ -21,7 +21,7 @@
 #    step:
 #        - ${test_startgame()} #启动游戏
 #        - ${test_GameLoaded(1)} #游戏加载处理
-#        - ${test_newUserGuide()} #游戏新手引导
+##        - ${test_newUserGuide()} #游戏新手引导
 #        - ${test_discoverPopup()} #大厅弹框
 #        - ${pageTurn(Bottom,4)} #底部切换到个人信息
 #        - ${test_signin()} #用户登录
@@ -112,5 +112,9 @@ booktraversal:
     reportname: "视觉小说遍历"
     step:
         - ${pageTurn(Bottom,0)}
-        - ${test_booktraversal(41652001)}
-        - ${test_booktraversal(10099021)}
+        - ${test_booktraversal(10071003)}
+        - ${test_booktraversal(10071004)}
+        - ${test_booktraversal(10071005)}
+#        - ${test_booktraversal(10071006)}
+#        - ${test_booktraversal(10071007)}
+#        - ${test_booktraversal(10071008)}

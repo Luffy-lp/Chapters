@@ -43,7 +43,7 @@ class Run(MyAnalysis):
                 devlist = connectfile.readlines()
                 print("连接的设备",devlist[1])
                 list=devlist[1].split("	device")
-                MyData.EnvData_dir["ADBdevice"]=list[0]
+                # MyData.EnvData_dir["ADBdevice"]=list[0]
                 # for i in range(len(list)):
                 #     if list[i].find('\tdevice') != -1:
                 #         temp = list[i].split('\t')

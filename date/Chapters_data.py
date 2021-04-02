@@ -143,8 +143,9 @@ class UserData(APiClass):
         self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
         self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
         self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
-        if self.UserData_dir["uuid"] is None:
-            self.UserData_dir["uuid"] = self.registerApi5(channel_id, device_id, device_platform)["uuid"]
+        if not self.UserData_dir["uuid"]:
+            uuid=self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
+            self.UserData_dir["uuid"] = uuid
         print("用户ID：", self.UserData_dir["uuid"])
 
     def getbookData(self, language="en-US"):

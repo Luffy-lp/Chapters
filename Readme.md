@@ -21,5 +21,7 @@ version1.6
 
 常见问题：
 1.一直提示still waiting for uiautomation ready;插件异常，卸载移动设备上的pocoservice和Yosemite。
-2.error: cannot connect to daemon;无法连接到adb，重启模拟器或重新开始手机的USB调试认证，或adb设备ID填写错误。
+2.error: cannot connect to daemon;无法连接到adb第一种情况，adb设备ID填写错误，填写正确即可。
+3.error: cannot connect to daemon;无法连接到adb第二种情况，USB调试认证未开启，开启即可。
+4.error: cannot connect to daemon;无法连接到adb第三种情况，频繁连接导致拒绝，尝试重启模拟器。
 3.conf中用户ID未填写正确会导致无法阅读

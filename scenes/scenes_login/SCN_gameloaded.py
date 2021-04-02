@@ -18,7 +18,7 @@ class GameLoaded(FindObject):
 
     def mainprocess(self, login=1):
         self.gameloading()
-        self.Popup_login(login)
+        # self.Popup_login(login)
         return True
 
     def gameloading(self,login=1):  # 游戏是否加载完成判断

@@ -65,6 +65,13 @@ path_CONF_DIR = os.path.join(path_BASE_DIR, "conf")
 # 错误截图存放的路径
 path_ERROR_IMAGE = os.path.join(path_BASE_DIR, "result/error_images")
 
+# 阅读结果存放
+path_BOOKREAD_ERROR = os.path.join(path_BASE_DIR, "result/bookresult")
+
+# 阅读截图
+path_BOOKREAD_ERROR_IMAGE = os.path.join(path_BASE_DIR, "result/bookresult/IMAGE")
+
+
 
 file=os.getcwd()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -76,6 +83,9 @@ mkdir(path_LOG_DIR)#log日志
 mkdir(path_resource)#资源路径
 mkdir(path_RESOURCE_IMAGE)#图片资源路径
 mkdir(path_RES_DIR)#测试报告录屏的目录路径
+mkdir(path_BOOKREAD_ERROR)
+mkdir(path_BOOKREAD_ERROR_IMAGE)
+
 
 
 

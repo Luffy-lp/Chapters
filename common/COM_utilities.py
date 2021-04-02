@@ -40,21 +40,14 @@ def mysnapshot(loc_desc,IMG_parameter,quality=None,max_size=None):
 
 
 
-def myscreenshot(loc_desc):
+def myscreenshot(file_path,loc_desc):
     # date_decs = time.strftime("%Y-%m-%d_%H_%M_%S")
-    filename = loc_desc + ".png"
-    file_path = os.path.join(path_RESOURCE_IMAGE, filename)
+    filename = str(loc_desc) + ".png"
+    file_path = os.path.join(file_path, filename)
     try:
-        # # 获取当前时间，并转换为指定格式的字符串
-        # date_decs = time.strftime("%Y-%m-%d_%H_%M_%S")
-        # filename = date_decs + loc_desc + ".png"
-        # print(filename)
-        # file_path = os.path.join("D://ERROR_IMAGE/", filename)
-        print(file_path)
         snapshot(filename=file_path, msg=loc_desc)
     except Exception as e:
         print(e)
-        raise e
 
 def screenshot(loc_desc):
     date_decs = time.strftime("%Y-%m-%d_%H_%M_%S")
