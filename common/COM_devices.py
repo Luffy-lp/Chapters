@@ -1,3 +1,5 @@
+import string
+
 from airtest.cli.parser import cli_setup
 from airtest.core.api import *
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
@@ -8,24 +10,61 @@ from common.my_log import mylog
 
 
 class CommonDevices():
+
     def __init__(self):
         if G.DEVICE == None:
+            self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
             if not cli_setup():
-                conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
-                    "ADBdevice"]
-                method = MyData.EnvData_dir["method"]
-                try:
-                    if "127" in  MyData.EnvData_dir["ADBdevice"]:
-                        method= MyData.EnvData_dir["simulator"]
-                    auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
-                    if MyData.DeviceData_dir["androidpoco"] is None:
-                        MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
-                        mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                        print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                except:
-                    pass
-                    # MyData.DeviceData_dir["ADBdevice"]
-                print("DEVIEC:", G.DEVICE)
+                # i=5
+                # while i>=0:
+                #     i-=1
+                    self.connect_devices()
+                    print("DEVIEC:", G.DEVICE)
+    def connect_devices(self):
+        conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
+            "ADBdevice"]
+        method = MyData.EnvData_dir["method"]
+        try:
+            if "127" in MyData.EnvData_dir["ADBdevice"]:
+                method = MyData.EnvData_dir["simulator"]
+            auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method, ], project_root=path_BASE_DIR)
+        except:
+            self.adb_dispose()
+            conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + \
+                   MyData.EnvData_dir[
+                       "ADBdevice"]
+            print("conf",conf)
+            method = MyData.EnvData_dir["method"]
+            auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method, ], project_root=path_BASE_DIR)
+            if MyData.DeviceData_dir["androidpoco"] is None:
+                MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
+                mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+                print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+            return True
+    def adb_dispose(self):
+        """初始化"""
+        i = 10
+        devlist=None
+        while i>=0:
+            i=i-1
+            try:
+                # print(os.open(self.adbpath + " devices"))
+                print(self.adbpath)
+                connectfile = os.popen(self.adbpath + ' devices')
+                devlist = connectfile.readlines()
+                print(len(devlist))
+                print("devlist",devlist)
+                for i in range(1,len(devlist)):
+                    if "device" in devlist[i]:
+                        print("连接的设备",devlist[i])
+                        list = devlist[i].split("	device")
+                        MyData.EnvData_dir["ADBdevice"] = list[0]
+                        print("ADBdevice", MyData.EnvData_dir["ADBdevice"])
+                        return True
+            except:
+                sleep(8)
+                print("查询设备信息异常")
+
     def getdevlist(self):
         devlist = []
         connectfile = os.popen('adb devices')
@@ -60,4 +99,4 @@ class CommonDevices():
                 print(f'设备{i + 1} SN: {connectinfolist[i]}')
             return True
 # CommonDevices1=CommonDevices()
-# CommonDevices1.getdevlist()
+# CommonDevices1.adb_dispose()

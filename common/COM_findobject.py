@@ -390,6 +390,7 @@ class FindObject(CommonDevices):
             except:
                 print("未成功点击按钮")
                 return False
-# FindObject1=FindObject()
+# print(aa)
+
 # FindObject1.android_tryfind("")
 # FindObject1.notchfit__Click_try("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)

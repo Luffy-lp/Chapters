@@ -1,4 +1,8 @@
 """步骤方法"""
+# from poco.drivers.osx.sdk.OSXUI import PocoSDKOSX
+# from poco.drivers.android.uiautomation import AndroidUiautomationPoco
+from poco.drivers.std import StdPocoAgent, StdPoco
+from step.test_SidePanel import *
 from step.test_login_step import *
 from step.test_common_step import *
 from step.test_UGC_step import *
@@ -17,6 +21,7 @@ from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
 
+
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
     file_stream_path = []
@@ -33,37 +38,13 @@ class Run(MyAnalysis):
 
     def initialize(self):
         """初始化"""
-        i = 10
-        while i>=0:
-            i=i-1
-            try:
-                # print(os.open(self.adbpath + " devices"))
-                print(self.adbpath)
-                connectfile = os.popen(self.adbpath + ' devices')
-                devlist = connectfile.readlines()
-                print("连接的设备",devlist[1])
-                list=devlist[1].split("	device")
-                # MyData.EnvData_dir["ADBdevice"]=list[0]
-                # for i in range(len(list)):
-                #     if list[i].find('\tdevice') != -1:
-                #         temp = list[i].split('\t')
-                #         devlist.append(temp[0])
-                # print("dddddd",devlist)
-            except:
-                sleep(8)
-                print("查询设备信息异常")
-            else:
-                print("adb devices正常")
-                OK = False
-                break
         # try:
         #     print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
         #     print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
         #     sleep(10)
         # except:
         #     pass
-        self.clear()
-        # CommonDevices()
+        CommonDevices()
 
     def get_eval_value(self, args, func_name):
 
@@ -176,27 +157,9 @@ class Run(MyAnalysis):
         else:
             mylog.info("----------正在进行异常重启------")
             test_startgame()
-            test_GameLoaded(1)
+            test_GameLoaded()
             test_discoverPopup()
         mylog.info("--------完成异常重启------")
-
-    def clear(self):
-        """清空之前的报告和文件"""
-        fileNamelist = [path_LOG_DIR, path_REPORT_DIR, path_RES_DIR]
-        for fileName in fileNamelist:
-            filelist = os.listdir(fileName)
-            for f in filelist:
-                filepath = os.path.join(fileName, f)
-                if os.path.isfile(filepath):
-                    os.remove(filepath)
-                # elif os.path.isdir(filepath):
-                # shutil.rmtree(filepath, True)
-        path = os.path.join(path_LOG_MY, "logging.log")
-        with open(path, 'w') as f1:
-            f1.seek(0)
-            f1.truncate()
-        mylog.info("完成文件清空")
-        print("完成文件清空")
 
     def runing(self):
         for k, v in self.Runlist_dir.items():
@@ -242,4 +205,5 @@ if __name__ == '__main__':
     # myRun.pull_errorLog()
     # myRun.writelogs()
     # myRun.get_fileist()
+
     myRun.togetherReport()

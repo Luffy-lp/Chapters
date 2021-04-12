@@ -1,4 +1,10 @@
 from time import sleep
+
+from poco.agent import PocoAgent
+from poco.drivers.std import StdPocoAgent
+from poco.drivers.std.test.simple import TestStandardFunction
+from poco.utils.simplerpc.simplerpc import RpcAgent
+
 from common import COM_utilities
 from common.COM_findobject import FindObject
 from scenes.scenes_login.SCN_newuser import NewUserGuide
@@ -10,24 +16,27 @@ from airtest.core.api import *
 class GameLoaded(FindObject):
     def __init__(self):
         self.GameLoaded_info = {}
-        self.GameLoaded_info["loadtime"]=None
+        self.GameLoaded_info["loadtime"] = None
         self.GameLoaded_info["ErrorTxt"] = []
         COM_utilities.clock()  # 插入计时器
         self.mysleep(10)
         FindObject.__init__(self)
 
-    def mainprocess(self, login=1):
+    def mainprocess(self):
         self.gameloading()
         # self.Popup_login(login)
         return True
 
-    def gameloading(self,login=1):  # 游戏是否加载完成判断
+    def gameloading(self):  # 游戏是否加载完成判断
+
+        # # self.call('GetSDKVersion')
+        # print("aaaaaaaaa",aa)
         while self.poco("Slider").wait(1).exists():
             self.Popo_Errorinfo()
             # self.Popup_login(login=1)
             if float(COM_utilities.clock("stop")) > 360:
                 print("游戏加载失败。。。")
-                log(Exception("游戏加载失败。。。"),snapshot=True)
+                log(Exception("游戏加载失败。。。"), snapshot=True)
                 raise Exception
         if self.GameLoaded_info["loadtime"] is None:
             self.GameLoaded_info["loadtime"] = float(COM_utilities.clock("stop")) - 2
@@ -60,5 +69,11 @@ class GameLoaded(FindObject):
             self.GameLoaded_info["ErrorTxt"].append(TXT)
             self.click_object("CenterBtn", description="Try again", waitTime=5)
             mylog.info("异常弹框，{0}".format(TXT))
-# GameLoaded1=GameLoaded()
-# GameLoaded1.Popo_Errorinfo()
+
+
+# GameLoaded1 = GameLoaded()
+# GameLoaded1.gameloading()
+# StdPocoAgent1 = StdPocoAgent()
+# aa = StdPocoAgent1.get_sdk_version()
+# print(aa)
+# aa=self.call('GetSDKVersion')

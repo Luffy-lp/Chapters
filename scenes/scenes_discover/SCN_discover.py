@@ -1,4 +1,5 @@
 from airtest.core.api import log
+
 from common import COM_utilities
 from date.Chapters_data import MyData
 from common.COM_findobject import FindObject
@@ -7,7 +8,6 @@ class Discover(FindObject):
     discoverPopup_info={}
     def __init__(self):
         FindObject.__init__(self)
-
     def discoverPopup(self):  # 积分弹框
         """大厅弹框检查"""
         self.Popuplist=[]

@@ -100,7 +100,8 @@ class BookRead(FindObject):
                 self.ReadBook_info["resource"] = False
                 dec = achatProgress + "SceneBG"
                 myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-                log(ResourceError(errorMessage="SceneBG的SpriteRenderer丢失"), desc="SceneBG的SpriteRenderer丢失", snapshot=True)
+                log(ResourceError(errorMessage="SceneBG的SpriteRenderer丢失"), desc="SceneBG的SpriteRenderer丢失",
+                    snapshot=True)
         else:
             self.ReadBook_info[achatProgress] = "SceneBG的enable为flase"
             self.ReadBook_info["resource"] = False
@@ -180,7 +181,7 @@ class BookRead(FindObject):
                     NormalSayRoleRight2 = self.poco("NormalSayRoleRight2").offspring("Cloth").wait(2).attr(
                         "SpriteRenderer")
                     if NormalSayRoleRight2:
-                        print("右2角色Cloth资源正常")
+                        print("NormalSayRoleRight2资源正常")
                     else:
                         self.ReadBook_info[achatProgress] = "NormalSayRoleRight->SpriteRenderer为flase"
                         self.ReadBook_info["resource"] = False
@@ -211,7 +212,7 @@ class BookRead(FindObject):
                     sleep(clickname)
                 else:
                     self.findClick_try(clickname, clickname, description=description, waitTime=2, sleeptime=2)
-        if select_id == 0:
+        elif select_id == 0:
             touch(self._POS)
             print("普通点击")
         else:
@@ -228,7 +229,7 @@ class BookRead(FindObject):
         self.ReadBook_info["chatProgress"] = readprogress[self.ReadBook_info["BookID"]]["chatProgress"]
         print("点击后进度：", self.ReadBook_info["chatProgress"])
         if achatProgress == str(self.ReadBook_info["chatProgress"]):
-            sleep(2)
+            sleep(0.2)
             readprogress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取当前进度
             self.ReadBook_info["chatProgress"] = readprogress[self.ReadBook_info["BookID"]]["chatProgress"]
             self._etime = self._etime + 1

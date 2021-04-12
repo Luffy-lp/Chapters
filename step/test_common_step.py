@@ -31,9 +31,9 @@ def pageTurn(type="Bottom",index=None,index1=None):
     elif type == "POS":
         PageTurn1.click_pos(index,index1)
     sleep(2)
-def test_GameLoaded(login):
+def test_GameLoaded():
     myGameLoaded = GameLoaded()
-    actualValue = myGameLoaded.mainprocess(login=login)
+    actualValue = myGameLoaded.mainprocess()
     if float(myGameLoaded.GameLoaded_info["loadtime"])>50:
         log(Exception("load游戏时间大于30s！加载时间为：{0}".format(myGameLoaded.GameLoaded_info["loadtime"])),snapshot=True)
     assert_equal(actualValue, True, "启动游戏{0}".format(myGameLoaded.GameLoaded_info))
@@ -58,7 +58,7 @@ def test_LanguageChoose(language):
     myLanguagePanel.click_language()  # 进入选择语言界面
     actualValue= myLanguagePanel.chooseLanguage(language)
     if myLanguagePanel.LanguagePanel_info["switch"]:
-        test_GameLoaded(1)
+        test_GameLoaded()
     else:
         myLanguagePanel.click_back()
     assert_equal(actualValue, True, "切换语言{0}".format(myLanguagePanel.LanguagePanel_info))

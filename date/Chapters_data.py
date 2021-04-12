@@ -38,6 +38,7 @@ class UserData(APiClass):
         print("导入用户数据成功")
 
     def getdata(self):
+        self.clear()
         self.yamldata_conf()
         # self.stroy_data()
         self.yaml_stroy()
@@ -54,7 +55,39 @@ class UserData(APiClass):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
         return cls._instance
-
+    def yamldata_conf(self):
+        # 读取yamlconf数据
+        data = None
+        loginInfo = {}
+        path = os.path.join(path_YAML_FILES, "conf.yml")
+        with open(path, encoding="utf-8") as f:
+            data = yaml.load(f.read(), Loader=yaml.Loader)
+        uuid = data["UserData"]["uuid"]
+        channel_id = data["UserData"]["channel_id"]
+        device_platform = data["UserData"]["device_platform"]
+        device_id = data["UserData"]["device_id"]
+        self.UserData_dir["device_id"] = device_id
+        self.UserData_dir["uuid"] = uuid
+        loginInfo["loginGuide"] = data["UserData"]["loginGuide"]
+        loginInfo["loginemail"] = data["UserData"]["loginemail"]
+        loginInfo["loginpassword"] = data["UserData"]["loginpassword"]
+        self.UserData_dir["loginInfo"] = loginInfo
+        self.UserData_dir["usertype"] = data["UserData"]["usertype"]
+        self.EnvData_dir["packagepath"] = os.path.join(path_resource, data["EnvData"]["APKpackage"])
+        self.EnvData_dir["packageName"] = data["EnvData"]["packageName"]
+        self.EnvData_dir["ADBdevice"] = data["EnvData"]["ADBdevice"]
+        self.EnvData_dir["ADBip"] = data["EnvData"]["ADBip"]
+        self.EnvData_dir["device"] = data["EnvData"]["device"]
+        self.EnvData_dir["method"] = data["EnvData"]["method"]
+        self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
+        self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
+        self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
+        self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
+        self.UserPath_dir["Desktoppath"] = data["PathData"]["Desktoppath"]
+        if not self.UserData_dir["uuid"]:
+            uuid=self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
+            self.UserData_dir["uuid"] = uuid
+        print("用户ID：", self.UserData_dir["uuid"])
     def read_yaml(self, filepath):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
@@ -86,7 +119,10 @@ class UserData(APiClass):
         return self.language_dir
 
     def yaml_bookinfo(self):
-        yamlbook_listpath = os.path.join(path_YAML_FILES, "bookread_result.yml")
+        if self.UserData_dir["usertype"]=="bookread":
+            yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
+        else:
+            yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
         self.book_list = self.read_yaml(yamlbook_listpath)
         return self.book_list
 
@@ -97,15 +133,21 @@ class UserData(APiClass):
         return self.newPoP_dir
 
     def yaml_bookread_result(self):
-        file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
+        if self.UserData_dir["usertype"]=="bookread":
+            file_path= os.path.join(self.UserPath_dir["Desktoppath"], "bookread_result.yml")
+        else:
+            file_path = os.path.join(path_YAML_FILES, "bookread_result.yml")
+        # file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
         with open(file_path, encoding='utf-8') as file:
             self.bookresult_dir = yaml.safe_load(file)
         return self.bookresult_dir
 
     def set_yaml(self,chapter,result):
-        file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
-        # mybool=self.bookresult_dir.__contains__(chapter)
-        # self.bookresult_dir= dict(self.bookresult_dir)
+        if self.UserData_dir["usertype"]=="bookread":
+            file_path= os.path.join(Desktoppath, "bookread_result.yml")
+        else:
+            file_path = os.path.join(Desktoppath, "bookread_result.yml")
+        # file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
         if type(self.bookresult_dir)!=dict:
             self.bookresult_dir={}
         self.bookresult_dir[chapter]=result
@@ -115,38 +157,7 @@ class UserData(APiClass):
         print("self.bookresult_dir", self.bookresult_dir)
         return self.bookresult_dir
 
-    def yamldata_conf(self):
-        # 读取yamlconf数据
-        data = None
-        loginInfo = {}
-        path = os.path.join(path_YAML_FILES, "conf.yml")
-        with open(path, encoding="utf-8") as f:
-            data = yaml.load(f.read(), Loader=yaml.Loader)
-        uuid = data["UserData"]["uuid"]
-        channel_id = data["UserData"]["channel_id"]
-        device_platform = data["UserData"]["device_platform"]
-        device_id = data["UserData"]["device_id"]
-        self.UserData_dir["device_id"] = device_id
-        self.UserData_dir["uuid"] = uuid
-        loginInfo["loginGuide"] = data["UserData"]["loginGuide"]
-        loginInfo["loginemail"] = data["UserData"]["loginemail"]
-        loginInfo["loginpassword"] = data["UserData"]["loginpassword"]
-        self.UserData_dir["loginInfo"] = loginInfo
-        self.EnvData_dir["packagepath"] = os.path.join(path_resource, data["EnvData"]["APKpackage"])
-        print("EnvData_dir:", self.EnvData_dir["packagepath"])
-        self.EnvData_dir["packageName"] = data["EnvData"]["packageName"]
-        self.EnvData_dir["ADBdevice"] = data["EnvData"]["ADBdevice"]
-        self.EnvData_dir["ADBip"] = data["EnvData"]["ADBip"]
-        self.EnvData_dir["device"] = data["EnvData"]["device"]
-        self.EnvData_dir["method"] = data["EnvData"]["method"]
-        self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
-        self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
-        self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
-        self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
-        if not self.UserData_dir["uuid"]:
-            uuid=self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
-            self.UserData_dir["uuid"] = uuid
-        print("用户ID：", self.UserData_dir["uuid"])
+
 
     def getbookData(self, language="en-US"):
         """大厅书架信息"""
@@ -185,6 +196,24 @@ class UserData(APiClass):
         # self.readprogressList_dir = readprogress
         return readprogress
 
+    def clear(self):
+        """清空之前的报告和文件"""
+        print("清空文件加")
+        fileNamelist = [path_LOG_DIR, path_REPORT_DIR, path_RES_DIR]
+        for fileName in fileNamelist:
+            filelist = os.listdir(fileName)
+            for f in filelist:
+                filepath = os.path.join(fileName, f)
+                if os.path.isfile(filepath):
+                    os.remove(filepath)
+                # elif os.path.isdir(filepath):
+                # shutil.rmtree(filepath, True)
+        path = os.path.join(path_LOG_MY, "logging.log")
+        with open(path, 'w') as f1:
+            f1.seek(0)
+            f1.truncate()
+        mylog.info("完成文件清空")
+        print("完成文件清空")
 
     def download_bookresource(self, bookid):
         """拉取书籍资源"""

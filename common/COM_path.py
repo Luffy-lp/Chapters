@@ -1,4 +1,23 @@
 import os
+
+import yaml
+Desktoppath=None
+import winreg
+def get_desktop():
+    key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                          r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders',)
+    return winreg.QueryValueEx(key, "Desktop")[0]
+print(get_desktop())
+Desktoppath=get_desktop()
+def yamldata_conf():
+    # 读取yamlconf数据
+    data = None
+    loginInfo = {}
+    path = os.path.join(path_YAML_FILES, "conf.yml")
+    with open(path, encoding="utf-8") as f:
+        data = yaml.load(f.read(), Loader=yaml.Loader)
+    Desktoppath = data["PathData"]["Desktoppath"]
+    print(Desktoppath)
 def mkdir(path):
     # 引入模块
     import os
@@ -41,36 +60,31 @@ path_YAML_FILES = os.path.join(path_BASE_DIR, "yamlfiles")
 # 测试用例的目录路径
 path_CASE_DIR = os.path.join(path_BASE_DIR, "step/testcases")
 
-# 测试结果的目录路径
-path_REPORT_DIR = os.path.join(path_BASE_DIR, "result")
-
-# 测试报告的目录路径
-path_REPORT_DIR = os.path.join(path_BASE_DIR, "result/report")
-
-# 测试报告录屏的目录路径
-path_RES_DIR = os.path.join(path_BASE_DIR, "result/res")
-
-# airtest日志目录的项目路径
-path_LOG_DIR = os.path.join(path_BASE_DIR, "result/log")
-
-# 自定义日志目录的项目路径
-path_LOG_MY = os.path.join(path_BASE_DIR, "result/report/mylog")
-
-# 用例数据的项目路径
-path_DATA_DIR = os.path.join(path_BASE_DIR, "casedatas")
 
 # 配置文件目录的路径
 path_CONF_DIR = os.path.join(path_BASE_DIR, "conf")
 
-# 错误截图存放的路径
-path_ERROR_IMAGE = os.path.join(path_BASE_DIR, "result/error_images")
+# 用例数据的项目路径
+path_DATA_DIR = os.path.join(path_BASE_DIR, "casedatas")
 
-# 阅读结果存放
-path_BOOKREAD_ERROR = os.path.join(path_BASE_DIR, "result/bookresult")
+# 测试结果的目录路径
+# path_REPORT_DIR = os.path.join(path_BASE_DIR, "result")
+path_REPORT_DIR = os.path.join(Desktoppath, "result")
+
+# 测试报告的目录路径
+path_REPORT_DIR = os.path.join(path_REPORT_DIR, "report")
+
+# 测试报告录屏的目录路径
+path_RES_DIR = os.path.join(path_REPORT_DIR, "res")
+
+# airtest日志目录的项目路径
+path_LOG_DIR = os.path.join(path_REPORT_DIR, "log")
+
+# 自定义日志目录的项目路径
+path_LOG_MY = os.path.join(path_REPORT_DIR, "report/mylog")
 
 # 阅读截图
-path_BOOKREAD_ERROR_IMAGE = os.path.join(path_BASE_DIR, "result/bookresult/IMAGE")
-
+path_BOOKREAD_ERROR_IMAGE = os.path.join(path_REPORT_DIR, "IMAGE")
 
 
 file=os.getcwd()
@@ -83,9 +97,6 @@ mkdir(path_LOG_DIR)#log日志
 mkdir(path_resource)#资源路径
 mkdir(path_RESOURCE_IMAGE)#图片资源路径
 mkdir(path_RES_DIR)#测试报告录屏的目录路径
-mkdir(path_BOOKREAD_ERROR)
 mkdir(path_BOOKREAD_ERROR_IMAGE)
-
-
 
 

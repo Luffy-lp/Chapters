@@ -24,6 +24,7 @@
         - ${书籍详情页(UIBookNewDetail, Button)}
         - ${奖励领取(UIClaimReward, BtnGet)}
         - ${领取Daypass奖励(UIDayPassReward, BtnRead)}
+        - ${周礼包(UIWeekCardBuy, close)}
 
 - 1:
     Popupscene: "bookdetail"
