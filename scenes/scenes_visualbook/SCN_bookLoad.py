@@ -1,11 +1,15 @@
 from airtest.core.api import *
+
+from common import COM_utilities
 from common.COM_findobject import FindObject
 from common.my_log import mylog
 from date.Chapters_data import MyData
 class BookLoad(FindObject):
     BookLoad_info={}
+
     def __init__(self):
         FindObject.__init__(self)
+        self._POS = COM_utilities.PosTurn([0.5, 0.6])
 
     def bookLoad(self,bookid=None):
         """书籍加载"""
@@ -24,6 +28,11 @@ class BookLoad(FindObject):
                     log(Exception("加载书籍异常，自动返回到大厅"),snapshot=True)
                     raise Exception("加载书籍异常，自动返回到大厅")
                 print("书籍加载中", loadtime)
+                # if self.find_try("UIBeginAdShow", description="Ad广告"):
+                #     touch(self._POS)
+                #     sleep(15)
+                #     self.findClick_try("Interstitial close button", "Interstitial close button", description="关闭广告",
+                #                        pocotype="Androidpoco", waitTime=3)
                 if loadtime > 360:
                     self.findClick_object("HomeBtn", "HomeBtn", description="加载书籍超时,返回大厅")
                     mylog.error("加载书籍超时")

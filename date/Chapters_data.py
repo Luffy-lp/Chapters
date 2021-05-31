@@ -1,7 +1,12 @@
+from msilib.schema import Environment
+from time import sleep
+
 import yaml
+
 from common.COM_path import *
 from common.my_log import mylog
 from date.Chapters_API import APiClass
+import sqlite3
 
 
 # TODO:书架需要考虑新手手书架情况
@@ -11,6 +16,7 @@ class UserData(APiClass):
     bookread_result = {}
 
     def __init__(self):
+        # self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
         self.DeviceData_dir = {}  # 设备信息配置表
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
@@ -34,6 +40,7 @@ class UserData(APiClass):
         self.bookresult_dir={}
         self.getdata()
         self.downloadbook_sign = {}
+        self.RpcClient=None
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
 
@@ -92,6 +99,17 @@ class UserData(APiClass):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
         return value
+    def read_db(self):
+        aa=os.popen('adb shell mkdir foldername')
+        print(aa)
+        # conn = sqlite3.connect("Thumbs.db")
+        # cursor = conn.cursor()
+        # sql = """pragma table_info(students)"""
+        # cursor.execute(sql)
+        # result = cursor.fetchall()
+        # print(result)
+        # print(type(result))
+        # conn.close()
 
     def yaml_case(self):
         bookdetailpaths = os.path.join(path_YAML_FILES, "yamlCase\\bookdetail.yml")
@@ -157,7 +175,25 @@ class UserData(APiClass):
         print("self.bookresult_dir", self.bookresult_dir)
         return self.bookresult_dir
 
-
+    def read_test(self):
+        """输出errorlog日志转化到log.txt中"""
+        print(path_BASE_DIR)
+        print(self.adbpath)
+        pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + self.errorLogpath
+        connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
+        print(pull)
+        print(connected)
+        with open(self.errorLogpath, "w") as errorLog_file:
+            pass
+        try:
+            print(os.system(self.adbpath + " devices"))
+            sleep(3)
+            print(os.system(connected))
+            sleep(3)
+            print(os.popen(pull))
+            print("完成读取errorlog")
+        except BaseException as e:
+            print("输出errorlog日志转化到log.txt中失败", e)
 
     def getbookData(self, language="en-US"):
         """大厅书架信息"""
@@ -190,6 +226,7 @@ class UserData(APiClass):
         datalist = self.getCommonDataApi(self.UserData_dir["uuid"])  # 调用通用接口0.章节进度，1.对话进度
         try:
             readprogress = datalist["data"]["readprogress"]
+            print(readprogress)
         except:
             raise Exception("请检查存档是否使用新存档，目前仅支持新存档")
         # chapter_id = datalist["data"]["readprogress"][bookid]["chatProgress"]
@@ -292,3 +329,5 @@ class UserData(APiClass):
 
 
 MyData = UserData()
+# MyData.set_yaml("10081004",True)
+# print(MyData.Story_cfg_chapter_dir["10007"])

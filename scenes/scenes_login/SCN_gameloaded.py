@@ -18,6 +18,7 @@ class GameLoaded(FindObject):
         self.GameLoaded_info = {}
         self.GameLoaded_info["loadtime"] = None
         self.GameLoaded_info["ErrorTxt"] = []
+
         COM_utilities.clock()  # 插入计时器
         self.mysleep(10)
         FindObject.__init__(self)
@@ -28,9 +29,6 @@ class GameLoaded(FindObject):
         return True
 
     def gameloading(self):  # 游戏是否加载完成判断
-
-        # # self.call('GetSDKVersion')
-        # print("aaaaaaaaa",aa)
         while self.poco("Slider").wait(1).exists():
             self.Popo_Errorinfo()
             # self.Popup_login(login=1)
@@ -64,11 +62,13 @@ class GameLoaded(FindObject):
         if self.android_tryfind("android:id/button1", description="Google提示"):
             self.android_findClick("android:id/button1", "android:id/button1", description="Google框架提示处理")
             mylog.error("检测到未安装谷歌框架，无法执行相关操作")
-        if self.find_try("Context", description="加载中..."):
-            TXT = self.poco("Context").get_TMPtext()
-            self.GameLoaded_info["ErrorTxt"].append(TXT)
-            self.click_object("CenterBtn", description="Try again", waitTime=5)
-            mylog.info("异常弹框，{0}".format(TXT))
+        if self.find_try("Title", description="发现弹框"):
+            txtinfo=self.poco("Title").get_TMPtext()
+            if txtinfo=="Info":
+                TXT = self.poco("Context").get_TMPtext()
+                self.GameLoaded_info["ErrorTxt"].append(TXT)
+                self.click_object("CenterBtn", description="Try again", waitTime=5)
+                mylog.info("异常弹框，{0}".format(TXT))
 
 
 # GameLoaded1 = GameLoaded()

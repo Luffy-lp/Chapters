@@ -205,5 +205,4 @@ if __name__ == '__main__':
     # myRun.pull_errorLog()
     # myRun.writelogs()
     # myRun.get_fileist()
-
     myRun.togetherReport()

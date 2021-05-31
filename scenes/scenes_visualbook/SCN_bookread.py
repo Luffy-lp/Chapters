@@ -1,4 +1,6 @@
 from airtest.core.api import *
+from poco.drivers.std import StdPocoAgent
+
 from common.COM_findobject import FindObject
 from common import COM_utilities
 from date.Chapters_data import MyData
@@ -25,12 +27,16 @@ class BookRead(FindObject):
         FindObject.__init__(self)
         self.myShop = Shop()
         self._POS = COM_utilities.PosTurn([0.5, 0.6])
+        self.StdPocoAgent1 = StdPocoAgent()
 
     def bookRead(self, bookid=None):
         """视觉小说阅读"""
         self.isstopRead = False
         self.Popuplist = []  # 清空之前的弹框列表
         self.ReadBook_info["卡顿次数"] = 0
+        self.touchtime = 0
+        self.ReadBook_info["resource"] = True
+        self.ReadBook_info["storyoption"] = {}
         if self.poco("UIDialogue").wait(5).exists():
             self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=2, sleeptime=3)
             # if self.ReadBook_info["chatProgress"] == 10001:
@@ -48,12 +54,15 @@ class BookRead(FindObject):
 
     def getReadBook_info(self, BookID):
         """获取当前书籍信息"""
-        readprogress = MyData.getreadprogress(BookID)  # 获取书籍进度
-        print("readprogress", readprogress[BookID])
-        chapterProgress = readprogress[BookID]["chapterProgress"]  # 获取章节进度
-        print("chapterProgress", chapterProgress)
-        chatProgress = readprogress[BookID]["chatProgress"]  # 获取到选项进度
+        # readprogress = MyData.getreadprogress(BookID)  # 获取书籍进度
+        # print("readprogress", readprogress[BookID])
+        # chapterProgress = readprogress[BookID]["chapterProgress"]  # 获取章节进度
+        # print("chapterProgress", chapterProgress)
+        chapterProgress = self.StdPocoAgent1.get_ReadProgress()["Item2"]
+        chatProgress = self.StdPocoAgent1.get_ReadProgress()["Item3"]
+        # chatProgress = readprogress[BookID]["chatProgress"]  # 获取到选项进度
         print("chatProgress", chatProgress)
+        print("chapterProgress", chapterProgress)
         story_cfg_chapter = MyData.read_story_cfg_chapter(BookID, str(chapterProgress))  # 写入章节信息表
         # MyData.read_story_cfg_chapter(BookID, chapterProgress)  # 写入章节信息表
         self.ReadBook_info["chapterProgress"] = chapterProgress
@@ -66,6 +75,7 @@ class BookRead(FindObject):
     def dialogueCourseJudge(self):
         """对话处理"""
         achatProgress = str(self.ReadBook_info["chatProgress"])
+        print("achatProgress", achatProgress)
         # print("MyData.Story_cfg_chapter_dir", MyData.Story_cfg_chapter_dir)
         option_info = MyData.Story_cfg_chapter_dir[achatProgress]  # 选项配置
         chat_type = option_info["chat_type"]  # 当前选项chat_type值
@@ -76,9 +86,9 @@ class BookRead(FindObject):
         print("记录选项进度:", achatProgress)
         self.resource_judgment(option_info, achatProgress)  # 选项资源判断
         self.chat_typeconf(chat_type, select_id)  # 根据情况处理点击
+        self.progressjudge(achatProgress)  # 进度异常判断
         if int(achatProgress) == self.ReadBook_info["chat_num"]:
             self.dialogueEndPOP()  # 阅读结束弹框判断
-        self.progressjudge(achatProgress)  # 进度异常判断
 
     def resource_judgment(self, option_info, achatProgress):
         """选项资源判断"""
@@ -114,6 +124,7 @@ class BookRead(FindObject):
             print("检测角色换装资源")
             try:
                 list = self.poco("Viewport").offspring("Cloth").wait(2)
+                print("list", list)
                 for key, vlus in enumerate(list):
                     if vlus.attr("texture"):
                         print("第{0}个肤色Cloth图片资源为：{1}".format(key, vlus.attr("texture")))
@@ -225,13 +236,15 @@ class BookRead(FindObject):
 
     def progressjudge(self, achatProgress):
         """进度异常判断"""
-        readprogress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取当前进度
-        self.ReadBook_info["chatProgress"] = readprogress[self.ReadBook_info["BookID"]]["chatProgress"]
+        # readprogress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取当前进度
+        self.ReadBook_info["chatProgress"] = self.StdPocoAgent1.get_ReadProgress()["Item3"]
+        # self.ReadBook_info["chatProgress"] = readprogress[self.ReadBook_info["BookID"]]["chatProgress"]
         print("点击后进度：", self.ReadBook_info["chatProgress"])
         if achatProgress == str(self.ReadBook_info["chatProgress"]):
             sleep(0.2)
-            readprogress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取当前进度
-            self.ReadBook_info["chatProgress"] = readprogress[self.ReadBook_info["BookID"]]["chatProgress"]
+            # readprogress = MyData.getreadprogress(self.ReadBook_info["BookID"])  # 获取当前进度
+            # self.ReadBook_info["chatProgress"] = readprogress[self.ReadBook_info["BookID"]]["chatProgress"]
+            self.ReadBook_info["chatProgress"] = self.StdPocoAgent1.get_ReadProgress()["Item3"]  # 获取当前进度
             self._etime = self._etime + 1
             if self._etime >= 2:
                 self._etime = 0

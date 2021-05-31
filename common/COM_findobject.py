@@ -2,8 +2,10 @@
 from time import sleep
 
 from airtest.core.api import *
+from poco.drivers.std import StdPocoAgent
 from poco.exceptions import PocoNoSuchNodeException
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
+
 from common.COM_utilities import clock
 from common.my_log import mylog
 from common.COM_devices import CommonDevices
@@ -25,7 +27,6 @@ class FindObject(CommonDevices):
         "Info": "CenterBtn",
         "IMPORTANT": "CenterBtn"
     }
-
     def __init__(self):
         CommonDevices.__init__(self)
         if MyData.DeviceData_dir["poco"] == None:
@@ -37,6 +38,10 @@ class FindObject(CommonDevices):
                 print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
             mylog.info("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
             print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
+            StdPocoAgent1 = StdPocoAgent()
+            UserID = StdPocoAgent1.get_UserID()
+            MyData.UserData_dir["uuid"]=UserID
+            print("UserID:",UserID)
         self.poco = MyData.DeviceData_dir["poco"]
         self.androidpoco = MyData.DeviceData_dir["androidpoco"]
 
@@ -45,6 +50,8 @@ class FindObject(CommonDevices):
             cls._instance = object.__new__(cls)
             MyData.DeviceData_dir["FindObject"] =cls._instance
         return cls._instance
+    # def mytest(self):
+    #     print("daafdsfdafd")
 
     def find_object(self, findName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """寻找目标"""
@@ -390,7 +397,8 @@ class FindObject(CommonDevices):
             except:
                 print("未成功点击按钮")
                 return False
-# print(aa)
-
-# FindObject1.android_tryfind("")
-# FindObject1.notchfit__Click_try("GuideViewBackBtn", "GuideViewBackBtn", description="点击返回箭头", waitTime=5,sleeptime=2)
+# FindObject1=FindObject()
+# REST1=REST()
+# REST1.mytest()
+# test=FindObject1.get_sdk_version()
+# print("test",test)

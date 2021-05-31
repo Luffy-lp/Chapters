@@ -18,7 +18,11 @@ class CommonDevices():
                 # i=5
                 # while i>=0:
                 #     i-=1
-                    self.connect_devices()
+                self.connect_devices()
+                if MyData.DeviceData_dir["androidpoco"] is None:
+                    MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
+                    mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
+                    print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
                     print("DEVIEC:", G.DEVICE)
     def connect_devices(self):
         conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
@@ -31,15 +35,10 @@ class CommonDevices():
         except:
             self.adb_dispose()
             conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + \
-                   MyData.EnvData_dir[
-                       "ADBdevice"]
+                   MyData.EnvData_dir["ADBdevice"]
             print("conf",conf)
             method = MyData.EnvData_dir["method"]
             auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method, ], project_root=path_BASE_DIR)
-            if MyData.DeviceData_dir["androidpoco"] is None:
-                MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
-                mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
             return True
     def adb_dispose(self):
         """初始化"""
@@ -51,16 +50,16 @@ class CommonDevices():
                 # print(os.open(self.adbpath + " devices"))
                 print(self.adbpath)
                 connectfile = os.popen(self.adbpath + ' devices')
+                print("connectfile:",connectfile)
                 devlist = connectfile.readlines()
-                print(len(devlist))
-                print("devlist",devlist)
+                # print("devlist",devlist)
                 for i in range(1,len(devlist)):
                     if "device" in devlist[i]:
-                        print("连接的设备",devlist[i])
                         list = devlist[i].split("	device")
                         MyData.EnvData_dir["ADBdevice"] = list[0]
                         print("ADBdevice", MyData.EnvData_dir["ADBdevice"])
                         return True
+                raise
             except:
                 sleep(8)
                 print("查询设备信息异常")

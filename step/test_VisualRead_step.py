@@ -90,7 +90,6 @@ def booktraversal(bookchapter):
     Bookfind1 = Bookfind()
     myVisual = BookRead()
     myVisual.ReadBook_info={}
-    print("ReadBook_info:", myVisual.ReadBook_info)
     bookNewDetail = BookNewDetail()
     # bookname = mydit[1]["bookname"]
     # Bookfind1.bookChoose_Search(bookname)
@@ -107,6 +106,9 @@ def booktraversal(bookchapter):
     bookNewDetail.bookNewDetailPOP()
     bookNewDetail.click_close()
     test_discoverPopup_noassert()
+    print("bookchapter:",bookchapter)
+    print("myVisual.ReadBook_info",myVisual.ReadBook_info)
+    print("ReadBook_info:",myVisual.ReadBook_info["resource"])
     MyData.set_yaml(bookchapter, myVisual.ReadBook_info["resource"])
     try:
         assert_equal(True, myVisual.ReadBook_info["resource"],
