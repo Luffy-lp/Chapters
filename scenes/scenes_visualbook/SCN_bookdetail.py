@@ -27,6 +27,8 @@ class BookNewDetail(FindObject):
                     self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
             else:
                 self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
+            # if self.find_try("CenterBtn", description="弹框确认按钮"):
+            #     self.findClick_object("CenterBtn", "CenterBtn", description="弹框确认按钮")
     # def bookChoose(self):
     def bookChoose_Shelf(self,bookShelf,index):
         """找到书架招数WeekView"""

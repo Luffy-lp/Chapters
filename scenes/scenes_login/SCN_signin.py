@@ -1,3 +1,5 @@
+from poco.drivers.std import StdPocoAgent
+
 from date.Chapters_data import MyData
 from common.COM_findobject import FindObject
 from common.COM_utilities import *
@@ -29,6 +31,10 @@ class SignIn(FindObject):
                 self.SignIn_info["用户登陆状态"] = "尝试登陆失败"
                 raise Exception("检测是否登陆成功失败")
         self.SignIn_info["用户登陆状态"] = "完成登陆"
+        StdPocoAgent1 = StdPocoAgent()
+        UserID = StdPocoAgent1.get_UserID()
+        MyData.UserData_dir["uuid"] = UserID
+        print("UserID:", UserID)
         return True
 
     def loginGuide(self):

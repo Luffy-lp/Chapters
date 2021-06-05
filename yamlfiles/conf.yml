@@ -8,7 +8,7 @@ UserData:
   loginpassword: "yo5161381" #绑定密码
   usertype: "bookread" #绑定密码
 EnvData:
-  APKpackage: "Chapters_620_261_60ab2d50df0d1.apk" #安装包名称
+  APKpackage: "Chapters_620_278_60b4c4073c151.apk" #安装包名称
   packageName: "com.mars.avgchapters" #apk包名称
   ADBip: "127.0.0.1:5037" #连接adb运行地址
   ADBdevice: "3HX7N16C16028513" #******连接ADB设备ID需要修改正确的配置***********R52M90DYELT，KPS4C19122001081

@@ -27,6 +27,7 @@ class CommonDevices():
     def connect_devices(self):
         conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
             "ADBdevice"]
+        print("尝试连接配置的adb",conf)
         method = MyData.EnvData_dir["method"]
         try:
             if "127" in MyData.EnvData_dir["ADBdevice"]:
@@ -50,14 +51,13 @@ class CommonDevices():
                 # print(os.open(self.adbpath + " devices"))
                 print(self.adbpath)
                 connectfile = os.popen(self.adbpath + ' devices')
-                print("connectfile:",connectfile)
                 devlist = connectfile.readlines()
                 # print("devlist",devlist)
                 for i in range(1,len(devlist)):
                     if "device" in devlist[i]:
                         list = devlist[i].split("	device")
                         MyData.EnvData_dir["ADBdevice"] = list[0]
-                        print("ADBdevice", MyData.EnvData_dir["ADBdevice"])
+                        print("连接adb可用列表中", MyData.EnvData_dir["ADBdevice"])
                         return True
                 raise
             except:

@@ -4,3 +4,11 @@ UIAlter:
     TRIGGER WARNING: CenterBtn #renewBtn
     Info: CenterBtn #renewBtn
     IMPORTANT: CenterBtn #renewBtn
+VisualRead:
+    UIVipSaleTip: CloseBtn
+dialogueEndPOP:
+    RoleCard: BtnGet
+    AdGroup: BtnGet
+    UIChapterStar: CloseBtn
+    UIChapterContinue: CloseBtn
+    ContinueBtn: ContinueBtn

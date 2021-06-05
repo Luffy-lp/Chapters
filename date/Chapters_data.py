@@ -35,33 +35,32 @@ class UserData(APiClass):
         self.chat_type_dir = {}  # 对话类型配置表
         self.Element_dir = {}
         self.language_dir = {}
-        self.newPoP_dir=[]
-        self.book_list=[]
-        self.bookresult_dir={}
+        self.newPoP_dir = []
+        self.book_list = []
+        self.bookresult_dir = {}
         self.getdata()
         self.downloadbook_sign = {}
-        self.RpcClient=None
+        self.RpcClient = None
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
 
     def getdata(self):
         self.clear()
         self.yamldata_conf()
-        # self.stroy_data()
         self.yaml_stroy()
         self.yaml_chattype()
         self.yaml_mobileconf()
         self.yaml_language()
-        self.getbookData()
+        # self.getbookData()
         self.yaml_bookinfo()
         self.yaml_newpopup()
         self.yaml_bookread_result()
-        print(self.Bookshelf__dir)
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
         return cls._instance
+
     def yamldata_conf(self):
         # 读取yamlconf数据
         data = None
@@ -92,24 +91,12 @@ class UserData(APiClass):
         self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
         self.UserPath_dir["Desktoppath"] = data["PathData"]["Desktoppath"]
         if not self.UserData_dir["uuid"]:
-            uuid=self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
+            uuid = self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
             self.UserData_dir["uuid"] = uuid
-        print("用户ID：", self.UserData_dir["uuid"])
     def read_yaml(self, filepath):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
         return value
-    def read_db(self):
-        aa=os.popen('adb shell mkdir foldername')
-        print(aa)
-        # conn = sqlite3.connect("Thumbs.db")
-        # cursor = conn.cursor()
-        # sql = """pragma table_info(students)"""
-        # cursor.execute(sql)
-        # result = cursor.fetchall()
-        # print(result)
-        # print(type(result))
-        # conn.close()
 
     def yaml_case(self):
         bookdetailpaths = os.path.join(path_YAML_FILES, "yamlCase\\bookdetail.yml")
@@ -137,7 +124,7 @@ class UserData(APiClass):
         return self.language_dir
 
     def yaml_bookinfo(self):
-        if self.UserData_dir["usertype"]=="bookread":
+        if self.UserData_dir["usertype"] == "bookread":
             yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
         else:
             yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
@@ -151,26 +138,24 @@ class UserData(APiClass):
         return self.newPoP_dir
 
     def yaml_bookread_result(self):
-        if self.UserData_dir["usertype"]=="bookread":
-            file_path= os.path.join(self.UserPath_dir["Desktoppath"], "bookread_result.yml")
+        if self.UserData_dir["usertype"] == "bookread":
+            file_path = os.path.join(self.UserPath_dir["Desktoppath"], "bookread_result.yml")
         else:
             file_path = os.path.join(path_YAML_FILES, "bookread_result.yml")
-        # file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
         with open(file_path, encoding='utf-8') as file:
             self.bookresult_dir = yaml.safe_load(file)
         return self.bookresult_dir
 
-    def set_yaml(self,chapter,result):
-        if self.UserData_dir["usertype"]=="bookread":
-            file_path= os.path.join(Desktoppath, "bookread_result.yml")
+    def update_record_bookread(self, chapter, result):
+        """更新已经阅读的书籍信息"""
+        if self.UserData_dir["usertype"] == "bookread":
+            file_path = os.path.join(Desktoppath, "bookread_result.yml")
         else:
             file_path = os.path.join(Desktoppath, "bookread_result.yml")
-        # file_path=os.path.join(path_YAML_FILES, "bookread_result.yml")
-        if type(self.bookresult_dir)!=dict:
-            self.bookresult_dir={}
-        self.bookresult_dir[chapter]=result
+        if type(self.bookresult_dir) != dict:
+            self.bookresult_dir = {}
+        self.bookresult_dir[chapter] = result
         with open(file_path, 'w+', encoding="utf-8") as f:
-            # allow_unicode不加此参数，写入中文会出现乱码
             yaml.dump(self.bookresult_dir, f, allow_unicode=True)
         print("self.bookresult_dir", self.bookresult_dir)
         return self.bookresult_dir
@@ -197,8 +182,6 @@ class UserData(APiClass):
 
     def getbookData(self, language="en-US"):
         """大厅书架信息"""
-        # self.UserData_dir["当前语言"]="Spanish"
-        # language = self.UserData_dir["当前语言"]
         for i in self.language_dir:
             if i == language:
                 language = self.language_dir[i]["formatName"]
@@ -208,7 +191,6 @@ class UserData(APiClass):
         bannerData = bookData["banner_data"]
         story_ids = bannerData["story_ids"]
         self.Bookshelf__dir["banner_data"] = story_ids
-        # 获得大厅Weekly Update书籍列表
         for i in areaData:
             for k, v in i.items():
                 if v == "Weekly Update":
@@ -219,7 +201,6 @@ class UserData(APiClass):
                 if v == "Weekly Update":
                     story_ids = i["story_ids"]
                     self.Bookshelf__dir[v] = story_ids
-        # 获得大厅banner_data书籍列表
 
     def getreadprogress(self, bookid):
         """获取用户阅读进度返回chapterProgress和chatProgress"""
@@ -229,13 +210,24 @@ class UserData(APiClass):
             print(readprogress)
         except:
             raise Exception("请检查存档是否使用新存档，目前仅支持新存档")
-        # chapter_id = datalist["data"]["readprogress"][bookid]["chatProgress"]
-        # self.readprogressList_dir = readprogress
         return readprogress
+
+    def getreadprogress_local(self, StdPocoAgent):
+        """获取本地用户阅读进度返回chapterProgress和chatProgress["Item2"]["Item3"]"""
+        time = 10
+        readprogress = None
+        while time > 0:
+            time -= 1
+            try:
+                readprogress = StdPocoAgent.get_ReadProgress()
+            except Exception as e:
+                print("拉本地读书进度失败")
+                mylog("拉本地读书进度失败{}".format(e))
+                sleep(0.5)
+            return readprogress
 
     def clear(self):
         """清空之前的报告和文件"""
-        print("清空文件加")
         fileNamelist = [path_LOG_DIR, path_REPORT_DIR, path_RES_DIR]
         for fileName in fileNamelist:
             filelist = os.listdir(fileName)
@@ -243,8 +235,6 @@ class UserData(APiClass):
                 filepath = os.path.join(fileName, f)
                 if os.path.isfile(filepath):
                     os.remove(filepath)
-                # elif os.path.isdir(filepath):
-                # shutil.rmtree(filepath, True)
         path = os.path.join(path_LOG_MY, "logging.log")
         with open(path, 'w') as f1:
             f1.seek(0)
@@ -265,7 +255,6 @@ class UserData(APiClass):
         """读取当前章节信息txt"""
         bookpath = bookid + "\\data_s\\" + chapter_id + "_chat.txt"
         path = os.path.join(path_resource, bookpath)
-        print("path", path)
         with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
             data = f.read()  # 可以是随便对文件的操作
         data = eval(data)
@@ -329,5 +318,5 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# MyData.set_yaml("10081004",True)
-# print(MyData.Story_cfg_chapter_dir["10007"])
+# MyData.read_story_cfg_chapter("51887","51887019")
+# print(MyData.Story_cfg_chapter_dir["10342"])

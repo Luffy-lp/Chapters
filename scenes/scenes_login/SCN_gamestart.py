@@ -65,6 +65,7 @@ class GameStart():
     def stopGame(self):
         stop_app(MyData.EnvData_dir["packageName"])
         MyData.DeviceData_dir["poco"] = None
+        MyData.RpcClient= None
         # MyData.DeviceData_dir["androidpoco"] = None
         print("停止游戏")
         mylog.info("停止游戏")

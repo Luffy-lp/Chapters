@@ -44,11 +44,12 @@ def test_bookread(BookID=None):
     """读书"""
     myVisual = BookRead()
     actualValue = myVisual.bookRead(BookID)
-    assert_equal(actualValue, True, "阅读详情{0}".format(myVisual.ReadBook_info))
+    assert_equal(actualValue, True, "阅读详情{0}".format(myVisual.progress_info))
     sleep(5)
 
 
 def test_booklist():
+    """阅读列表遍历"""
     book_list = MyData.book_list
     print(book_list)
     for bookchapter in book_list:
@@ -69,35 +70,23 @@ def test_booklist():
                     booktraversal(str(newchapter))
                     print("newchapter", newchapter)
         else:
-            print("配置错误", bookchapter)
-        # bookid = bookchapter[:5]
-        # chapterid = bookchapter[5:]
-        # print(bookid)
-        # print(chapterid)
-    # if type(MyData.bookresult_dir) != dict:
-    #     MyData.bookresult_dir = {}
-    # if bookchapter in MyData.bookresult_dir:
-    #     print(bookchapter+"已经阅读{}".format(MyData.bookresult_dir[bookchapter]))
-    #     assert_equal(True, True,bookchapter+"已经阅读{}".format(MyData.bookresult_dir[bookchapter]))
-    # else:
-    #     booktraversal(bookchapter)
+            print("书籍列表配置错误，请注意格式")
 
 
 def booktraversal(bookchapter):
+    """阅读列表执行"""
     MyData.UserData_dir["bookDetailInfo"]["BookID"] = None
     bookid = bookchapter[:5]
     chapterid = bookchapter[5:]
     Bookfind1 = Bookfind()
     myVisual = BookRead()
-    myVisual.ReadBook_info={}
+    myVisual.progress_info = {}
     bookNewDetail = BookNewDetail()
-    # bookname = mydit[1]["bookname"]
-    # Bookfind1.bookChoose_Search(bookname)
     if bookchapter in MyData.bookresult_dir:
         book_list = MyData.book_list
-        if not book_list[bookchapter] == None:
-            print(bookchapter + "已经阅读{}".format(MyData.bookresult_dir[bookchapter]))
-            assert_equal(True, True, bookchapter + "已经阅读{}".format(MyData.bookresult_dir[bookchapter]))
+        if not book_list[bookchapter] is None:
+            print(bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
+            assert_equal(True, True, bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
             return True
     Bookfind1.bookChoose_bookid(bookid)
     bookNewDetail.book_Play(chapterid)
@@ -106,23 +95,9 @@ def booktraversal(bookchapter):
     bookNewDetail.bookNewDetailPOP()
     bookNewDetail.click_close()
     test_discoverPopup_noassert()
-    print("bookchapter:",bookchapter)
-    print("myVisual.ReadBook_info",myVisual.ReadBook_info)
-    print("ReadBook_info:",myVisual.ReadBook_info["resource"])
-    MyData.set_yaml(bookchapter, myVisual.ReadBook_info["resource"])
+    print("阅读结果：", myVisual.BookRead_info)
+    MyData.update_record_bookread(bookchapter, myVisual.BookRead_info["result"])
     try:
-        assert_equal(True, myVisual.ReadBook_info["resource"],
-                     str(myVisual.ReadBook_info["chapterProgress"]) + "章节完成阅读{0}".format(myVisual.ReadBook_info))
+        assert_equal(True, myVisual.BookRead_info["result"], bookchapter + "章节完成阅读{0}".format(myVisual.BookRead_info))
     except:
         print("{}资源存在问题,详细见报告".format(bookchapter))
-
-# def test_booktraversal(bookchapter):
-#     """书籍遍历阅读"""
-#     if type(MyData.bookresult_dir) != dict:
-#         MyData.bookresult_dir = {}
-#     if bookchapter in MyData.bookresult_dir:
-#         print(bookchapter+"已经阅读{}".format(MyData.bookresult_dir[bookchapter]))
-#         assert_equal(True, True,bookchapter+"已经阅读{}".format(MyData.bookresult_dir[bookchapter]))
-#     else:
-#         booktraversal(bookchapter)
-# test_booklist()

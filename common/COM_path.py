@@ -20,14 +20,13 @@ def yamldata_conf():
 def get_desktop():
     Dpath=yamldata_conf()
     if Dpath:
-        print("Dpath",Dpath)
+        print("桌面配置路径",Dpath)
         Desktoppath=Dpath
     else:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
                               r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders',)
         Desktoppath=winreg.QueryValueEx(key, "Desktop")[0]
-    print("Desktoppath",Desktoppath)
-
+    print("实际桌面路径",Desktoppath)
     return Desktoppath
 
 
@@ -102,7 +101,6 @@ path_BOOKREAD_ERROR_IMAGE = os.path.join(path_REPORT_DIR, "IMAGE")
 
 file=os.getcwd()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
 mkdir(path_REPORT_DIR)#测试结果
 mkdir(path_REPORT_DIR)#测试报告
 mkdir(path_LOG_MY)#mylog日志
