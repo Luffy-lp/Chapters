@@ -6,6 +6,7 @@ from poco.drivers.std import StdPocoAgent
 from poco.exceptions import PocoNoSuchNodeException
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
+from common.COM_Error import ResourceError
 from common.COM_utilities import clock
 from common.my_log import mylog
 from common.COM_devices import CommonDevices
@@ -27,7 +28,6 @@ class FindObject(CommonDevices):
         "Info": "CenterBtn",
         "IMPORTANT": "CenterBtn",
     }
-
     def __init__(self):
         CommonDevices.__init__(self)
         if MyData.DeviceData_dir["poco"] == None:
@@ -56,6 +56,7 @@ class FindObject(CommonDevices):
         """寻找目标"""
         waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         print("正在寻找{0}".format(description))
+        log(PocoNoSuchNodeException("等待-【{}】-元素超时".format(description)), desc="等待元素超时", snapshot=True)
         if self.poco(findName).wait(waitTime).exists():
             print("发现{0}".format(description))
             sleep(sleeptime)
@@ -203,6 +204,32 @@ class FindObject(CommonDevices):
                 return False
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
+
+    def assert_resource(self, parentName, findName,findAttr,description="", waitTime=1, tryTime=1, reportError=True,sleeptime=0):
+        # self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture")
+        while (tryTime > 0):
+            tryTime = tryTime - 1
+            try:
+                # log("【资源检查】:{0}->{1}属性检测".format(description,findAttr))
+                # gameobject = self.poco(findName)
+                if self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr):
+                    attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
+                    log("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue),desc="【资源检查】:{0}->{1}->{2}")
+                    # mylog("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue))
+                else:
+                    if reportError:
+                        log(ResourceError(errorMessage="【资源异常】：{0}->{1} is None".format(description, findAttr)),
+                            desc="【资源异常】：{0}->{1} is None".format(description, findAttr),
+                            snapshot=True,level="error")
+                    # mylog(ResourceError(errorMessage="【资源异常】：{0}->{1} is None".format(description, findAttr)))
+            except:
+                if reportError:
+                    log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr),
+                        snapshot=True,level="error")
+                # mylog(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr))
+            else:
+                return True
+        return False
 
     def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,
                       pocotype=None):

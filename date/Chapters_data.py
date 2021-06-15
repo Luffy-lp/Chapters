@@ -36,14 +36,14 @@ class UserData(APiClass):
         self.Element_dir = {}
         self.language_dir = {}
         self.newPoP_dir = []
-        self.book_list = []
+        # self.book_list = []
+        self.checklist=[]
         self.bookresult_dir = {}
         self.getdata()
         self.downloadbook_sign = {}
         self.RpcClient = None
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
-
     def getdata(self):
         self.clear()
         self.yamldata_conf()
@@ -123,6 +123,12 @@ class UserData(APiClass):
         self.language_dir = self.read_yaml(yamllanguagepath)
         return self.language_dir
 
+    def yaml_newpopup(self):
+        yamlnewpopup_path = os.path.join(path_YAML_FILES, "yamlGame/newpopup.yml")
+        with open(yamlnewpopup_path, encoding='utf-8') as file:
+            self.newPoP_dir = yaml.safe_load(file)
+        return self.newPoP_dir
+
     def yaml_bookinfo(self):
         if self.UserData_dir["usertype"] == "bookread":
             yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
@@ -131,15 +137,10 @@ class UserData(APiClass):
         self.book_list = self.read_yaml(yamlbook_listpath)
         return self.book_list
 
-    def yaml_newpopup(self):
-        yamlnewpopup_path = os.path.join(path_YAML_FILES, "yamlGame/newpopup.yml")
-        with open(yamlnewpopup_path, encoding='utf-8') as file:
-            self.newPoP_dir = yaml.safe_load(file)
-        return self.newPoP_dir
-
     def yaml_bookread_result(self):
         if self.UserData_dir["usertype"] == "bookread":
-            file_path = os.path.join(self.UserPath_dir["Desktoppath"], "bookread_result.yml")
+            # print("ifDesktoppath",Desktoppath)
+            file_path = os.path.join(Desktoppath, "bookread_result.yml")
         else:
             file_path = os.path.join(path_YAML_FILES, "bookread_result.yml")
         with open(file_path, encoding='utf-8') as file:
@@ -318,5 +319,6 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# MyData.read_story_cfg_chapter("51887","51887019")
+# aa=MyData.read_story_cfg_chapter("19017","19017006")
+# print(aa)
 # print(MyData.Story_cfg_chapter_dir["10342"])

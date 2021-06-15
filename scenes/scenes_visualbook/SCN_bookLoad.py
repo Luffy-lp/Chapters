@@ -40,6 +40,6 @@ class BookLoad(FindObject):
                     raise Exception("加载书籍超时")
             loadtime = time.time() - startime
             self.BookLoad_info["书籍加载时间："]=loadtime
-            print("完成书籍加载，加载时间为{0}秒".format(loadtime))
-            log(loadtime, timestamp=time.time(), desc="完成书籍加载", snapshot=True)
+            mylog.info("完成书籍加载，加载时间为{0}秒".format(loadtime))
+            log("完成书籍加载，加载时间为{0}秒".format(loadtime), timestamp=time.time(), desc="完成书籍加载", snapshot=True)
         return True

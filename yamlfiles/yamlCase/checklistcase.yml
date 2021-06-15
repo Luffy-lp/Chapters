@@ -107,10 +107,10 @@ booktraversal:
     caseauthor: "lipeng"
     casename: "视觉小说遍历"
     casedec: "视觉小说遍历"
-    repeattime: "3"
+    repeattime: "5"
     reportname: "视觉小说遍历"
     step:
-        - ${pageTurn(Bottom,0)}
+#        - ${pageTurn(Bottom,0)}
 #        - ${test_getuserID()}
         - ${test_booklist()}
 #        - ${test_booktraversal(10071003)}

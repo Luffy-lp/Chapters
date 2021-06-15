@@ -40,64 +40,64 @@ def test_bookload_noassert(BookID=None):
     sleep(3)
 
 
-def test_bookread(BookID=None):
+def test_bookread(BookID=None, bookchapter=None):
     """读书"""
     myVisual = BookRead()
-    actualValue = myVisual.bookRead(BookID)
+    actualValue = myVisual.bookRead(BookID, bookchapter)
     assert_equal(actualValue, True, "阅读详情{0}".format(myVisual.progress_info))
     sleep(5)
 
 
 def test_booklist():
     """阅读列表遍历"""
-    book_list = MyData.book_list
-    print(book_list)
-    for bookchapter in book_list:
+    print("书籍列表:", MyData.book_list)
+    for bookchapter in MyData.book_list:
         if len(bookchapter) == 8:
-            if book_list[bookchapter] is None:
+            if MyData.book_list[bookchapter] is None:
                 booktraversal(bookchapter)
-                print("bookchapter", bookchapter)
+                print("单章节", bookchapter)
         elif len(bookchapter) == 17:
-            if book_list[bookchapter] is None:
-                print(bookchapter)
+            if MyData.book_list[bookchapter] is None:
+                print("章节区间", bookchapter)
                 bookchapters = bookchapter.split("-")
                 beginchapter = bookchapters[0]
                 endchapter = bookchapters[1]
                 index = int(endchapter) - int(beginchapter)
                 for i in range(index + 1):
-                    newchapter = int(beginchapter) + i
-                    # bookchapterlist.append(str(newchapter))
-                    booktraversal(str(newchapter))
-                    print("newchapter", newchapter)
+                    bookchapter = int(beginchapter) + i
+                    print("即将阅读", bookchapter)
+                    booktraversal(str(bookchapter))
         else:
             print("书籍列表配置错误，请注意格式")
-
+            return
 
 def booktraversal(bookchapter):
     """阅读列表执行"""
-    MyData.UserData_dir["bookDetailInfo"]["BookID"] = None
+    if bookchapter not in MyData.bookresult_dir.keys():
+        MyData.bookresult_dir[bookchapter] = None
+        print("newchapter is none")
+    elif MyData.bookresult_dir[bookchapter] == True or MyData.bookresult_dir[bookchapter] == False:
+        print(bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
+        assert_equal(True, True, bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
+        return True
     bookid = bookchapter[:5]
     chapterid = bookchapter[5:]
+    MyData.UserData_dir["bookDetailInfo"]["BookID"] = None
     Bookfind1 = Bookfind()
     myVisual = BookRead()
     myVisual.progress_info = {}
     bookNewDetail = BookNewDetail()
-    if bookchapter in MyData.bookresult_dir:
-        book_list = MyData.book_list
-        if not book_list[bookchapter] is None:
-            print(bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
-            assert_equal(True, True, bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
-            return True
     Bookfind1.bookChoose_bookid(bookid)
     bookNewDetail.book_Play(chapterid)
     test_bookload_noassert(bookid)
-    myVisual.bookRead(bookid)
+    myVisual.bookRead(bookid, bookchapter)
     bookNewDetail.bookNewDetailPOP()
     bookNewDetail.click_close()
     test_discoverPopup_noassert()
     print("阅读结果：", myVisual.BookRead_info)
     MyData.update_record_bookread(bookchapter, myVisual.BookRead_info["result"])
     try:
-        assert_equal(True, myVisual.BookRead_info["result"], bookchapter + "章节完成阅读{0}".format(myVisual.BookRead_info))
+        assert_equal(True, myVisual.BookRead_info["result"],
+                     bookchapter + "章节完成阅读{0}".format(myVisual.BookRead_info))
     except:
         print("{}资源存在问题,详细见报告".format(bookchapter))

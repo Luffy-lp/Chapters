@@ -160,7 +160,6 @@ class Run(MyAnalysis):
             test_GameLoaded()
             test_discoverPopup()
         mylog.info("--------完成异常重启------")
-
     def runing(self):
         for k, v in self.Runlist_dir.items():
             repeattime = self.Case_info[k]["repeattime"]
@@ -172,11 +171,11 @@ class Run(MyAnalysis):
                 htmlname = self.Case_info[k]["reportname"] + str(
                     repeattime - (self.Case_info[k]["repeattime"] - 1)) + ".html"
                 # logname = self.Case_info[k]["reportname"] + str(repeattime - (self.Case_info[k]["repeattime"] - 1)) + "log.txt"
-                try:
-                    start_record()
-                    mylog.info("【{0}】启动录制成功".format(__title__))
-                except:
-                    mylog.info("【{0}】启动录制失败".format(__title__))
+                # try:
+                #     start_record()
+                #     mylog.info("【{0}】启动录制成功".format(__title__))
+                # except:
+                #     mylog.info("【{0}】启动录制失败".format(__title__))
                 try:
                     self.runcase(self.Runlist_dir[k])
                     self.Case_info[k]["repeattime"] = 0
@@ -187,11 +186,11 @@ class Run(MyAnalysis):
                     self.resetEnv(k)
                 finally:
                     self.partReport(htmlname=htmlname, __title__=__title__, k=k)
-                    try:
-                        stop_record(recordfile)
-                        mylog.info("【{0}】生成录制文件成功".format(__title__))
-                    except:
-                        mylog.info("【{0}】生成录制文件失败".format(__title__))
+                    # try:
+                    #     stop_record(recordfile)
+                    #     mylog.info("【{0}】生成录制文件成功".format(__title__))
+                    # except:
+                    #     mylog.info("【{0}】生成录制文件失败".format(__title__))
 
 
 if __name__ == '__main__':

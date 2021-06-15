@@ -1,4 +1,7 @@
 import poco.utils.six as six
+from airtest.core.helper import log
+
+
 class MYError(Exception):
     """
     Base class for errors and exceptions of MY. It is Python3 compatible.
@@ -20,10 +23,14 @@ class ResourceError(MYError):
         self.chatProgress=chatProgress
         self.type=type
     def __str__(self):
-      return f"书籍资源异常:{0}".format(self.errorMessage)
+        return "书籍资源异常,{0}".format(self.errorMessage)
 # try:
 #     if 1 < 4:
-        # raise ResourceError("ddddd", "11111", "10003", "10003002", "10dfasf")
+#         log(ResourceError(errorMessage="内容为空"), desc="内容为空",
+#             snapshot=True)
+# #         ResourceError("ddddd", "11111", "10003", "10003002", "10dfasf")
+# # #         raise ResourceError("ddddd", "11111", "10003", "10003002", "10dfasf")
 # except ResourceError as e:
-#     print(e.booid)
-#     print(e)
+#     pass
+#     # print(e.errorMessage)
+#     # print(e)
