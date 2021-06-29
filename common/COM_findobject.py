@@ -216,6 +216,7 @@ class FindObject(CommonDevices):
                     attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
                     log("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue),desc="【资源检查】:{0}->{1}->{2}")
                     # mylog("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue))
+                    return True
                 else:
                     if reportError:
                         log(ResourceError(errorMessage="【资源异常】：{0}->{1} is None".format(description, findAttr)),
@@ -227,8 +228,6 @@ class FindObject(CommonDevices):
                     log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr),
                         snapshot=True,level="error")
                 # mylog(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr))
-            else:
-                return True
         return False
 
     def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,
@@ -406,24 +405,31 @@ class FindObject(CommonDevices):
         sleep(mytime)
 
     def UIAlterPoP(self):
-        AlterTxt = MyData.newPoP_dir["UIAlter"]
-        if self.find_try("AlterView", description="文本弹框", waitTime=1):
-            txt = self.poco("UIAlter").offspring("Title").get_TMPtext()
-            print("弹框类型：", txt)
-            mylog.info("发现-【{}】-类型弹框".format(txt))
-            Btn = AlterTxt.get(txt)
-            self.Popuplist.append(txt)
-            print("准备点击按钮", Btn)
-            if Btn == None:
-                self.findClick_try("CenterBtn", "CenterBtn", description="点击弹框按钮")
+        is_UIAlterPoP=False
+        while True:
+            if len(self.poco("UIOther").children().wait(0.5)) >= 2:
+                is_UIAlterPoP = True
+                AlterTxt = MyData.newPoP_dir["UIAlter"]
+                # if self.find_try("AlterView", description="文本弹框", waitTime=1):
+                txt = self.poco("UIAlter").offspring("Title").get_TMPtext()
+                print("弹框类型：", txt)
+                mylog.info("发现-【{}】-类型弹框".format(txt))
+                Btn = AlterTxt.get(txt)
+                self.Popuplist.append(txt)
+                print("按钮名称", Btn)
+                if Btn == None:
+                    self.findClick_try("CenterBtn", "CenterBtn", description="点击弹框按钮")
+                else:
+                    try:
+                        self.poco(Btn).click()
+                        print("点击按钮", Btn)
+                        sleep(1)
+                    except:
+                        print("未成功点击按钮")
+                        return False
             else:
-                try:
-                    self.poco(Btn).click()
-                    print("点击按钮", Btn)
-                    sleep(1)
-                except:
-                    print("未成功点击按钮")
-                    return False
+                print("UIOther弹框检测结束")
+                return is_UIAlterPoP
 # FindObject1=FindObject()
 # REST1=REST()
 # REST1.mytest()

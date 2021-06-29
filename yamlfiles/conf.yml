@@ -11,7 +11,7 @@ EnvData:
   APKpackage: "Chapters_620_278_60b4c4073c151.apk" #安装包名称
   packageName: "com.mars.avgchapters" #apk包名称
   ADBip: "127.0.0.1:5037" #连接adb运行地址
-  ADBdevice: "192.168.191.51:30045" #******连接ADB设备ID需要修改正确的配置***********R52M90DYELT，KPS4C19122001081
+  ADBdevice: "192.168.191.199:30013" #******连接ADB设备ID需要修改正确的配置***********R52M90DYELT，KPS4C19122001081
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setup通用连接设备的参数
   simulator: "?cap_method=JAVACAP&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setupJAVA连接设备的参数
   device: "android" #连接设备类型

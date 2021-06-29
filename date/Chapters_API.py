@@ -114,6 +114,14 @@ class APiClass():
                 }
         data = self.try_APIlink(url=url, headers=self.Header, body=body, trytime=10, timeout=1, name="getCommonDataApi")
         return data
+    def readApi(self, UUID,storyId):
+        """记录短信阅读进度"""
+        url = self.url + "readApi.Class.php?DEBUG=true"
+        body = {"uuid": UUID,
+                "storyId": storyId,
+                }
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, trytime=10, timeout=1, name="readApi")
+        return data
 
     def getAllStoryInfoApi(self, UUID):
         """所有章节信息接口"""
@@ -249,11 +257,12 @@ class APiClass():
                 os.remove(path)
                 return
             except BaseException as e:
+                sleep(2)
                 print("书籍资源读取失败,重试", e)
             else:
                 print("书籍资源读取成功")
         # raise Exception("下载书籍资源失败")
 
 # APiClass1=APiClass()
-# data=APiClass1.story_v1_hall("44346")
+# data=APiClass1.getCommonDataApi("46776")
 # print("data111111",data)

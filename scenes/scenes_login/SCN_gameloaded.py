@@ -62,7 +62,7 @@ class GameLoaded(FindObject):
         if self.android_tryfind("android:id/button1", description="Google提示"):
             self.android_findClick("android:id/button1", "android:id/button1", description="Google框架提示处理")
             mylog.error("检测到未安装谷歌框架，无法执行相关操作")
-        if self.find_try("Title", description="发现弹框"):
+        if self.find_try("Title", description="弹框"):
             txtinfo=self.poco("Title").get_TMPtext()
             if txtinfo=="Info":
                 TXT = self.poco("Context").get_TMPtext()

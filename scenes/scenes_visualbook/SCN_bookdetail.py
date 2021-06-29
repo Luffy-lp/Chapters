@@ -15,18 +15,26 @@ class BookNewDetail(FindObject):
 
     def bookNewDetailPOP(self):
         # self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)
-        print(MyData.popup_dir)
-        print("详情页弹框配置：",MyData.popup_dir[1])
-        poplist = MyData.popup_dir[1]
-        for k in poplist:
-            if k["args"][0]=="UIAlter":
-                self.UIAlterPoP()
-            if k["args"][0]=="UIPassGuide":
-                while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
-                    self.findClick_object("UIPassGuide", "Close", description="Close按钮")
-                    self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
-            else:
-                self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
+        self.UIAlterPoP()
+        # print("详情页弹框配置：",MyData.popup_dir[1])
+        # poplist = MyData.popup_dir[1]
+        # time=5
+        # while time>0:
+        #     time-=1
+        #     if len(self.poco("UIOther").children())>=2:
+        #        txt= self.poco("UIAlter").offspring("Title").get_TMPtext()
+        #         for k in poplist:
+        #             if k["args"][0] == "UIAlter":
+        #                 self.UIAlterPoP()
+        #             if k["args"][0] == "UIPassGuide":
+        #                 while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
+        #                     self.findClick_object("UIPassGuide", "Close", description="Close按钮")
+        #                     self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
+        #             else:
+        #                 self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=0.2,
+        #                                    tryTime=1, sleeptime=2)
+        #     else:
+        #         return
             # if self.find_try("CenterBtn", description="弹框确认按钮"):
             #     self.findClick_object("CenterBtn", "CenterBtn", description="弹框确认按钮")
     # def bookChoose(self):
@@ -167,6 +175,8 @@ class BookNewDetail(FindObject):
                 self.findClick_childobject(POCO,description="选择第{}章".format(index),waitTime=3)
         if self.find_try("Play", description="Play按钮",waitTime=1):
            self.findClick_object("Play", "Play", description="Play按钮",waitTime=1)
+           if self.UIAlterPoP():
+               self.findClick_object("Play", "Play", description="Play按钮", waitTime=1)
         else:
             self.findClick_object("DaypassPlay", "DaypassPlay", description="Daypass按钮",waitTime=1)
         return True

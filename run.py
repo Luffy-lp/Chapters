@@ -21,7 +21,6 @@ from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
 
-
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
     file_stream_path = []

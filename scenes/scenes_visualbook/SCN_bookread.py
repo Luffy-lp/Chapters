@@ -1,3 +1,5 @@
+import string
+
 from airtest.core.api import *
 from poco.drivers.std import StdPocoAgent
 
@@ -9,7 +11,7 @@ from common.my_log import mylog
 from pages.shop.shop import Shop
 from common.COM_Error import ResourceError
 from common.COM_path import *
-
+from common.COM_trans import *
 
 class BookRead(FindObject):
     isstopRead = True  # 阅读状态
@@ -64,7 +66,6 @@ class BookRead(FindObject):
         print("章节进度:", self.progress_info["chapterProgress"])
         print("对话总数:", self.progress_info["chat_num"])
         print("对话进度:", self.progress_info["chatProgress"])
-
         return self.progress_info
 
     def dialogueCourseJudge(self):
@@ -79,7 +80,7 @@ class BookRead(FindObject):
         self.updte_readprogress()  # 更新当前书籍阅读进度
         self.progressjudge()  # 书籍阅读进度是否异常判断
         self.dialogueEndPOP()  # 阅读结束弹框判断
-        print("花费时间：", clock("stop"))
+        clock("stop")
         print("==================================================")
 
     def precondition(self):
@@ -138,44 +139,33 @@ class BookRead(FindObject):
                 # 特效类背景检测
                 SceneBGbool1 = self.assert_resource("SceneBG", "Background", "SpriteRenderer", "特效类背景", waitTime=1)
                 self.resource_result(SceneBGbool1, "SpriteRenderer", "特效类背景", filename_head=filename_head)
+        if self.StdPocoAgent1.get_Music():
+            log("【资源检查】:音乐资源->True")
+        else:
+            log(ResourceError(errorMessage="资源异常：音乐资源组件异常"), desc="资源异常：音乐资源组件异常",snapshot=True)
         try:
             if self.progress_info["option_info"]["show_id"]:  # 物品检测
                 Goodsbool = self.assert_resource("UIShowGoods", "Img", findAttr="texture", description="物品", waitTime=2)
                 self.resource_result(result=Goodsbool, findAtrr="texture", des="物品", filename_head=filename_head)
                 return True
         except:
-            print("不存在show_id")
-        # if self.progress_info["option_info"]["show_id"]: #物品检测
-        #     print("发现配置物品")
-        #     try:
-        #         texture=self.poco("UIShowGoods").offspring("Img").wait(2).attr("texture")
-        #         if texture:
-        #             print("物品texture", texture)
-        #         else:
-        #             self.BookRead_info["result"] = False
-        #             dec = filename_head + "Goods"
-        #             print("配置的物品{0}的texture为空", self.progress_info["option_info"]["show_id"])
-        #             myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-        #             log(ResourceError(errorMessage="资源异常：物品的texture为空"), desc="物品的texture为空", snapshot=True)
-        #     except:
-        #         self.BookRead_info["result"] = False
-        #         dec = filename_head + "Goods"
-        #         print("配置的物品{0}未找到对应的texture",self.progress_info["option_info"]["show_id"])
-        #         myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-        #         log(ResourceError(errorMessage="资源异常：未找到物品的texture"), desc="未找到物品的texture",snapshot=True)
-        #     return True
+            log("【资源检查】:不存在show_id")
+
         try:
             content = self.progress_info["option_info"]["content"]  # 普通文本
             mind = self.progress_info["option_info"]["mind"]  # 想象文本
             if content:
-                # print("普通文本:", content)
-                log("【资源检查】:普通文本->True",content)
+                # mystr=mytrans(content)
+                log("【资源检查】:普通文本->True  [{}]".format(content))
+                # log("【中文翻译】:普通文本->True  [{}]".format(mystr))
             elif mind:
-                # print("想象文本:", mind)
-                log("【资源检查】:想象文本->True",mind)
+                # mystr=mytrans(mind)
+                log("【资源检查】:想象文本->True  [{}]".format(mind))
+                # log("【中文翻译】:想象文本->True  [{}]".format(mystr))
             elif chat_type == 10:
-                # print("换装类型无文本")
                 log("【资源检查】:换装类型文本->True")
+            elif "end"in self.progress_info["option_info"]["scene_bg_id"]:
+                log("【资源检查】:无文本章节结束End展示->True")
             else:
                 self.BookRead_info["result"] = False
                 print("内容为空:", content)
@@ -183,38 +173,31 @@ class BookRead(FindObject):
                 myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
                 log(ResourceError(errorMessage="资源异常：内容为空"), desc="资源异常：内容为空",
                     snapshot=True)
-        except:
-            print("无content配置")
-        if self.StdPocoAgent1.get_Music():
-            log("【资源检查】:音乐资源->True")
-        else:
-            log(ResourceError(errorMessage="资源异常：音乐资源组件异常"), desc="资源异常：音乐资源组件异常",snapshot=True)
+        except Exception as e:
+            print("读取content和mind配置异常",e)
         if chat_type == 28:
             Sbool = self.assert_resource("UIChapterSelectRoleOver", "Cloth", "texture", "角色选择确认",waitTime=2)
             self.resource_result(Sbool,"texture","角色选择确认",filename_head=filename_head)
             return
-            # if self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture"):
-            #     print("角色选择确认chat_type",chat_type)
-            # else:
-            #     self.BookRead_info["result"] = False
-            #     dec = filename_head + "Cloth"
-            #     myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-            #     log(ResourceError(errorMessage="资源异常：角色选择确认资源异常"), desc="资源异常：角色选择确认资源异常",
-            #         snapshot=True)
         if chat_type == 2:
             log("【资源检查】:旁白不检测资源")
+            sleep(0.5)
             return True
         if chat_type == 8 or chat_type == 15 or chat_type == 16 or chat_type == 19 or chat_type == 26 or chat_type == 29:
             log("【资源检查】:电话类暂不检测")
+            sleep(0.5)
             return True
         if chat_type == 7 or chat_type == 23:
             log("【资源检查】:短信类型不检测资源")
+            sleep(0.5)
             return True
         if chat_type == 3:
             log("【资源检查】:角色名称设置不检测资源")
+            sleep(0.5)
             return True
         if chat_type == 4 or chat_type == 5 or chat_type == 6 or chat_type == 9:
             log("【资源检查】:旧版换装不检测资源")
+            sleep(0.5)
             return True
         if chat_type == 10:
             try:
@@ -223,16 +206,6 @@ class BookRead(FindObject):
                     name=vlus.get_name()
                     Clothbool = self.assert_resource(name,"Cloth","texture",description="角色装扮Cloth资源",waitTime=2)
                     self.resource_result(Clothbool, "texture", "角色装扮Cloth资源", filename_head=filename_head)
-                    # if vlus.attr("texture"):
-                    #     print("第{0}个肤色Cloth图片资源为：{1}".format(key, vlus.attr("texture")))
-                    # else:
-                    #     print("角色装扮Cloth图片资源异常")
-                    #     self.BookRead_info[achatProgress] = "角色装扮Cloth图片资源异常"
-                    #     self.BookRead_info["result"] = False
-                    #     dec = filename_head + "Cloth"
-                    #     myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-                    #     log(ResourceError(errorMessage="资源异常：{0}第{1}角色装扮Cloth图片资源异常".format(achatProgress, key)),
-                    #         desc="{0}第{1}角色装扮Cloth图片资源异常".format(achatProgress, key), snapshot=True)
             except ResourceError as e:
                 print("角色装扮Cloth图片资源异常")
                 self.BookRead_info[achatProgress] = "角色装扮Cloth图片资源异常"
@@ -245,88 +218,15 @@ class BookRead(FindObject):
         if pos_id == 2:
             RoleLeft_bool = self.assert_resource("NormalSayRoleLeft", "Cloth", "SpriteRenderer", "左侧人物的Cloth资源",waitTime=2)
             self.resource_result(RoleLeft_bool,"SpriteRenderer","左侧人物的Cloth资源",filename_head=filename_head)
-            # try:
-            #     NormalSayRoleLeft_bool = self.poco("NormalSayRoleLeft").offspring("Cloth").attr(
-            #         "SpriteRenderer")
-            #     print("左侧人物Cloth检测")
-            #     if NormalSayRoleLeft_bool:
-            #         print("左侧人物的Cloth资源正常")
-            #     else:
-            #         self.BookRead_info[achatProgress] = "左侧人物的Cloth的资源丢失"
-            #         self.BookRead_info["result"] = False
-            #         log(ResourceError(errorMessage="资源异常：NormalSayRoleLeft->Cloth的资源丢失"),
-            #             desc="左侧人物的Cloth的资源丢失", snapshot=True)
-            # except:
-            #     self.BookRead_info[achatProgress] = "左侧人物的SpriteRenderer获取失败"
-            #     self.BookRead_info["result"] = False
-            #     dec = filename_head + "Cloth"
-            #     myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-            #     log(ResourceError(errorMessage="资源异常：NormalSayRoleLeft->SpriteRenderer获取失败"),
-            #         desc="左侧人物的SpriteRenderer获取失败", snapshot=True)
-
         elif pos_id == 1:
             RoleRightbool = self.assert_resource("RoleSay", "Cloth", "SpriteRenderer", "右侧角色Cloth检测", waitTime=2)
             self.resource_result(RoleRightbool, "SpriteRenderer", "右侧人物Cloth检测", filename_head=filename_head)
-            # self.rightPos_judge()
-            # if self.NormalSayRoleRight:
-            #     RoleRightbool = self.assert_resource("NormalSayRoleRight", "Cloth", "SpriteRenderer", "右侧1角色Cloth检测",waitTime=2)
-            #     self.resource_result(RoleRightbool,"SpriteRenderer","右侧1人物Cloth检测",filename_head=filename_head)
-            # else:
-            #     RoleRight2bool= self.assert_resource("NormalSayRoleRight2", "Cloth", "SpriteRenderer", "右侧2角色Cloth检测", waitTime=1)
-            #     self.resource_result(RoleRight2bool, "SpriteRenderer", "右侧2角色Cloth检测", filename_head=filename_head)
-            # if self.poco("NormalSayRoleRight").offspring("Body").wait(0.5).exists():
-            #     try:
-            #         NormalSayRoleRight = self.poco("NormalSayRoleRight").offspring("Cloth").wait(2).attr(
-            #             "SpriteRenderer")
-            #         print("右侧1人物Cloth检测")
-            #         if NormalSayRoleRight:
-            #             print("NormalSayRoleRight资源正常")
-            #         else:
-            #             self.BookRead_info[achatProgress] = "右侧1人物的SpriteRenderer为flase"
-            #             self.BookRead_info["result"] = False
-            #             dec = filename_head + "Cloth"
-            #             myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-            #             log(ResourceError(errorMessage="资源异常：右侧1人物的SpriteRenderer为flase"),
-            #                 desc="右侧1人物的SpriteRenderer为flase",
-            #                 snapshot=True)
-            #     except:
-            #         self.BookRead_info[achatProgress] = "右侧1人物的未找到SpriteRenderer"
-            #         self.BookRead_info["result"] = False
-            #         dec = filename_head + "Cloth"
-            #         myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-            #         log(ResourceError(errorMessage="资源异常：右侧1人物的未找到SpriteRenderer"),
-            #             desc="右侧1人物的未找到SpriteRenderer",
-            #             snapshot=True)
-            #
-            # else:
-            #     # self.poco("NormalSayRoleRight2").offspring("Body").wait(0.2).exists():
-            #     try:
-            #         NormalSayRoleRight2 = self.poco("NormalSayRoleRight2").offspring("Cloth").wait(2).attr(
-            #             "SpriteRenderer")
-            #         print("右侧2人物Cloth检测")
-            #         if NormalSayRoleRight2:
-            #             print("NormalSayRoleRight2资源正常")
-            #         else:
-            #             self.BookRead_info[achatProgress] = "右侧2人物的SpriteRenderer为flase"
-            #             self.BookRead_info["result"] = False
-            #             dec = filename_head + "Cloth"
-            #             myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-            #             log(ResourceError(errorMessage="资源异常：右侧2人物的SpriteRenderer为flase"),
-            #                 desc="右侧2人物的SpriteRenderer为flase",
-            #                 snapshot=True)
-            #     except:
-            #         self.BookRead_info[achatProgress] = "右侧2人物的未找到SpriteRenderer"
-            #         self.BookRead_info["result"] = False
-            #         dec = filename_head + "Cloth"
-            #         myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-            #         log(ResourceError(errorMessage="资源异常：右侧2人物的未找到SpriteRenderer"),
-            #             desc="右侧2人物的未找到SpriteRenderer",
-            #             snapshot=True)
 
     def chat_typeconf(self):
         """选项判断"""
         chat_id = self.progress_info["option_info"]["chat_type"]  # 当前选项chat_type值
         select_id = self.progress_info["option_info"]["select_id"]  # select_id值
+        # is_touch=False
         if chat_id in MyData.chat_type_dir:
             description = MyData.chat_type_dir[chat_id][0]
             print("description", description)
@@ -340,6 +240,7 @@ class BookRead(FindObject):
                     self.findClick_try(clickname, clickname, description=description, waitTime=2, sleeptime=2)
         elif select_id == 0:
             touch(self._POS)
+            # is_touch=True
             # print("普通点击")
         else:
             if self.poco("UIChapterSelectList").child("Item").exists():  # "UISelectList")老版本

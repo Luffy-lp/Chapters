@@ -2,7 +2,8 @@
 Notch_Fit: #刘海屏
   2PFNW19710005425: (0,84,1080,2340) #设备ID: (下发黑屏高度，上方黑屏高度，分辨率宽，分辨率长) 华为畅享9P
   KPS4C19122001081: (0,70,1080,2280) #设备华为P20
-  192.168.191.51:30035: (0,70,1080,2280) #设备华为P20
+  192.168.191.199:30011: (0,70,1080,2280) #设备华为P20
+  192.168.191.199:30012: (0,108,1080,2280) #设备华为P20
 Upload_Image: #UGC上传图片com.google.android.apps.photos:id/image
   KPS4C19122001081: ["com.android.gallery3d:id/album_cover_image",[130,338],"com.android.gallery3d:id/head_select_right","com.android.gallery3d:id/head_select_right"]
   R52M90DYELT: ["com.google.android.apps.photos:id/image",[293,679],"com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save"]#三星平板 设备ID: [点击元素，[130,338]点击某个点]

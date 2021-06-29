@@ -12,19 +12,20 @@ class Bookfind(FindObject):
     def __init__(self):
         FindObject.__init__(self)
 
-    def bookNewDetailPOP(self):
+    # def bookNewDetailPOP(self):
+
         # self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)
-        print("详情页弹框配置：",MyData.popup_dir[1])
-        poplist = MyData.popup_dir[1]
-        for k in poplist:
-            if k["args"][0]=="UIAlter":
-                self.UIAlterPoP()
-            if k["args"][0]=="UIPassGuide":
-                while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
-                    self.findClick_object("UIPassGuide", "Close", description="Close按钮")
-                    self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
-            else:
-                self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
+        # print("详情页弹框配置：",MyData.popup_dir[1])
+        # poplist = MyData.popup_dir[1]
+        # for k in poplist:
+        #     if k["args"][0]=="UIAlter":
+        #         self.UIAlterPoP()
+        #     if k["args"][0]=="UIPassGuide":
+        #         while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
+        #             self.findClick_object("UIPassGuide", "Close", description="Close按钮")
+        #             self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
+        #     else:
+        #         self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
     # def bookChoose(self):
     def bookChoose_Search(self,bookName):
         """通过书籍名称查找"""
@@ -45,7 +46,9 @@ class Bookfind(FindObject):
         text(bookid)
         self.click_object("SearchBtn",description="恢复光标焦点",sleeptime=2)
         self.click_object("SearchBtn",description="bookid搜索按钮")
-        self.bookNewDetailPOP()
+        time.sleep(3)
+        self.UIAlterPoP()
+        # self.bookNewDetailPOP()
     def bookChoose_Shelf(self,bookShelf,index):
         """找到书架招数WeekView"""
         index = int(index)

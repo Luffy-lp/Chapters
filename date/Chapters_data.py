@@ -2,7 +2,6 @@ from msilib.schema import Environment
 from time import sleep
 
 import yaml
-
 from common.COM_path import *
 from common.my_log import mylog
 from date.Chapters_API import APiClass
@@ -322,3 +321,4 @@ MyData = UserData()
 # aa=MyData.read_story_cfg_chapter("19017","19017006")
 # print(aa)
 # print(MyData.Story_cfg_chapter_dir["10342"])
+
