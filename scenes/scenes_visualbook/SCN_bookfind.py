@@ -40,14 +40,21 @@ class Bookfind(FindObject):
 
     def bookChoose_bookid(self,bookid):
         """通过书籍ID查找"""
-        self.click_object("Placeholder",description="bookid搜索书籍输入框",sleeptime=1)
-        for i in range(5):
-            keyevent("67")
-        text(bookid)
-        self.click_object("SearchBtn",description="恢复光标焦点",sleeptime=2)
-        self.click_object("SearchBtn",description="bookid搜索按钮")
+        mytime=3
+        while mytime>0:
+            mytime = 3
+            self.click_object("Placeholder",description="bookid搜索书籍输入框")
+            for i in range(5):
+                keyevent("67")
+            text(bookid)
+            self.click_object("SearchBtn",description="恢复光标焦点")
+            bookidText = self.poco("InputField").child("Text").get_text()
+            if bookidText==bookid:
+                self.click_object("SearchBtn",description="bookid搜索按钮")
+                mytime=0
         time.sleep(3)
-        self.UIAlterPoP()
+        if self.find_try("UIBookNewDetail", "书籍详情页", waitTime=2):
+            self.UIAlterPoP()
         # self.bookNewDetailPOP()
     def bookChoose_Shelf(self,bookShelf,index):
         """找到书架招数WeekView"""

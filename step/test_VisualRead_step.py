@@ -53,7 +53,7 @@ def test_booklist():
     print("书籍列表:", MyData.book_list)
     for bookchapter in MyData.book_list:
         if len(bookchapter) == 8:
-            if MyData.book_list[bookchapter] is None:
+            if MyData.book_list[bookchapter] is None or type( MyData.book_list[bookchapter])==int:
                 booktraversal(bookchapter)
                 print("单章节", bookchapter)
         elif len(bookchapter) == 17:
@@ -71,15 +71,25 @@ def test_booklist():
             print("书籍列表配置错误，请注意格式")
             return
 
+
 def booktraversal(bookchapter):
     """阅读列表执行"""
     if bookchapter not in MyData.bookresult_dir.keys():
-        MyData.bookresult_dir[bookchapter] = None
+        MyData.bookresult_dir[bookchapter] = 1
         print("newchapter is none")
-    elif MyData.bookresult_dir[bookchapter] == True or MyData.bookresult_dir[bookchapter] == False:
+    elif MyData.bookresult_dir[bookchapter] == "True" or MyData.bookresult_dir[bookchapter] == "False":
         print(bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
-        assert_equal(True, True, bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
+        # assert_equal(True, True, bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
         return True
+    elif type(MyData.bookresult_dir[bookchapter]) == int:
+        if MyData.bookresult_dir[bookchapter] >= 3:
+            print(bookchapter + "失败3次跳过阅读")
+            return True
+        else:
+            result= MyData.bookresult_dir[bookchapter] + 1
+            MyData.update_record_bookread(bookchapter, result)
+    else:
+        MyData.update_record_bookread(bookchapter, 1)
     bookid = bookchapter[:5]
     chapterid = bookchapter[5:]
     MyData.UserData_dir["bookDetailInfo"]["BookID"] = None
@@ -95,7 +105,7 @@ def booktraversal(bookchapter):
     bookNewDetail.click_close()
     test_discoverPopup_noassert()
     print("阅读结果：", myVisual.BookRead_info)
-    MyData.update_record_bookread(bookchapter, myVisual.BookRead_info["result"])
+    MyData.update_record_bookread(bookchapter, str(myVisual.BookRead_info["result"]))
     try:
         assert_equal(True, myVisual.BookRead_info["result"],
                      bookchapter + "章节完成阅读{0}".format(myVisual.BookRead_info))

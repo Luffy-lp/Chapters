@@ -14,8 +14,8 @@ class BookNewDetail(FindObject):
         FindObject.__init__(self)
 
     def bookNewDetailPOP(self):
-        # self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)
-        self.UIAlterPoP()
+        if self.find_try("UIBookNewDetail", "书籍详情页", waitTime=2):
+            self.UIAlterPoP()
         # print("详情页弹框配置：",MyData.popup_dir[1])
         # poplist = MyData.popup_dir[1]
         # time=5
@@ -182,8 +182,9 @@ class BookNewDetail(FindObject):
         return True
 
     def click_close(self):
-        if self.findClick_try("Mask", "Button", description="关闭详情页按钮",sleeptime=1):
-            return True
+        if self.find_try("UIBookNewDetail", "书籍详情页", waitTime=2):
+            if self.findClick_try("Mask", "Button", description="关闭详情页按钮",sleeptime=1):
+                return True
 
     def click_Reset(self, type="SetBook"):
         """SetBook,SetChapter"""

@@ -6,6 +6,7 @@ from poco.drivers.std import StdPocoAgent
 from poco.exceptions import PocoNoSuchNodeException
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
+from common import COM_utilities
 from common.COM_Error import ResourceError
 from common.COM_utilities import clock
 from common.my_log import mylog
@@ -54,9 +55,9 @@ class FindObject(CommonDevices):
 
     def find_object(self, findName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """寻找目标"""
-        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
+        # waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         print("正在寻找{0}".format(description))
-        log(PocoNoSuchNodeException("等待-【{}】-元素超时".format(description)), desc="等待元素超时", snapshot=True)
+        # log(PocoNoSuchNodeException("等待-【{}】-元素超时".format(description)), desc="等待元素超时", snapshot=True)
         if self.poco(findName).wait(waitTime).exists():
             print("发现{0}".format(description))
             sleep(sleeptime)
@@ -205,7 +206,7 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def assert_resource(self, parentName, findName,findAttr,description="", waitTime=1, tryTime=1, reportError=True,sleeptime=0):
+    def assert_resource(self, parentName, findName,findAttr,description="", waitTime=1, tryTime=2, reportError=True,sleeptime=0):
         # self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture")
         while (tryTime > 0):
             tryTime = tryTime - 1
@@ -217,18 +218,19 @@ class FindObject(CommonDevices):
                     log("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue),desc="【资源检查】:{0}->{1}->{2}")
                     # mylog("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue))
                     return True
-                else:
-                    if reportError:
-                        log(ResourceError(errorMessage="【资源异常】：{0}->{1} is None".format(description, findAttr)),
-                            desc="【资源异常】：{0}->{1} is None".format(description, findAttr),
-                            snapshot=True,level="error")
                     # mylog(ResourceError(errorMessage="【资源异常】：{0}->{1} is None".format(description, findAttr)))
             except:
-                if reportError:
-                    log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr),
-                        snapshot=True,level="error")
+                log("资源检查异常重试")
+                # if reportError:
+                #     log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr),
+                #         snapshot=True,level="error")
                 # mylog(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr))
-        return False
+        else:
+            if reportError:
+                log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, findAttr)),
+                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr),
+                    snapshot=True, level="error")
+                return False
 
     def findClick_try(self, findName, ClickName, description="", waitTime=0.5, tryTime=1, sleeptime=0, log=True,
                       pocotype=None):
@@ -430,6 +432,83 @@ class FindObject(CommonDevices):
             else:
                 print("UIOther弹框检测结束")
                 return is_UIAlterPoP
+    def PopupManage(self):
+        """大厅弹框检查"""
+        self.Popuplist = []
+        poplist = MyData.popup_dir[0]
+        FullScreenPanellist = MyData.popup_dir[2]
+        havePopup = True
+        self.UIAlterPoP()
+        COM_utilities.clock()  # 插入计时器
+        while havePopup:
+            print("进入弹框判断")
+            mytime = float(COM_utilities.clock("stop"))
+            if mytime > 60:
+                log(Exception("弹框处理超时...."), snapshot=True)
+                raise Exception
+            if self.poco("FullScreenPanel").children():
+                if FullScreenPanellist:
+                    for k in FullScreenPanellist:
+                        self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,
+                                           tryTime=1, sleeptime=2)
+            if self.poco("PopupPanel").children():
+                print("进入PopupPanel弹框判断")
+                child = self.poco("PopupPanel").child(nameMatches="^UI.*", visible=True)
+                for list in child:
+                    listname = list.get_name()
+                    print("listname:", listname)
+                    for k in poplist:
+                        if listname == k["args"][0]:
+                            if listname == "UIGiftPopup":
+                                if self.find_try("UIGiftPopup", "推送礼包", 0.2, tryTime=1):
+                                    self.findClick_try("GiftShake", "GiftBag3", "礼物", 0.2, tryTime=1, sleeptime=5)
+                                    self.findClick_try("UIBagItemReward", "BtnStore", "会员卡", 0.2, tryTime=1,
+                                                       sleeptime=1)
+                                    self.findClick_try("UIBagItemReward", "BtnRead", "背包道具推送", 0.2, tryTime=1,
+                                                       sleeptime=1)
+                            else:
+                                self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,
+                                                   tryTime=1, sleeptime=2)
+            elif self.poco("PopUpPanel").children():
+                print("进入PopUpPanel弹框判断")
+                try:
+                    child1 = self.poco("PopUpPanel").child(nameMatches="^UI.*", visible=True)
+                    for list in child1:
+                        listname = list.get_name()
+                        print("listname:", listname)
+                        for k in poplist:
+                            if listname == k["args"][0]:
+                                if listname == "UIGiftPopup":
+                                    if self.find_try("UIGiftPopup", "推送礼包", 0.2, tryTime=1):
+                                        self.findClick_try("GiftShake", "GiftBag3", "礼物", 0.2, tryTime=1, sleeptime=5)
+                                        self.findClick_try("UIBagItemReward", "BtnStore", "会员卡", 0.2, tryTime=1,
+                                                           sleeptime=1)
+                                        self.findClick_try("UIBagItemReward", "BtnRead", "背包道具推送", 0.2, tryTime=1,
+                                                           sleeptime=1)
+                                else:
+                                    self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"],
+                                                       waitTime=1,
+                                                       tryTime=1, sleeptime=0.5)
+                except:
+                    print("PopUpPanel非点击弹框")
+            else:
+                print("判断当前无弹框")
+                havePopup = False
+            # self.discoverPopup_info["弹框列表："] = FindObject.Popuplist
+        return True
+
+    def common_Popup_Manage(self):
+        print("通用按钮判断")
+        list1 = []
+        try:
+            list = self.poco(nameMatches='.*Btn.*|Button')
+            for i in list:
+                list1.append(i)
+            list1.sort(key=lambda x: x.attr('_ilayer'), reverse=False)
+            print(list1[len(list1) - 1].get_name())
+            list1[len(list1) - 1].click()
+        except:
+            print("查询按钮列表异常")
 # FindObject1=FindObject()
 # REST1=REST()
 # REST1.mytest()

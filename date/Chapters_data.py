@@ -38,6 +38,8 @@ class UserData(APiClass):
         # self.book_list = []
         self.checklist=[]
         self.bookresult_dir = {}
+        self.type_check_dir={}
+
         self.getdata()
         self.downloadbook_sign = {}
         self.RpcClient = None
@@ -54,6 +56,7 @@ class UserData(APiClass):
         self.yaml_bookinfo()
         self.yaml_newpopup()
         self.yaml_bookread_result()
+        self.yaml_type_check()
 
     def __new__(cls):
         if cls._instance is None:
@@ -96,6 +99,10 @@ class UserData(APiClass):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
         return value
+
+    def yaml_type_check(self):
+        type_checkpath = os.path.join(path_YAML_FILES, "yamlGame/type_check.yml")
+        self.type_check_dir = self.read_yaml(type_checkpath)
 
     def yaml_case(self):
         bookdetailpaths = os.path.join(path_YAML_FILES, "yamlCase\\bookdetail.yml")
@@ -318,7 +325,5 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# aa=MyData.read_story_cfg_chapter("19017","19017006")
-# print(aa)
 # print(MyData.Story_cfg_chapter_dir["10342"])
 

@@ -12,3 +12,4 @@ dialogueEndPOP:
     UIChapterStar: CloseBtn
     UIChapterContinue: CloseBtn
     ContinueBtn: ContinueBtn
+    UIRoleLikeNew: OKBtn
