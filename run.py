@@ -200,7 +200,9 @@ if __name__ == '__main__':
     except Exception as e:
         mylog.error("------出现异常{}", e)
         log(e, "------出现异常--------")
+myRun.togetherReport()
+input('Press Enter to exit...')
     # myRun.pull_errorLog()
     # myRun.writelogs()
     # myRun.get_fileist()
-    myRun.togetherReport()
+

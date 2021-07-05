@@ -31,7 +31,6 @@ class BookRead(FindObject):
     chat_type = None
     filename_head = None
     Result_info = {}
-
     def __init__(self):
         FindObject.__init__(self)
         self.myShop = Shop()
@@ -43,9 +42,11 @@ class BookRead(FindObject):
         self.reset_read()
         if self.poco("UIDialogue").wait(5).exists():
             clock()
-            self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励", waitTime=1, sleeptime=3)
+            self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励")
+            if self.find_try("VisualRoleRender","全身像类型"):
+                self.BookRead_info["showWhole"]=True
             self.getbookprogress(bookid, chapterProgress)
-            sleep(1)
+            # sleep(1)
             while not self.isstopRead:
                 self.dialogueCourseJudge()  # 阅读过程判断对应章节显示的内容
             return True
@@ -217,19 +218,34 @@ class BookRead(FindObject):
 
     def role_check(self):
         """角色检测"""
-        if self.pos_id == 2:
-            RoleLeft_bool = self.assert_resource("NormalSayRoleLeft", "Cloth", "SpriteRenderer", "左侧人物的Cloth资源",
-                                                 waitTime=2)
-            self.resource_result(RoleLeft_bool, "SpriteRenderer", "左侧人物的Cloth资源")
-            RoleHair_bool = self.assert_resource("NormalSayRoleLeft", "Hair", "SpriteRenderer", "左侧人物的Hair资源",
-                                                 waitTime=2)
-            self.resource_result(RoleHair_bool, "SpriteRenderer", "左侧人物的Hair资源")
-        elif self.pos_id == 1:
-            # name = self.poco(nameMatches='^NormalSayRoleRight.*$')
-            RoleRightbool = self.assert_resource("RoleSay", "Cloth", "SpriteRenderer", "右侧角色Cloth检测", waitTime=2)
-            self.resource_result(RoleRightbool, "SpriteRenderer", "右侧人物Cloth检测")
-            RoleHair_bool = self.assert_resource("RoleSay", "Hair", "SpriteRenderer", "右侧人物的Hair资源", waitTime=2)
-            self.resource_result(RoleHair_bool, "SpriteRenderer", "右侧人物的Hair资源")
+        if self.BookRead_info["showWhole"]==False:
+            if self.pos_id == 2:
+                RoleLeft_bool = self.assert_resource("NormalSayRoleLeft", "Cloth", "SpriteRenderer", "左侧人物的Cloth资源",
+                                                     waitTime=2)
+                self.resource_result(RoleLeft_bool, "SpriteRenderer", "左侧人物的Cloth资源")
+                RoleHair_bool = self.assert_resource("NormalSayRoleLeft", "Hair", "SpriteRenderer", "左侧人物的Hair资源",
+                                                     waitTime=2)
+                self.resource_result(RoleHair_bool, "SpriteRenderer", "左侧人物的Hair资源")
+            elif self.pos_id == 1:
+                # name = self.poco(nameMatches='^NormalSayRoleRight.*$')
+                RoleRightbool = self.assert_resource("RoleSay", "Cloth", "SpriteRenderer", "右侧角色Cloth检测", waitTime=2)
+                self.resource_result(RoleRightbool, "SpriteRenderer", "右侧人物Cloth检测")
+                RoleHair_bool = self.assert_resource("RoleSay", "Hair", "SpriteRenderer", "右侧人物的Hair资源", waitTime=2)
+                self.resource_result(RoleHair_bool, "SpriteRenderer", "右侧人物的Hair资源")
+        else:
+            if self.pos_id == 2:
+                RoleLeft_bool = self.assert_resource("NormalSayRoleLeft", "Cloth", "SpriteRenderer", "全身像左侧人物的Cloth资源",
+                                                     waitTime=2)
+                self.resource_result(RoleLeft_bool, "SpriteRenderer", "全身像左侧人物的Cloth资源")
+                RoleHair_bool = self.assert_resource("NormalSayRoleLeft", "Hair", "SpriteRenderer", "全身像左侧人物的Hair资源",
+                                                     waitTime=2)
+                self.resource_result(RoleHair_bool, "SpriteRenderer", "全身像左侧人物的Hair资源")
+            elif self.pos_id == 1:
+                # name = self.poco(nameMatches='^NormalSayRoleRight.*$')
+                RoleRightbool = self.assert_resource("NormalSayRoleRight", "Cloth", "SpriteRenderer", "全身像右侧角色Cloth检测", waitTime=2)
+                self.resource_result(RoleRightbool, "SpriteRenderer", "全身像右侧人物Cloth检测")
+                RoleHair_bool = self.assert_resource("NormalSayRoleRight", "Hair", "SpriteRenderer", "全身像右侧人物的Hair资源", waitTime=2)
+                self.resource_result(RoleHair_bool, "SpriteRenderer", "全身像右侧人物的Hair资源")
 
     def head_check(self):
         """电话头像检测"""
@@ -327,6 +343,7 @@ class BookRead(FindObject):
         self.NormalSayRoleRight = None
         self.old_RoleRight_role_id = None
         self._etime = 0
+        self.BookRead_info["showWhole"]=False
 
     def dialogueEndPOP(self):
         """章节尾弹框"""
