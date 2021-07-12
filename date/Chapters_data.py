@@ -304,6 +304,9 @@ class UserData(APiClass):
         self.UserData_dir["ticket"] = ticket
         self.UserData_dir["credit"] = credit
         return self.UserData_dir
+    def updateUsercurrency(self,value_type,number):
+        """	修改虚拟币类型currency"""
+        self.syncValueApi(self.UserData_dir["uuid"], value_type=value_type,valuechange=number)
 
     def getUsermemberinfo(self):
         """获取会员相关信息"""
@@ -325,5 +328,6 @@ class UserData(APiClass):
 
 
 MyData = UserData()
+# MyData.getUsercurrency()
 # print(MyData.Story_cfg_chapter_dir["10342"])
 

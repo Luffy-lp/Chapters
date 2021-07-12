@@ -155,6 +155,7 @@ class Run(MyAnalysis):
             pass
         else:
             mylog.info("----------正在进行异常重启------")
+            test_stopgame()
             test_startgame()
             test_GameLoaded()
             test_discoverPopup()

@@ -57,10 +57,9 @@ class GameStart():
     def starGame(self):  # 启动游戏
         wake()
         print("尝试启动游戏")
-        mylog.info("启动游戏")
         start_app(MyData.EnvData_dir["packageName"])
-        print("等待加载")
         self.isStarGame = True
+
 
     def stopGame(self):
         stop_app(MyData.EnvData_dir["packageName"])

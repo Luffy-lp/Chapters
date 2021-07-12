@@ -7,6 +7,7 @@ from poco.utils.simplerpc.simplerpc import RpcAgent
 
 from common import COM_utilities
 from common.COM_findobject import FindObject
+from date.Chapters_data import MyData
 from scenes.scenes_login.SCN_newuser import NewUserGuide
 from scenes.SCN_pageTurn import PageTurn
 from common.my_log import mylog
@@ -28,17 +29,29 @@ class GameLoaded(FindObject):
         # self.Popup_login(login)
         return True
 
-    def gameloading(self):  # 游戏是否加载完成判断
-        while self.poco("Slider").wait(1).exists():
+    def gameloading(self):
+        """游戏是否加载完成判断"""
+        while self.poco("Handle Slide Area").wait(1).exists():
             self.Popo_Errorinfo()
             # self.Popup_login(login=1)
+            try:
+                percentage= self.poco("Handle Slide Area").offspring("Progress").get_text()
+                print("游戏加载进度：",percentage)
+            except:
+                pass
             if float(COM_utilities.clock("stop")) > 360:
                 print("游戏加载失败。。。")
                 log(Exception("游戏加载失败。。。"), snapshot=True)
                 raise Exception
         if self.GameLoaded_info["loadtime"] is None:
             self.GameLoaded_info["loadtime"] = float(COM_utilities.clock("stop")) - 2
-        mylog.info("完成游戏加载，加载时间为{0}秒".format(self.GameLoaded_info["loadtime"]))
+        # mylog.info("完成游戏加载，加载时间为{0}秒".format(self.GameLoaded_info["loadtime"]))
+        print("已进入游戏界面")
+        StdPocoAgent1 = StdPocoAgent()
+        UserID = StdPocoAgent1.get_UserID()
+        MyData.UserData_dir["uuid"] = UserID
+        print("UserID:", UserID)
+        MyData.getUsercurrency()
         return True
 
     def Popup_login(self, login=1):

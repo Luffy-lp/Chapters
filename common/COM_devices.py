@@ -34,7 +34,9 @@ class CommonDevices():
                 method = MyData.EnvData_dir["simulator"]
             auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method, ], project_root=path_BASE_DIR)
         except:
+            print("尝试查看电脑连接的可用移动设备")
             self.adb_dispose()
+            MyData.EnvData_dir["ADBip"] = "127.0.0.1:5037"
             conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + \
                    MyData.EnvData_dir["ADBdevice"]
             print("conf",conf)

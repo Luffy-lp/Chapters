@@ -67,6 +67,8 @@ def test_booklist():
                     bookchapter = int(beginchapter) + i
                     print("即将阅读", bookchapter)
                     booktraversal(str(bookchapter))
+
+
         else:
             print("书籍列表配置错误，请注意格式")
             return

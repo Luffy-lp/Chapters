@@ -1,4 +1,5 @@
 import json
+import time
 from time import sleep
 import traceback
 import requests
@@ -156,13 +157,12 @@ class APiClass():
         url = self.url + "syncValueApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
                 "channel_id": channel_id,
-                "random_id": "",
+                "random_id": str(time.time()),
                 "tag": "charge",
                 "value_type": value_type,
                 "value_all": "",
-                "valuechange": valuechange
+                "value_change": valuechange
                 }
-
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="syncValueApi")
         print(data)
         return data

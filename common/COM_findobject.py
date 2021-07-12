@@ -29,24 +29,24 @@ class FindObject(CommonDevices):
         "Info": "CenterBtn",
         "IMPORTANT": "CenterBtn",
     }
+
     def __init__(self):
         CommonDevices.__init__(self)
         if MyData.DeviceData_dir["poco"] == None:
-            MyData.DeviceData_dir["poco"] = UnityPoco()
-            ADBdevice = MyData.EnvData_dir["ADBdevice"]
-            if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-                MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
-                mylog.info("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
-                print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
-            mylog.info("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
-            print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
-            StdPocoAgent1 = StdPocoAgent()
-            UserID = StdPocoAgent1.get_UserID()
-            MyData.UserData_dir["uuid"] = UserID
-            print("UserID:", UserID)
+            self.initialized()
         self.poco = MyData.DeviceData_dir["poco"]
         self.androidpoco = MyData.DeviceData_dir["androidpoco"]
 
+    def initialized(self):
+        """基于poco之后的初始化"""
+        MyData.DeviceData_dir["poco"] = UnityPoco()
+        ADBdevice = MyData.EnvData_dir["ADBdevice"]
+        if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
+            MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+            mylog.info("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
+            print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
+        mylog.info("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
+        print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
@@ -96,13 +96,13 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def findClick_childobject(self, ClickPoco: poco, description="", waitTime=1, tryTime=1, sleeptime=0.1,
+    def findClick_childobject(self, ClickPoco: poco, description="", waitTime=1, tryTime=1, sleeptime=0,
                               clickPos=None):
         """用于关联父级才能点击到的元素"""
-        waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
+        # waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
         if ClickPoco.wait(waitTime).exists():
             print("发现{0}".format(description))
-            mylog.info("查找点击元素-【{}】--成功".format(description))
+            # mylog.info("查找点击元素-【{}】--成功".format(description))
             if clickPos is None:
                 ClickPoco.click()
             else:
@@ -206,16 +206,16 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def assert_resource(self, parentName, findName,findAttr,description="", waitTime=1, tryTime=2, reportError=True,sleeptime=0):
+    def assert_resource(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
+                        sleeptime=0):
         # self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture")
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
-                # log("【资源检查】:{0}->{1}属性检测".format(description,findAttr))
-                # gameobject = self.poco(findName)
-                if self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr):
-                    attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
-                    log("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue),desc="【资源检查】:{0}->{1}->{2}")
+                attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
+                if attrValue:
+                    # attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
+                    log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
                     # mylog("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue))
                     return True
                     # mylog(ResourceError(errorMessage="【资源异常】：{0}->{1} is None".format(description, findAttr)))
@@ -250,6 +250,8 @@ class FindObject(CommonDevices):
                 else:
                     mylog.info("尝试点击-【{}】-元素失败".format(description))
                     print("未触发点击")
+            else:
+                return False
         except:
             log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
             mylog.error("尝试点击-【{}】-元素失败".format(description))
@@ -407,7 +409,7 @@ class FindObject(CommonDevices):
         sleep(mytime)
 
     def UIAlterPoP(self):
-        is_UIAlterPoP=False
+        is_UIAlterPoP = False
         while True:
             if len(self.poco("UIOther").children().wait(0.5)) >= 2:
                 is_UIAlterPoP = True
@@ -432,6 +434,7 @@ class FindObject(CommonDevices):
             else:
                 print("UIOther弹框检测结束")
                 return is_UIAlterPoP
+
     def PopupManage(self):
         """大厅弹框检查"""
         self.Popuplist = []
@@ -498,18 +501,22 @@ class FindObject(CommonDevices):
         return True
 
     def common_Popup_Manage(self):
+        """通用弹框"""
         print("通用按钮判断")
         list1 = []
         try:
             list = self.poco(nameMatches='.*Btn.*|Button')
             for i in list:
-                list1.append(i)
+                if i.get_name() != "Btn":
+                    list1.append(i)
             list1.sort(key=lambda x: x.attr('_ilayer'), reverse=False)
             print(list1[len(list1) - 1].get_name())
             list1[len(list1) - 1].click()
         except:
             print("查询按钮列表异常")
 # FindObject1=FindObject()
+# aa=FindObject1.poco("UIBeginAdShow").offspring("TxtFree").get_TMPtext()
+# print("dddddd",aa)
 # REST1=REST()
 # REST1.mytest()
 # test=FindObject1.get_sdk_version()

@@ -1,7 +1,7 @@
 import time
 
 from airtest.core.api import assert_equal
-from common.COM_findobject import FindObject
+from common.COM_findobject import FindObject, log
 from date.Chapters_data import MyData
 
 # TODO:概率出现未成功点击书籍的
@@ -16,28 +16,6 @@ class BookNewDetail(FindObject):
     def bookNewDetailPOP(self):
         if self.find_try("UIBookNewDetail", "书籍详情页", waitTime=2):
             self.UIAlterPoP()
-        # print("详情页弹框配置：",MyData.popup_dir[1])
-        # poplist = MyData.popup_dir[1]
-        # time=5
-        # while time>0:
-        #     time-=1
-        #     if len(self.poco("UIOther").children())>=2:
-        #        txt= self.poco("UIAlter").offspring("Title").get_TMPtext()
-        #         for k in poplist:
-        #             if k["args"][0] == "UIAlter":
-        #                 self.UIAlterPoP()
-        #             if k["args"][0] == "UIPassGuide":
-        #                 while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
-        #                     self.findClick_object("UIPassGuide", "Close", description="Close按钮")
-        #                     self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
-        #             else:
-        #                 self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=0.2,
-        #                                    tryTime=1, sleeptime=2)
-        #     else:
-        #         return
-            # if self.find_try("CenterBtn", description="弹框确认按钮"):
-            #     self.findClick_object("CenterBtn", "CenterBtn", description="弹框确认按钮")
-    # def bookChoose(self):
     def bookChoose_Shelf(self,bookShelf,index):
         """找到书架招数WeekView"""
         index = int(index)
@@ -162,23 +140,29 @@ class BookNewDetail(FindObject):
     #     return True, Booklist
 
     def book_Play(self,index=None):
-        print(index)
         if index:
             try:
                 POCO=self.poco("chapterBtn(Clone)")[int(index)-1]
                 self.findClick_childobject(POCO,description="选择第{}章".format(index),waitTime=3)
             except:
-                self.click_close()
-                self.click_object("SearchBtn", description="bookid搜索按钮",waitTime=1)
-                self.bookNewDetailPOP()
-                POCO=self.poco("chapterBtn(Clone)")[int(index)-1]
-                self.findClick_childobject(POCO,description="选择第{}章".format(index),waitTime=3)
+                try:
+                    self.click_close()
+                    self.click_object("SearchBtn", description="bookid搜索按钮",waitTime=1)
+                    self.bookNewDetailPOP()
+                    POCO=self.poco("chapterBtn(Clone)")[int(index)-1]
+                    self.findClick_childobject(POCO,description="选择第{}章".format(index),waitTime=3)
+                except:
+                    log(Exception("{}章节不存在请查询章节是否上传.......".format(index)))
         if self.find_try("Play", description="Play按钮",waitTime=1):
            self.findClick_object("Play", "Play", description="Play按钮",waitTime=1)
            if self.UIAlterPoP():
                self.findClick_object("Play", "Play", description="Play按钮", waitTime=1)
         else:
             self.findClick_object("DaypassPlay", "DaypassPlay", description="Daypass按钮",waitTime=1)
+        if int(MyData.UserData_dir["diamond"]) < 4999:
+            MyData.updateUsercurrency("diamond", "4999")
+        if int(MyData.UserData_dir["ticket"]) < 99:
+            MyData.updateUsercurrency("ticket", "99")
         return True
 
     def click_close(self):

@@ -3,24 +3,24 @@
 #字典参数：${func(a=1, b=2)}
 #混合类型参数：${func(1, 2, a=3, b=4)}
 #单个用例可以#号全部注释，未注释用例step里面最少有一个，用例说明参考“测试步骤配置说明”
-#case1:
-#    caseauthor: "lipeng"
-#    casename: "安装游戏-"
-#    casedec: "安装游戏"
-#    repeattime: "3"
-#    reportname: "安装游戏"
-#    step:
+case1:
+    caseauthor: "lipeng"
+    casename: "安装游戏-"
+    casedec: "安装游戏"
+    repeattime: "3"
+    reportname: "安装游戏"
+    step:
 #        - ${test_uninstallGame()}
-#        - ${test_installGame()}
-#case2:
-#    caseauthor: "lipeng"
-#    casename: "用户登陆-"
-#    casedec: "用户登陆描述"
-#    repeattime: "3"
-#    reportname: "用户登陆"
-#    step:
-#        - ${test_startgame()} #启动游戏
-#        - ${test_GameLoaded()} #游戏加载处理
+        - ${test_installGame()}
+case2:
+    caseauthor: "lipeng"
+    casename: "用户登陆-"
+    casedec: "用户登陆描述"
+    repeattime: "3"
+    reportname: "用户登陆"
+    step:
+        - ${test_startgame()} #启动游戏
+        - ${test_GameLoaded()} #游戏加载处理
 #        - ${test_discoverPopup()} #大厅弹框
 #        - ${pageTurn(Bottom,4)} #底部切换到个人信息
 #        - ${test_signin()} #用户登录

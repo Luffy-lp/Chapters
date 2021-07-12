@@ -83,7 +83,7 @@ def clock(type=None):  # 计时器
     global start_time
     if type == "stop":
         spendtime = '%.2f' % (perf_counter() - start_time)
-        print("花费时间:", spendtime)
+        print("花费时间{}秒:".format(spendtime))
         return spendtime
     else:
         start_time = perf_counter()

@@ -12,10 +12,10 @@ class BookLoad(FindObject):
         self._POS = COM_utilities.PosTurn([0.5, 0.6])
 
     def bookLoad(self,bookid=None):
-        """书籍加载"""
-        if self.find_try("DefaultBg", description="书籍加载界面", waitTime=2, tryTime=2):
+        """书籍加载DefaultBg"""
+        if self.find_try("ChapterLoad", description="书籍加载界面", waitTime=2, tryTime=2):
             startime = time.time()
-            while self.poco("DefaultBg").wait(3).exists():
+            while self.poco("ChapterLoad").wait(3).exists():
                 loadtime = time.time() - startime
                 if MyData.UserData_dir["bookDetailInfo"]["BookID"]:
                     MyData.download_bookresource(MyData.UserData_dir["bookDetailInfo"]["BookID"])
@@ -33,7 +33,7 @@ class BookLoad(FindObject):
                 #     sleep(15)
                 #     self.findClick_try("Interstitial close button", "Interstitial close button", description="关闭广告",
                 #                        pocotype="Androidpoco", waitTime=3)
-                if loadtime > 360:
+                if loadtime > 720:
                     self.findClick_object("HomeBtn", "HomeBtn", description="加载书籍超时,返回大厅")
                     mylog.error("加载书籍超时")
                     log(loadtime, timestamp=time.time(), desc="加载书籍超时", snapshot=True)

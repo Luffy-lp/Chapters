@@ -6,6 +6,8 @@ UIAlter:
     IMPORTANT: CenterBtn #renewBtn
 VisualRead:
     UIVipSaleTip: CloseBtn
+    UITreasureShow: close
+    UISub: BackBtn
 dialogueEndPOP:
     RoleCard: BtnGet
     AdGroup: BtnGet
@@ -13,3 +15,5 @@ dialogueEndPOP:
     UIChapterContinue: CloseBtn
     ContinueBtn: ContinueBtn
     UIRoleLikeNew: OKBtn
+    UIVipSaleTip: CloseBtn
+    UITreasureShow: close

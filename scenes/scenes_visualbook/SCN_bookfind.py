@@ -1,7 +1,7 @@
 import time
 
 from airtest.core.api import assert_equal, text, keyevent
-from common.COM_findobject import FindObject
+from common.COM_findobject import FindObject, log
 from date.Chapters_data import MyData
 
 # TODO:概率出现未成功点击书籍的
@@ -40,21 +40,14 @@ class Bookfind(FindObject):
 
     def bookChoose_bookid(self,bookid):
         """通过书籍ID查找"""
-        mytime=3
-        while mytime>0:
-            mytime = 3
-            self.click_object("Placeholder",description="bookid搜索书籍输入框")
-            for i in range(5):
-                keyevent("67")
-            text(bookid)
-            self.click_object("SearchBtn",description="恢复光标焦点")
-            bookidText = self.poco("InputField").child("Text").get_text()
-            if bookidText==bookid:
-                self.click_object("SearchBtn",description="bookid搜索按钮")
-                mytime=0
-        time.sleep(3)
+        self.poco("InputField").set_text(bookid)
+        self.click_object("SearchBtn",description="bookid搜索按钮",waitTime=1,sleeptime=2)
         if self.find_try("UIBookNewDetail", "书籍详情页", waitTime=2):
             self.UIAlterPoP()
+        elif self.find_try("UIBookErrorEmail", "书籍详情页"):
+            log(Exception("书籍不存在"),snapshot=True)
+        else:
+            log(Exception("查找书籍异常原因未知"), snapshot=True)
         # self.bookNewDetailPOP()
     def bookChoose_Shelf(self,bookShelf,index):
         """找到书架招数WeekView"""

@@ -42,10 +42,12 @@ def test_installGame():
 def test_startgame():
     """启动游戏"""
     myGameStart = GameStart()
-    myGameStart.stopGame()
-    sleep(1)
+    # sleep(1)
     myGameStart.starGame()
     # assert_equal(myGameStart.isStarGame, True, "启动游戏{0}".format(myGameStart.GameStart_info))
+def test_stopgame():
+    myGameStart = GameStart()
+    myGameStart.stopGame()
 
 def test_signin(login="Google", email="15019423971", password="yo5161381"):
     """用户绑定"""

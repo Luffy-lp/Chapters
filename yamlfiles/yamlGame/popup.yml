@@ -26,6 +26,9 @@
         - ${周礼包(UIWeekCardBuy, close)}
         - ${月签到活动(UISignActivity, Back)}
         - ${月签到活动(UIRewardPopup, BtnGet)}
+        - ${月签到活动(UISignActivity, Back)}
+        - ${关闭宝箱1(UIVipSaleTip, CloseBtn)}
+        - ${关闭宝箱(UITreasureShow, close)}
 - 1:
     Popupscene: "bookdetail"
     Poputype: "none"

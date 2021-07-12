@@ -1,4 +1,4 @@
-from airtest.core.api import touch
+from airtest.core.api import touch, sleep
 
 from common import COM_utilities
 from date.Chapters_data import MyData
@@ -9,13 +9,24 @@ from scenes.scenes_discover.SCN_discover import Discover
 class PageTurn(FindObject):
     # def __init__(self):
     #     FindObject.__init__(self)
+    def getState(self):
+        self.find_try("DiscoverCanvas")
+
+    def toTurn(self, finishScene):
+        pass
     def Bottom_click(self, index):
         """0~4对应底部主场景"""
         index = str(index)
+        if index == "0":
+            while self.find_try("Home",description="小房子"):
+                pos = self.poco("Home").get_position()
+                touch(COM_utilities.PosTurn(pos))
+                sleep(1)
         if self.find_object("Bottom", description="底部跳转", waitTime=3):
             Bottom = self.poco("Bottom").child(index)
             self.findClick_childobject(Bottom, description="底部跳转到" + index,
                                        waitTime=3 + float(MyData.EnvData_dir["sleepLevel"]))
+
             if index == "0":  # 如果跳转到大厅后需要检查弹框
                 myDiscover = Discover()
                 myDiscover.discoverPopup()
