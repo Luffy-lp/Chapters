@@ -10,14 +10,14 @@ UserData:
 EnvData:
   APKpackage: "Chapters_620_323_60d46e92b9031.apk" #安装包名称
   packageName: "com.mars.avgchapters" #apk包名称
-  ADBip: "192.168.191.22:5039" #连接adb运行地址 android://192.168.191.36:5039/R52M90DYELT
-  ADBdevice: "721MECRH24RE7" #******连接ADB设备ID需要修改正确的配置***********android://192.168.191.22:5039/721MECRH24RE7
+  ADBip: "192.168.191.22:5039" #连接adb运行地址android://192.168.191.27:5039/8711d27d7d22
+  ADBdevice: "88Y0219B06010006" #******连接ADB设备ID需要修改正确的配置***********android://192.168.191.22:5039/88Y0219B06010006
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setup通用连接设备的参数
   simulator: "?cap_method=JAVACAP&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setupJAVA连接设备的参数
   device: "android" #连接设备类型
   sleepLevel: "5" #根据手机运行速度配置延迟
 APIData:
-  URL: "http://testitf.stardustgod.com/" #API连接地址
+  URL: "http://dev-chapters-int.stardustgod.com/" #API连接地址http://testitf.stardustgod.com/
   Header: {"TIMECLOSE": "1"} #API头内容
 PathData:
   errorLogpath: "storage/emulated/0/Android/data/com.mars.avgchapters/files/errorfile" #unity异常日志存放路径尽量配置正确

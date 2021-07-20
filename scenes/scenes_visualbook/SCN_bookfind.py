@@ -90,7 +90,9 @@ class Bookfind(FindObject):
         return True
 
 # Bookfind1=Bookfind()
-# Bookfind1.bookChoose_bookid("10001")
+# aa=Bookfind1.find_try("Discover",description="大厅")
+# print(aa)
+
 # # # if Bookfind1.poco("NormalSayRoleLeft").offspring("Body"):
 # # #    aaa= Bookfind1.poco("NormalSayRoleLeft").offspring("Body").get_SpriteRenderer()
 # # #    print(aaa)

@@ -97,7 +97,8 @@ def booktraversal(bookchapter):
     MyData.UserData_dir["bookDetailInfo"]["BookID"] = None
     Bookfind1 = Bookfind()
     myVisual = BookRead()
-    myVisual.progress_info = {}
+    # myVisual.progress_info = {}
+    # myVisual.BookRead_info = {}
     bookNewDetail = BookNewDetail()
     Bookfind1.bookChoose_bookid(bookid)
     bookNewDetail.book_Play(chapterid)

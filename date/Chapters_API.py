@@ -10,21 +10,18 @@ from common.COM_path import *
 
 
 class APiClass():
-    _response = None
     Header = {"TIMECLOSE": "1"}
-    url = "http://testitf.stardustgod.com/"
-
+    url = "http://dev-chapters-int.stardustgod.com/"
     def __init__(self):
+        self._response = None
         print("调用接口类")
-
     def try_APIlink(self, url, headers, body, name, trytime=100, timeout=10):
         """requests公共方法"""
         while (trytime >= 0):
             trytime = trytime - 1
             try:
-                print("拉取{0}接口".format(name))  # 补充正则截取
+                print("拉取{0}接口".format(name))  #补充正则截取
                 self._response = requests.post(url=url, headers=headers, data=body, timeout=10)
-
             except:
                 # traceback.print_exc()
                 print("拉取{0}接口失败，重试".format(name))
@@ -223,11 +220,13 @@ class APiClass():
             zip_file.extract(f, folder_abs)
         zip_file.close()
 
-    def avgcontentApi(self, bookid):
+    def avgcontentApi(self, bookid,channel_id="AVG10005",country_code="CN"):
         """获取章节资源下载地址"""
         url = self.url + "avgcontentApi.Class.php?DEBUG=true"
         body = {"chapter_id": bookid,
-                "source_type": "t0"
+                "source_type": "t0",
+                "channel_id":channel_id,
+                "country_code":country_code,
                 }
         response = self.try_APIlink(url=url, headers=self.Header, body=body, name="avgcontentApi")
         address: str = response["address"]
@@ -244,10 +243,9 @@ class APiClass():
                 path = os.path.join(path_resource, addresslist[len(addresslist) - 1])
                 print("path", path)
                 pathbook = os.path.join(path_resource, bookid)
-                print("pathbook", pathbook)
+                print("资源路径", pathbook)
                 with open(path, "wb") as code:
                     code.write(r.content)
-                    print("打开书籍资源")
                 sleep(5)
                 code.close()
                 file_zip = zipfile.ZipFile(path, 'r')
@@ -255,14 +253,15 @@ class APiClass():
                 file_zip.extractall(pathbook)
                 file_zip.close()
                 os.remove(path)
+                print("书籍资源下载成功")
                 return
             except BaseException as e:
                 sleep(2)
                 print("书籍资源读取失败,重试", e)
             else:
                 print("书籍资源读取成功")
+        print("下载书籍资源失败")
         # raise Exception("下载书籍资源失败")
-
 # APiClass1=APiClass()
-# data=APiClass1.getCommonDataApi("46776")
+# data=APiClass1.avgcontentApi("12065")
 # print("data111111",data)

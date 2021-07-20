@@ -58,6 +58,7 @@ class GameStart():
         wake()
         print("尝试启动游戏")
         start_app(MyData.EnvData_dir["packageName"])
+        print("启动游戏")
         self.isStarGame = True
 
 

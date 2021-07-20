@@ -83,6 +83,20 @@ class FindObject(CommonDevices):
             mylog.error("查找点击元素-【{}】--失败".format(findName))
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
+    def click_offspring(self, parentName, offspringName, description="", waitTime=1, tryTime=1, sleeptime=0):
+        """父级关联查找"""
+        print("正在寻找{0}".format(description))
+        try:
+            self.poco(parentName).offspring(offspringName).wait(waitTime).click()
+            mylog.info("点击元素-【{}】--成功".format(description))
+            print("点击元素-【{}】--成功".format(description))
+            sleep(sleeptime)
+            return True
+        except Exception as e:
+            mylog.error("点击【{0}】出现未知错误，{1}".format(description, e))
+            return False
+        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
+        raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
     def find_childobject(self, findPoco: poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
@@ -214,21 +228,33 @@ class FindObject(CommonDevices):
             try:
                 attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
                 if attrValue:
-                    # attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
                     log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
-                    # mylog("【资源检查】:{0}->{1}->{2}".format(description,findAttr,attrValue))
                     return True
-                    # mylog(ResourceError(errorMessage="【资源异常】：{0}->{1} is None".format(description, findAttr)))
             except:
                 log("资源检查异常重试")
-                # if reportError:
-                #     log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr),
-                #         snapshot=True,level="error")
-                # mylog(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description,findAttr)), desc="【资源异常】：{0}->未找到{1}".format(description,findAttr))
         else:
             if reportError:
                 log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, findAttr)),
-                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr),
+                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr),snapshot=True, level="error")
+                return False
+
+    def assert_getText(self, parentName, findName, textAttr, description="", waitTime=1, tryTime=2, reportError=True,
+                        sleeptime=0):
+        # self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture")
+        while (tryTime > 0):
+            tryTime = tryTime - 1
+            if textAttr=="TMPtext":
+                try:
+                    mytext = self.poco(parentName).offspring(findName).wait(waitTime).get_TMPtext()
+                    if mytext:
+                        log("【资源检查】:{0}->{1}->{2}".format(description, textAttr, mytext), desc="【资源检查】:{0}->{1}->{2}")
+                        return mytext
+                except:
+                    log("资源检查异常重试")
+        else:
+            if reportError:
+                log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, textAttr)),
+                    desc="【资源异常】：{0}->未找到{1}".format(description, textAttr),
                     snapshot=True, level="error")
                 return False
 
@@ -410,30 +436,36 @@ class FindObject(CommonDevices):
 
     def UIAlterPoP(self):
         is_UIAlterPoP = False
-        while True:
-            if len(self.poco("UIOther").children().wait(0.5)) >= 2:
-                is_UIAlterPoP = True
-                AlterTxt = MyData.newPoP_dir["UIAlter"]
-                # if self.find_try("AlterView", description="文本弹框", waitTime=1):
-                txt = self.poco("UIAlter").offspring("Title").get_TMPtext()
-                print("弹框类型：", txt)
-                mylog.info("发现-【{}】-类型弹框".format(txt))
-                Btn = AlterTxt.get(txt)
-                self.Popuplist.append(txt)
-                print("按钮名称", Btn)
-                if Btn == None:
-                    self.findClick_try("CenterBtn", "CenterBtn", description="点击弹框按钮")
+        time=10
+        while time>1:
+            time-=1
+            try:
+                if len(self.poco("UIOther").children().wait(0.5)) >= 2:
+                    is_UIAlterPoP = True
+                    AlterTxt = MyData.newPoP_dir["UIAlter"]
+                    # if self.find_try("AlterView", description="文本弹框", waitTime=1):
+                    txt = self.poco("UIAlter").offspring("Title").get_TMPtext()
+                    print("弹框类型：", txt)
+                    mylog.info("发现-【{}】-类型弹框".format(txt))
+                    Btn = AlterTxt.get(txt)
+                    self.Popuplist.append(txt)
+                    print("按钮名称", Btn)
+                    if Btn == None:
+                        self.findClick_try("CenterBtn", "CenterBtn", description="点击弹框按钮")
+                        return
+                    else:
+                        try:
+                            self.poco(Btn).click()
+                            print("点击按钮", Btn)
+                            sleep(1)
+                        except:
+                            print("未成功点击按钮")
+                            return False
                 else:
-                    try:
-                        self.poco(Btn).click()
-                        print("点击按钮", Btn)
-                        sleep(1)
-                    except:
-                        print("未成功点击按钮")
-                        return False
-            else:
-                print("UIOther弹框检测结束")
-                return is_UIAlterPoP
+                    print("UIOther弹框检测结束")
+                    return is_UIAlterPoP
+            except:
+                log(Exception("查找弹框异常"),snapshot=True)
 
     def PopupManage(self):
         """大厅弹框检查"""
@@ -515,7 +547,8 @@ class FindObject(CommonDevices):
         except:
             print("查询按钮列表异常")
 # FindObject1=FindObject()
-# aa=FindObject1.poco("UIBeginAdShow").offspring("TxtFree").get_TMPtext()
+# aa=FindObject1.assert_getText("UICanvasStatic","Placeholder","TMPtext",description="角色名称")
+# aa=FindObject1.poco("").offspring("Placeholder").get_TMPtext()
 # print("dddddd",aa)
 # REST1=REST()
 # REST1.mytest()

@@ -13,29 +13,28 @@ from common.COM_path import *
 from common.COM_trans import *
 
 class BookRead(FindObject):
-    isstopRead = True  # 阅读状态
-    isbookLoad = False
-    iserrTime = 0
-    touchtime = 0
-    _etime = 0
-    progress_info = {}
-    getstoryoptionslist = {}
-    Story_cfg_chapter_dir = {}
-    option_record = {}
-    BookRead_info = {}
-    NormalSayRoleRight = None
-    old_RoleRight_role_id = None
-    achatProgress = None
-    pos_id = None  # 当前选项self.pos_id值
-    chat_type = None
-    filename_head = None
-    Result_info = {}
+    # myShop = Shop()
     def __init__(self):
         FindObject.__init__(self)
-        self.myShop = Shop()
-        self._POS = COM_utilities.PosTurn([0.5, 0.3])
         self.StdPocoAgent1 = StdPocoAgent()
-
+        self. _POS = COM_utilities.PosTurn([0.5, 0.3])
+        self.isstopRead = True  # 阅读状态
+        self.isbookLoad = False
+        self.iserrTime = 0
+        self.touchtime = 0
+        self. _etime = 0
+        self.progress_info = {}
+        self.BookRead_info = {}
+        self.getstoryoptionslist = {}
+        self.Story_cfg_chapter_dir = {}
+        self.option_record = {}
+        self.NormalSayRoleRight = None
+        self.old_RoleRight_role_id = None
+        self.achatProgress = None
+        self.pos_id = None  # 当前选项self.pos_id值
+        self.chat_type = None
+        self.filename_head = None
+        self.Result_info = {}
     def bookRead(self, bookid=None, chapterProgress=None):
         """视觉小说阅读"""
         self.reset_read()
@@ -43,15 +42,14 @@ class BookRead(FindObject):
             clock()
             if self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励"):
                 pass
-            elif self.find_try("TxtFree","非付费用户章节头广告"):
+            elif self.find_try("TxtFree", "非付费用户章节头广告"):
                 touch(self._POS)
-                sleep(1)
                 keyevent("HOME")
                 start_app("com.mars.avgchapters")
-            if self.find_try("VisualRoleRender","全身像类型"):
-                self.BookRead_info["showWhole"]=True
+                sleep(2)
+            if self.find_try("VisualRoleRender", "全身像类型"):
+                self.BookRead_info["showWhole"] = True
             self.getbookprogress(bookid, chapterProgress)
-            # sleep(1)
             while not self.isstopRead:
                 self.dialogueCourseJudge()  # 阅读过程判断对应章节显示的内容
             return True
@@ -64,16 +62,15 @@ class BookRead(FindObject):
         """初始化当前书籍信息"""
         self.BookRead_info["result"] = True
         readprogress = MyData.getreadprogress_local(self.StdPocoAgent1)  # 拉取本地当前阅读进度
-        print("readprogress", readprogress)
+        print("阅读进度：", readprogress)
         self.progress_info["chapterProgress"] = chapterProgress
-        MyData.read_story_cfg_chapter(BookID,
-                                      str(self.progress_info["chapterProgress"]))  # 拉取章节信息存Story_cfg_chapter_dir表
-        self.progress_info["chatProgress"] = readprogress  # 更新本地当前阅读对话进度
-        self.progress_info["option_info"] = MyData.Story_cfg_chapter_dir[
-            str(self.progress_info["chatProgress"])]  # 更新对话信息
+        MyData.read_story_cfg_chapter(BookID,str(self.progress_info["chapterProgress"]))  # 拉取章节信息存Story_cfg_chapter_dir表
+        self.progress_info["chatProgress"] = readprogress  #更新本地当前阅读对话进度
+        self.progress_info["option_info"] = MyData.Story_cfg_chapter_dir[str(self.progress_info["chatProgress"])]#更新对话信息
         self.updte_oldReadProgress()  # 保存老进度
         self.progress_info["chat_num"] = MyData.Story_cfg_chapter_dir["length"] + 10000  # 当前章节对话总数
         self.progress_info["BookID"] = BookID
+        self.option_record["resourceProgress"]= self.progress_info["chatProgress"]
         print("阅读书籍:", BookID)
         print("章节进度:", self.progress_info["chapterProgress"])
         print("对话总数:", self.progress_info["chat_num"])
@@ -101,7 +98,7 @@ class BookRead(FindObject):
             sleep(1.5)
         if self.progress_info["option_info"]["is_need_around"] == 1:
             print("场景环绕等待")
-            sleep(4)
+            sleep(3)
         self.option_record["scene_bg_id"] = self.progress_info["option_info"]["scene_bg_id"]  # 背景
 
     def updte_readprogress(self):
@@ -133,6 +130,36 @@ class BookRead(FindObject):
             SceneBGbool1 = self.assert_resource("SceneBG", "Background", "SpriteRenderer", "特效类背景", waitTime=1)
             self.resource_result(SceneBGbool1, "SpriteRenderer", "特效类背景")
 
+    def friendID_check(self):
+        """friend_id检测"""
+        try:
+            friend_id = self.progress_info["option_info"]["friend_id"]  # 普通文本
+            if friend_id and friend_id!=0:
+                log("【资源检查】:friend_id->True  [{}]".format(friend_id))
+            else:
+                self.resource_result(False, "txt", "friend_id")
+                log(ResourceError(errorMessage="资源异常：friend_id内容为空或为0"), desc="资源异常：friend_id内容为空或为0",
+                    snapshot=True)
+        except:
+            self.resource_result(False, "txt", "friend_id")
+            log(ResourceError(errorMessage="资源异常：friend_id内容为空或为0"), desc="资源异常：friend_id内容为空或为0",
+                snapshot=True)
+
+    def goodsTxt_check(self):
+        try:
+            goodstype = self.progress_info["option_info"]["goodstype"]  # 普通文本
+            goodsid = self.progress_info["option_info"]["goodsid"]  # 普通文本
+            if goodstype and goodsid:
+                log("【资源检查】:goodstype:{1},goodsid:{2}->True".format(goodstype, goodsid))
+            else:
+                self.resource_result(False, "txt", "goodstype和goodsid")
+                log(ResourceError(errorMessage="资源异常：内容为空"), desc="资源异常：内容为空",
+                    snapshot=True)
+        except:
+            self.resource_result(False, "txt", "goodstype和goodsid")
+            log(ResourceError(errorMessage="资源异常：未找到goodstype或goodsid"), desc="资源异常：未找到goodstype或goodsid",
+                snapshot=True)
+
     def content_check(self):
         """内容检测"""
         self.Result_info["content"] = False
@@ -155,25 +182,20 @@ class BookRead(FindObject):
                 self.Result_info["content"] = True
             else:
                 if self.Result_info["goods"] == False:
-                    self.BookRead_info["result"] = False
-                    print("内容为空:", content)
-                    dec = self.filename_head + "content"
-                    myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+                    self.resource_result(False, "txt", "content或mind")
                     log(ResourceError(errorMessage="资源异常：内容为空"), desc="资源异常：内容为空",
                         snapshot=True)
-        except Exception as e:
-            print("读取content和mind配置异常", e)
+        except:
+            self.resource_result(False, "txt", "content或mind")
+            log(ResourceError(errorMessage="资源异常：未发现content或mind"), desc="资源异常：未发现content或mind",
+                snapshot=True)
         finally:
             if self.Result_info["goods"] == False and self.Result_info["content"] == False:
-                self.BookRead_info["result"] = False
-                dec = self.filename_head + "content"
-                myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-                log(ResourceError(errorMessage="资源异常：内容为空"), desc="资源异常：内容为空",
+                self.resource_result(False, "txt", "content或mind")
+                log(ResourceError(errorMessage="资源异常：未发现content或mind"), desc="资源异常：未发现content或mind",
                     snapshot=True)
             if self.Result_info["goods"] == True and self.Result_info["content"] == True:
-                self.BookRead_info["result"] = False
-                dec = self.filename_head + "同时存在文字和物品"
-                myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+                self.resource_result(False, "txt", "同时存在文字和物品")
                 log(ResourceError(errorMessage="资源异常：同时存在文字和物品"), desc="资源异常：同时存在文字和物品",
                     snapshot=True)
 
@@ -200,6 +222,8 @@ class BookRead(FindObject):
         """角色选择资源"""
         Sbool = self.assert_resource("UIChapterSelectRoleOver", "Cloth", "texture", "角色选择确认")
         self.resource_result(Sbool, "texture", "角色选择确认")
+        bodybool = self.assert_resource("UIChapterSelectRoleOver", "Body", "texture", description="角色Body资源")
+        self.resource_result(bodybool, "texture", "角色Body资源")
         return True
 
     def showChangeDress_check(self):
@@ -209,6 +233,8 @@ class BookRead(FindObject):
             list = self.poco("Viewport").offspring("Content").children().wait(2)
             for key, vlus in enumerate(list):
                 name = vlus.get_name()
+                bodybool = self.assert_resource(name, "Body", "texture", description="角色装扮Body资源")
+                self.resource_result(bodybool, "texture", "角色装扮Body资源")
                 Clothbool = self.assert_resource(name, "Cloth", "texture", description="角色装扮Cloth资源")
                 self.resource_result(Clothbool, "texture", "角色装扮Cloth资源")
         except ResourceError as e:
@@ -222,33 +248,51 @@ class BookRead(FindObject):
 
     def role_check(self):
         """角色检测"""
-        if self.BookRead_info["showWhole"]==False:
+        if self.BookRead_info["showWhole"] == False:
             if self.pos_id == 2:
+                bodybool = self.assert_resource("NormalSayRoleLeft", "Body", "SpriteRenderer", description="左侧人物Body资源")
+                self.resource_result(bodybool, "SpriteRenderer", "左侧人物Body资源")
                 RoleLeft_bool = self.assert_resource("NormalSayRoleLeft", "Cloth", "SpriteRenderer", "左侧人物的Cloth资源")
                 self.resource_result(RoleLeft_bool, "SpriteRenderer", "左侧人物的Cloth资源")
                 RoleHair_bool = self.assert_resource("NormalSayRoleLeft", "Hair", "SpriteRenderer", "左侧人物的Hair资源")
                 self.resource_result(RoleHair_bool, "SpriteRenderer", "左侧人物的Hair资源")
             elif self.pos_id == 1:
                 # name = self.poco(nameMatches='^NormalSayRoleRight.*$')
+                bodybool = self.assert_resource("RoleSay", "Body", "SpriteRenderer", description="右侧人物Body资源")
+                self.resource_result(bodybool, "SpriteRenderer", "右侧人物Body资源")
                 RoleRightbool = self.assert_resource("RoleSay", "Cloth", "SpriteRenderer", "右侧角色Cloth检测")
                 self.resource_result(RoleRightbool, "SpriteRenderer", "右侧人物Cloth检测")
                 RoleHair_bool = self.assert_resource("RoleSay", "Hair", "SpriteRenderer", "右侧人物的Hair资源")
                 self.resource_result(RoleHair_bool, "SpriteRenderer", "右侧人物的Hair资源")
         else:
             if self.pos_id == 2:
+                bodybool = self.assert_resource("NormalSayRoleLeft", "Body", "SpriteRenderer", description="全身像左侧人物Body资源")
+                self.resource_result(bodybool, "SpriteRenderer", "全身像左侧人物Body资源")
                 RoleLeft_bool = self.assert_resource("NormalSayRoleLeft", "Cloth", "SpriteRenderer", "全身像左侧人物的Cloth资源")
                 self.resource_result(RoleLeft_bool, "SpriteRenderer", "全身像左侧人物的Cloth资源")
                 RoleHair_bool = self.assert_resource("NormalSayRoleLeft", "Hair", "SpriteRenderer", "全身像左侧人物的Hair资源")
                 self.resource_result(RoleHair_bool, "SpriteRenderer", "全身像左侧人物的Hair资源")
             elif self.pos_id == 1:
                 # name = self.poco(nameMatches='^NormalSayRoleRight.*$')
+                bodybool = self.assert_resource("NormalSayRoleRight", "Body", "SpriteRenderer", description="全身像右侧人物Body资源")
+                self.resource_result(bodybool, "SpriteRenderer", "全身像右侧人物Body资源")
                 RoleRightbool = self.assert_resource("NormalSayRoleRight", "Cloth", "SpriteRenderer", "全身像右侧角色Cloth检测")
                 self.resource_result(RoleRightbool, "SpriteRenderer", "全身像右侧人物Cloth检测")
                 RoleHair_bool = self.assert_resource("NormalSayRoleRight", "Hair", "SpriteRenderer", "全身像右侧人物的Hair资源")
                 self.resource_result(RoleHair_bool, "SpriteRenderer", "全身像右侧人物的Hair资源")
 
+    def oldShowChangeDress_check(self):
+        log(ResourceError(errorMessage="【旧版换装提醒】"), desc="【旧版换装提醒", snapshot=True, level="error")
+        self.resource_result(False, "旧版换装提醒", "旧版换装提醒")
+
+    def setRoleName_check(self):
+        RoleName = self.assert_getText("UICanvasStatic", "Placeholder", "TMPtext", description="角色名称检测")
+        self.resource_result(RoleName, "TMPtext", "角色名称检测")
+
     def head_check(self):
         """电话头像检测"""
+        bodybool = self.assert_resource("UIChapterCallPhone", "Body", "texture", description="电话呼叫方头像Body资源")
+        self.resource_result(bodybool, "texture", "电话呼叫方头像Body资源")
         RoleRightbool = self.assert_resource("UIChapterCallPhone", "Cloth", "texture", "电话呼叫方头像Cloth检测")
         self.resource_result(RoleRightbool, "texture", "电话呼叫方头像Cloth检测")
         RoleHair_bool = self.assert_resource("UIChapterCallPhone", "Hair", "texture", "电话呼叫方头像Hair资源")
@@ -256,13 +300,17 @@ class BookRead(FindObject):
 
     def mail_check(self):
         """邮件检测"""
-        RoleRightbool = self.assert_resource("UIChapterMail", "Cloth", "texture", "电话呼叫方头像Cloth检测")
-        self.resource_result(RoleRightbool, "texture", "电话呼叫方头像Cloth检测")
-        RoleHair_bool = self.assert_resource("UIChapterMail", "Hair", "texture", "电话呼叫方头像Hair资源")
-        self.resource_result(RoleHair_bool, "texture", "电话呼叫方头像Hair资源")
+        bodybool = self.assert_resource("UIChapterMail", "Body", "texture", description="邮件头像Body资源")
+        self.resource_result(bodybool, "texture", "邮件头像Body资源")
+        RoleRightbool = self.assert_resource("UIChapterMail", "Cloth", "texture", "邮件头像Cloth检测")
+        self.resource_result(RoleRightbool, "texture", "邮件头像Cloth检测")
+        RoleHair_bool = self.assert_resource("UIChapterMail", "Hair", "texture", "邮件头像Hair资源")
+        self.resource_result(RoleHair_bool, "texture", "邮件头像Hair资源")
 
     def friendHead_check(self):
         """短信头像检测"""
+        bodybool = self.assert_resource("FriendHead", "Body", "texture", description="短信头像Body资源")
+        self.resource_result(bodybool, "texture", "短信头像Body资源")
         RoleRightbool = self.assert_resource("FriendHead", "Cloth", "texture", "短信头像Cloth检测")
         self.resource_result(RoleRightbool, "texture", "短信头像Cloth检测")
         RoleHair_bool = self.assert_resource("FriendHead", "Hair", "texture", "短信头像Hair资源")
@@ -270,6 +318,8 @@ class BookRead(FindObject):
 
     def resource_judgment(self):
         """选项资源判断"""
+        if self.option_record["resourceProgress"] == str(self.progress_info["chatProgress"]):
+            return
         self.Result_info = {}
         self.Result_info["goods"] = False
         self.achatProgress = str(self.progress_info["chatProgress"])
@@ -278,10 +328,11 @@ class BookRead(FindObject):
         self.filename_head = str(self.progress_info["chapterProgress"]) + "_" + self.achatProgress
         method_list = MyData.type_check_dir[self.chat_type]
         print("【阅读类型】:{0}对话类型->【阅读进度：{1}】".format(method_list[0], self.achatProgress))
+        mylog.info("【阅读类型】:{0}对话类型->【阅读进度：{1}】".format(method_list[0], self.achatProgress))
         for i in range(1, len(method_list)):
             methodName = "self." + method_list[i]
             eval(methodName)()
-
+        self.option_record["resourceProgress"]=str(self.progress_info["chatProgress"])
     def chat_typeconf(self):
         """选项判断"""
         chat_id = self.progress_info["option_info"]["chat_type"]  # 当前选项self.chat_type值
@@ -299,13 +350,14 @@ class BookRead(FindObject):
                 else:
                     self.findClick_try(clickname, clickname, description=description, waitTime=2, sleeptime=2)
         elif select_id == 0:
-            touch(self._POS)
+            touch(self._POS,times=2,duration=0.2)
             # is_touch=True
             print("点击操作")
         else:
             try:
                 # if self.poco("UIChapterSelectList").child("Item").exists():  # "UISelectList")老版本
-                Item0 = self.poco("UIChapterSelectList").child("Item")[0].wait(1)
+                sleep(0.3)
+                Item0 = self.poco("UIChapterSelectList").child("Item")[0]
                 self.findClick_childobject(Item0, description="选项")
             except:
                 print("未发现选项")
@@ -318,7 +370,7 @@ class BookRead(FindObject):
         if self.option_record["oldChatProgress"] == str(self.progress_info["chatProgress"]):
             self._etime = self._etime + 1
             print("进度相同容错处理")
-            touch(self._POS)
+            # touch(self._POS)
             sleep(0.2)
             self.updte_readprogress()
         else:
@@ -327,7 +379,7 @@ class BookRead(FindObject):
             self.BookRead_info["Jank"] = self.BookRead_info["Jank"] + 1
             VisualRead: dict = MyData.newPoP_dir["VisualRead"]
             for k, v in VisualRead.items():
-                self.findClick_try(k, v,description="突发性弹框")
+                self.findClick_try(k, v, description="突发性弹框")
             print("卡顿或异常次数：", self.BookRead_info["Jank"])
             if self.BookRead_info["Jank"] > 30:
                 print("卡顿或异常次数较多", self.BookRead_info["Jank"])
@@ -342,13 +394,13 @@ class BookRead(FindObject):
         self.Popuplist = []  # 清空之前的弹框列表
         self.BookRead_info["Jank"] = 0
         self.touchtime = 0
-        self.progress_info["results"] = True
+        # self.progress_info["results"] = True
         self.progress_info["storyoption"] = {}
         self.option_record["scene_bg_id"] = 0
         self.NormalSayRoleRight = None
         self.old_RoleRight_role_id = None
         self._etime = 0
-        self.BookRead_info["showWhole"]=False
+        self.BookRead_info["showWhole"] = False
 
     def dialogueEndPOP(self):
         """章节尾弹框"""
@@ -382,17 +434,5 @@ class BookRead(FindObject):
         else:
             print("一级弹框已处理")
         self.findClick_try("UIChapterStar", "CloseBtn", description="阅读分享", waitTime=1)
-        self.findClick_try("UIChapterContinue", "BtnGet", description="章节尾奖励",sleeptime=0.5)
+        self.findClick_try("UIChapterContinue", "BtnGet", description="章节尾奖励", sleeptime=0.5)
         self.findClick_try("UIChapterContinue", "ContinueBtn", description="章节尾弹框", sleeptime=0.5)
-    # def rightPos_judge(self):
-    #     """判断右侧角色位置"""
-    #     if self.NormalSayRoleRight == None:
-    #         if self.poco("NormalSayRoleRight").offspring("Body").wait(0.5).exists():
-    #             self.NormalSayRoleRight = True
-    #             self.old_RoleRight_role_id = self.progress_info["option_info"]["role_id"]
-    #         else:
-    #             self.NormalSayRoleRight = False
-    #             self.old_RoleRight_role_id = self.progress_info["option_info"]["role_id"]
-    #     if self.progress_info["option_info"]["role_id"] is not self.old_RoleRight_role_id:
-    #         self.NormalSayRoleRight = not self.NormalSayRoleRight
-    #         self.old_RoleRight_role_id = self.progress_info["option_info"]["role_id"]

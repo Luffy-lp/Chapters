@@ -18,7 +18,11 @@ class PageTurn(FindObject):
         """0~4对应底部主场景"""
         index = str(index)
         if index == "0":
+            time=5
             while self.find_try("Home",description="小房子"):
+                time-=1
+                if time<0:
+                    return
                 pos = self.poco("Home").get_position()
                 touch(COM_utilities.PosTurn(pos))
                 sleep(1)

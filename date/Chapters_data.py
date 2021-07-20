@@ -11,11 +11,10 @@ import sqlite3
 # TODO:书架需要考虑新手手书架情况
 class UserData(APiClass):
     _instance = None
-    storyoptions_dir = {}
-    bookread_result = {}
-
     def __init__(self):
         # self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
+        self.storyoptions_dir = {}
+        self.bookread_result = {}
         self.DeviceData_dir = {}  # 设备信息配置表
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
@@ -39,7 +38,6 @@ class UserData(APiClass):
         self.checklist=[]
         self.bookresult_dir = {}
         self.type_check_dir={}
-
         self.getdata()
         self.downloadbook_sign = {}
         self.RpcClient = None
@@ -121,7 +119,7 @@ class UserData(APiClass):
     def yaml_mobileconf(self):
         mobileconfpath = os.path.join(path_YAML_FILES, "mobileconf.yml")
         self.mobileconf_dir = self.read_yaml(mobileconfpath)
-        print(self.mobileconf_dir)
+        # print(self.mobileconf_dir)
         return self.mobileconf_dir
 
     def yaml_language(self):
@@ -164,7 +162,7 @@ class UserData(APiClass):
         self.bookresult_dir[chapter] = result
         with open(file_path, 'w+', encoding="utf-8") as f:
             yaml.dump(self.bookresult_dir, f, allow_unicode=True)
-        print("self.bookresult_dir", self.bookresult_dir)
+        print("记录阅读结果", self.bookresult_dir)
         return self.bookresult_dir
 
     def read_test(self):
@@ -214,7 +212,6 @@ class UserData(APiClass):
         datalist = self.getCommonDataApi(self.UserData_dir["uuid"])  # 调用通用接口0.章节进度，1.对话进度
         try:
             readprogress = datalist["data"]["readprogress"]
-            print(readprogress)
         except:
             raise Exception("请检查存档是否使用新存档，目前仅支持新存档")
         return readprogress
@@ -264,6 +261,7 @@ class UserData(APiClass):
         path = os.path.join(path_resource, bookpath)
         with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
             data = f.read()  # 可以是随便对文件的操作
+            # print(data)
         data = eval(data)
         self.Story_cfg_chapter_dir = data
         self.Story_cfg_chapter_dir["length"] = len(data)
@@ -318,16 +316,17 @@ class UserData(APiClass):
             if stroyID == k:
                 try:
                     stroyoptionlist = self.storyoptions_dir[k][stroychapter]
-                    print("stroyoptionlist", stroyoptionlist)
+                    # print("stroyoptionlist", stroyoptionlist)
                     return stroyoptionlist
                 except:
-                    print("无特殊选项")
+                    # print("无特殊选项")
                     return None
             else:
                 return None
 
 
 MyData = UserData()
-# MyData.getUsercurrency()
-# print(MyData.Story_cfg_chapter_dir["10342"])
-
+# aa:dict=MyData.read_story_cfg_chapter("10001","10001001")
+# print(aa)
+# for k,v in aa.items():
+#     print(v)
