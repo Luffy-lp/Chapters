@@ -138,8 +138,12 @@ class BookNewDetail(FindObject):
     #     Bookname = BookTitle.get_TMPtext()
     #     Booklist.append({"Bookname": Bookname})
     #     return True, Booklist
-
+    def get_readBookInfo(self):
+       print("书籍类型检测")
+       data= MyData.getBookInfo(uuid=MyData.UserData_dir["uuid"],bookId=MyData.bookInfo_dir["BookID"])
+       self.BookNewDetail_info["sequel_from"]=data["sequel_from"]
     def book_Play(self,index=None):
+        self.get_readBookInfo()
         if index:
             try:
                 POCO=self.poco("chapterBtn(Clone)")[int(index)-1]
@@ -154,9 +158,13 @@ class BookNewDetail(FindObject):
                 except:
                     log(Exception("{}章节不存在请查询章节是否上传.......".format(index)))
         if self.find_try("Play", description="Play按钮",waitTime=1):
-           self.findClick_object("Play", "Play", description="Play按钮",waitTime=1)
-           if self.UIAlterPoP():
-               self.findClick_object("Play", "Play", description="Play按钮", waitTime=1)
+            self.findClick_object("Play", "Play", description="Play按钮",waitTime=1)
+            if self.BookNewDetail_info["sequel_from"]:
+                self.findClick_try("UpBtn","UpBtn",description="Yes,I do")
+            if self.UIAlterPoP():
+                self.findClick_object("Play", "Play", description="Play按钮", waitTime=1)
+                if self.BookNewDetail_info["sequel_from"]:
+                    self.findClick_try("UpBtn", "UpBtn", description="Yes,I do")
         else:
             self.findClick_object("DaypassPlay", "DaypassPlay", description="Daypass按钮",waitTime=1)
         if int(MyData.UserData_dir["diamond"]) < 4999:

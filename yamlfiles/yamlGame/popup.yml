@@ -29,6 +29,7 @@
         - ${月签到活动(UISignActivity, Back)}
         - ${关闭宝箱1(UIVipSaleTip, CloseBtn)}
         - ${关闭宝箱(UITreasureShow, close)}
+        - ${关联书籍(UIStorySequel, UpBtn)}
 - 1:
     Popupscene: "bookdetail"
     Poputype: "none"

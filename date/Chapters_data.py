@@ -15,6 +15,7 @@ class UserData(APiClass):
         # self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
         self.storyoptions_dir = {}
         self.bookread_result = {}
+        self.bookInfo_dir={} #书籍信息
         self.DeviceData_dir = {}  # 设备信息配置表
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
@@ -215,6 +216,11 @@ class UserData(APiClass):
         except:
             raise Exception("请检查存档是否使用新存档，目前仅支持新存档")
         return readprogress
+    def getBookInfo(self,uuid,bookId,channel_id="AVG10005"):
+        """获取书籍信息"""
+        data = self.booklistInfoApi(uuid=uuid, channel_id=channel_id, bookId=bookId)
+        self.bookInfo_dir = data["data"]
+        return self.bookInfo_dir
 
     def getreadprogress_local(self, StdPocoAgent):
         """获取本地用户阅读进度返回chapterProgress和chatProgress["Item2"]["Item3"]"""

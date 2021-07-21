@@ -67,8 +67,6 @@ def test_booklist():
                     bookchapter = int(beginchapter) + i
                     print("即将阅读", bookchapter)
                     booktraversal(str(bookchapter))
-
-
         else:
             print("书籍列表配置错误，请注意格式")
             return
@@ -94,6 +92,7 @@ def booktraversal(bookchapter):
         MyData.update_record_bookread(bookchapter, 1)
     bookid = bookchapter[:5]
     chapterid = bookchapter[5:]
+    MyData.bookInfo_dir["BookID"]=bookid
     MyData.UserData_dir["bookDetailInfo"]["BookID"] = None
     Bookfind1 = Bookfind()
     myVisual = BookRead()

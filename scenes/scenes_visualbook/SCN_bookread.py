@@ -1,3 +1,4 @@
+import random
 import string
 
 from airtest.core.api import *
@@ -12,17 +13,18 @@ from common.COM_Error import ResourceError
 from common.COM_path import *
 from common.COM_trans import *
 
+
 class BookRead(FindObject):
     # myShop = Shop()
     def __init__(self):
         FindObject.__init__(self)
         self.StdPocoAgent1 = StdPocoAgent()
-        self. _POS = COM_utilities.PosTurn([0.5, 0.3])
+        self._POS = COM_utilities.PosTurn([0.5, 0.3])
         self.isstopRead = True  # 阅读状态
         self.isbookLoad = False
         self.iserrTime = 0
         self.touchtime = 0
-        self. _etime = 0
+        self._etime = 0
         self.progress_info = {}
         self.BookRead_info = {}
         self.getstoryoptionslist = {}
@@ -35,6 +37,7 @@ class BookRead(FindObject):
         self.chat_type = None
         self.filename_head = None
         self.Result_info = {}
+
     def bookRead(self, bookid=None, chapterProgress=None):
         """视觉小说阅读"""
         self.reset_read()
@@ -64,13 +67,15 @@ class BookRead(FindObject):
         readprogress = MyData.getreadprogress_local(self.StdPocoAgent1)  # 拉取本地当前阅读进度
         print("阅读进度：", readprogress)
         self.progress_info["chapterProgress"] = chapterProgress
-        MyData.read_story_cfg_chapter(BookID,str(self.progress_info["chapterProgress"]))  # 拉取章节信息存Story_cfg_chapter_dir表
-        self.progress_info["chatProgress"] = readprogress  #更新本地当前阅读对话进度
-        self.progress_info["option_info"] = MyData.Story_cfg_chapter_dir[str(self.progress_info["chatProgress"])]#更新对话信息
+        MyData.read_story_cfg_chapter(BookID,
+                                      str(self.progress_info["chapterProgress"]))  # 拉取章节信息存Story_cfg_chapter_dir表
+        self.progress_info["chatProgress"] = readprogress  # 更新本地当前阅读对话进度
+        self.progress_info["option_info"] = MyData.Story_cfg_chapter_dir[
+            str(self.progress_info["chatProgress"])]  # 更新对话信息
         self.updte_oldReadProgress()  # 保存老进度
         self.progress_info["chat_num"] = MyData.Story_cfg_chapter_dir["length"] + 10000  # 当前章节对话总数
         self.progress_info["BookID"] = BookID
-        self.option_record["resourceProgress"]= self.progress_info["chatProgress"]
+        self.option_record["resourceProgress"] = self.progress_info["chatProgress"]
         print("阅读书籍:", BookID)
         print("章节进度:", self.progress_info["chapterProgress"])
         print("对话总数:", self.progress_info["chat_num"])
@@ -134,7 +139,7 @@ class BookRead(FindObject):
         """friend_id检测"""
         try:
             friend_id = self.progress_info["option_info"]["friend_id"]  # 普通文本
-            if friend_id and friend_id!=0:
+            if friend_id and friend_id != 0:
                 log("【资源检查】:friend_id->True  [{}]".format(friend_id))
             else:
                 self.resource_result(False, "txt", "friend_id")
@@ -266,7 +271,8 @@ class BookRead(FindObject):
                 self.resource_result(RoleHair_bool, "SpriteRenderer", "右侧人物的Hair资源")
         else:
             if self.pos_id == 2:
-                bodybool = self.assert_resource("NormalSayRoleLeft", "Body", "SpriteRenderer", description="全身像左侧人物Body资源")
+                bodybool = self.assert_resource("NormalSayRoleLeft", "Body", "SpriteRenderer",
+                                                description="全身像左侧人物Body资源")
                 self.resource_result(bodybool, "SpriteRenderer", "全身像左侧人物Body资源")
                 RoleLeft_bool = self.assert_resource("NormalSayRoleLeft", "Cloth", "SpriteRenderer", "全身像左侧人物的Cloth资源")
                 self.resource_result(RoleLeft_bool, "SpriteRenderer", "全身像左侧人物的Cloth资源")
@@ -274,7 +280,8 @@ class BookRead(FindObject):
                 self.resource_result(RoleHair_bool, "SpriteRenderer", "全身像左侧人物的Hair资源")
             elif self.pos_id == 1:
                 # name = self.poco(nameMatches='^NormalSayRoleRight.*$')
-                bodybool = self.assert_resource("NormalSayRoleRight", "Body", "SpriteRenderer", description="全身像右侧人物Body资源")
+                bodybool = self.assert_resource("NormalSayRoleRight", "Body", "SpriteRenderer",
+                                                description="全身像右侧人物Body资源")
                 self.resource_result(bodybool, "SpriteRenderer", "全身像右侧人物Body资源")
                 RoleRightbool = self.assert_resource("NormalSayRoleRight", "Cloth", "SpriteRenderer", "全身像右侧角色Cloth检测")
                 self.resource_result(RoleRightbool, "SpriteRenderer", "全身像右侧人物Cloth检测")
@@ -332,7 +339,8 @@ class BookRead(FindObject):
         for i in range(1, len(method_list)):
             methodName = "self." + method_list[i]
             eval(methodName)()
-        self.option_record["resourceProgress"]=str(self.progress_info["chatProgress"])
+        self.option_record["resourceProgress"] = str(self.progress_info["chatProgress"])
+
     def chat_typeconf(self):
         """选项判断"""
         chat_id = self.progress_info["option_info"]["chat_type"]  # 当前选项self.chat_type值
@@ -350,14 +358,18 @@ class BookRead(FindObject):
                 else:
                     self.findClick_try(clickname, clickname, description=description, waitTime=2, sleeptime=2)
         elif select_id == 0:
-            touch(self._POS,times=2,duration=0.2)
+            touch(self._POS, times=2, duration=0.2)
             # is_touch=True
             print("点击操作")
         else:
             try:
                 # if self.poco("UIChapterSelectList").child("Item").exists():  # "UISelectList")老版本
-                sleep(0.3)
-                Item0 = self.poco("UIChapterSelectList").child("Item")[0]
+                # sleep(0.1)
+                randomNUM = random.randint(0, 1)
+                if randomNUM == 0:
+                    Item0 = self.poco("UIChapterSelectList").child("Item(Clone)")[0].wait(1)
+                else:
+                    Item0 = self.poco("UIChapterSelectList").child("Item")[0].wait(1)
                 self.findClick_childobject(Item0, description="选项")
             except:
                 print("未发现选项")
@@ -416,6 +428,7 @@ class BookRead(FindObject):
                         self.rebtn()
                     elif time <= 0:
                         log(Exception("弹框检测异常"), snapshot=True)
+                        raise
                     self.common_Popup_Manage()
                     sleep(3)
                 self.BookRead_info["clicks"] = self.touchtime

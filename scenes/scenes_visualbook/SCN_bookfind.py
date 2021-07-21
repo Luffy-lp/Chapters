@@ -12,21 +12,6 @@ class Bookfind(FindObject):
     def __init__(self):
         FindObject.__init__(self)
 
-    # def bookNewDetailPOP(self):
-
-        # self.find_object("UIBookNewDetail", "书籍详情页", waitTime=2, tryTime=10)
-        # print("详情页弹框配置：",MyData.popup_dir[1])
-        # poplist = MyData.popup_dir[1]
-        # for k in poplist:
-        #     if k["args"][0]=="UIAlter":
-        #         self.UIAlterPoP()
-        #     if k["args"][0]=="UIPassGuide":
-        #         while (self.find_try("UIPassGuide", description="道具票使用", waitTime=0.5, tryTime=1)):
-        #             self.findClick_object("UIPassGuide", "Close", description="Close按钮")
-        #             self.findClick_object("UIPassGuide", "ExitBtn", description="Exit按钮")
-        #     else:
-        #         self.findClick_try(k["args"][0],k["args"][1],description=k["func_name"], waitTime=0.2, tryTime=1, sleeptime=2)
-    # def bookChoose(self):
     def bookChoose_Search(self,bookName):
         """通过书籍名称查找"""
         self.findClick_object("SearchBar","SearchBar",description="查询按钮")
@@ -37,6 +22,17 @@ class Bookfind(FindObject):
         POCO.click()
         time.sleep(2)
         POCO.click()
+    def newBookChoose_bookid(self,bookid):
+        """通过书籍ID查找"""
+        self.poco("InputField").set_text(bookid)
+        self.click_object("SearchBtn",description="bookid搜索按钮",waitTime=1,sleeptime=2)
+        if self.find_try("UIVisualDetailView", "书籍详情页", waitTime=2):
+            self.UIAlterPoP()
+        elif self.find_try("UIBookErrorEmail", "书籍详情页"):
+            log(Exception("书籍不存在"),snapshot=True)
+        else:
+            log(Exception("查找书籍异常原因未知"), snapshot=True)
+        # self.bookNewDetailPOP()
 
     def bookChoose_bookid(self,bookid):
         """通过书籍ID查找"""
@@ -88,12 +84,3 @@ class Bookfind(FindObject):
         MyData.UserData_dir["bookDetailInfo"] = self.BookNewDetail_info
         print(MyData.UserData_dir)
         return True
-
-# Bookfind1=Bookfind()
-# aa=Bookfind1.find_try("Discover",description="大厅")
-# print(aa)
-
-# # # if Bookfind1.poco("NormalSayRoleLeft").offspring("Body"):
-# # #    aaa= Bookfind1.poco("NormalSayRoleLeft").offspring("Body").get_SpriteRenderer()
-# # #    print(aaa)
-# Bookfind1.traversal()

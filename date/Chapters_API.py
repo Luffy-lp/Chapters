@@ -12,22 +12,25 @@ from common.COM_path import *
 class APiClass():
     Header = {"TIMECLOSE": "1"}
     url = "http://dev-chapters-int.stardustgod.com/"
+
     def __init__(self):
         self._response = None
         print("调用接口类")
+
     def try_APIlink(self, url, headers, body, name, trytime=100, timeout=10):
         """requests公共方法"""
         while (trytime >= 0):
             trytime = trytime - 1
             try:
-                print("拉取{0}接口".format(name))  #补充正则截取
+                print("拉取{0}接口".format(name))  # 补充正则截取
                 self._response = requests.post(url=url, headers=headers, data=body, timeout=10)
             except:
                 # traceback.print_exc()
                 print("拉取{0}接口失败，重试".format(name))
                 sleep(1)
             else:
-                dir = eval(self._response.text)
+                dir_json=json.loads(self._response.text)
+                dir = eval(str(dir_json))
                 # print(self._response.text)
                 # my_re=\n[\s\S]*
                 print("拉取{0}接口成功".format(name))
@@ -75,18 +78,18 @@ class APiClass():
 
     def story_v1_hall(self, UUID, language="en-US"):
         """获取书架信息接口ja-JP  en-US"""
-        UUID=43090
+        UUID = 43090
         url = "http://dev-chapters-int.stardustgod.com" + "/na/story/v1/hall?debug=true"
         # url = self.url + "/na/story/v1/hall?debug=true"
         print(url)
-        Header = {"platform":"android",
-                  "Accept":"application/json",
+        Header = {"platform": "android",
+                  "Accept": "application/json",
                   "language": language}
         body = {"channel_id": "AVG50005",
                 "uuid": UUID,
                 }
         data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10, name="story_v1_hall")
-        data=1
+        data = 1
         return data
 
     def getStoryAllChapterInfoApi(self, UUID, story_id):
@@ -112,7 +115,8 @@ class APiClass():
                 }
         data = self.try_APIlink(url=url, headers=self.Header, body=body, trytime=10, timeout=1, name="getCommonDataApi")
         return data
-    def readApi(self, UUID,storyId):
+
+    def readApi(self, UUID, storyId):
         """记录短信阅读进度"""
         url = self.url + "readApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
@@ -181,6 +185,22 @@ class APiClass():
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="memberInfoApi")
         return data
 
+    def booklistInfoApi(self, uuid,channel_id, bookId):
+        """书籍详情v2"""
+        Header = {
+            "language": "en-US",
+            "platform":"Android",
+            "Accept":"application/json"
+        }
+        url = self.url + "/na/story/v1/story/view?debug=1"
+        body = {
+            "uuid":uuid,
+            "channel_id": channel_id,
+            "book_id": bookId,
+        }
+        data = self.try_APIlink(url=url, headers=Header, body=body, name="booklistInfoApi")
+        return data
+
     def unzip_file(self, fz_name, path):
         """
         解压缩文件
@@ -220,13 +240,13 @@ class APiClass():
             zip_file.extract(f, folder_abs)
         zip_file.close()
 
-    def avgcontentApi(self, bookid,channel_id="AVG10005",country_code="CN"):
+    def avgcontentApi(self, bookid, channel_id="AVG10005", country_code="CN"):
         """获取章节资源下载地址"""
         url = self.url + "avgcontentApi.Class.php?DEBUG=true"
         body = {"chapter_id": bookid,
                 "source_type": "t0",
-                "channel_id":channel_id,
-                "country_code":country_code,
+                "channel_id": channel_id,
+                "country_code": country_code,
                 }
         response = self.try_APIlink(url=url, headers=self.Header, body=body, name="avgcontentApi")
         address: str = response["address"]
@@ -262,6 +282,9 @@ class APiClass():
                 print("书籍资源读取成功")
         print("下载书籍资源失败")
         # raise Exception("下载书籍资源失败")
-# APiClass1=APiClass()
-# data=APiClass1.avgcontentApi("12065")
-# print("data111111",data)
+
+
+# APiClass1 = APiClass()
+# data = APiClass1.booklistInfoApi(uuid="47566",channel_id="AVG10005", bookId=16051)
+# data=data["data"]
+# print("data111111", data["sequel_from"])

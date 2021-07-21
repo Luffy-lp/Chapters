@@ -452,7 +452,7 @@ class FindObject(CommonDevices):
                     print("按钮名称", Btn)
                     if Btn == None:
                         self.findClick_try("CenterBtn", "CenterBtn", description="点击弹框按钮")
-                        return
+                        # return is_UIAlterPoP
                     else:
                         try:
                             self.poco(Btn).click()
@@ -466,7 +466,7 @@ class FindObject(CommonDevices):
                     return is_UIAlterPoP
             except:
                 log(Exception("查找弹框异常"),snapshot=True)
-
+            return is_UIAlterPoP
     def PopupManage(self):
         """大厅弹框检查"""
         self.Popuplist = []
