@@ -30,20 +30,23 @@ class Discover(FindObject):
                                            tryTime=1, sleeptime=2)
             if self.poco("PopupPanel").children():
                 print("进入PopupPanel弹框判断")
+                list1 = []
                 child = self.poco("PopupPanel").child(nameMatches="^UI.*", visible=True)
                 for list in child:
                     listname = list.get_name()
-                    print("listname:", listname)
-                    for k in poplist:
-                        if listname==k["args"][0]:
-                            if listname == "UIGiftPopup":
-                                if self.find_try("UIGiftPopup", "推送礼包", 0.2, tryTime=1):
-                                    self.findClick_try("GiftShake", "GiftBag3", "礼物", 0.2, tryTime=1, sleeptime=5)
-                                    self.findClick_try("UIBagItemReward", "BtnStore", "会员卡", 0.2, tryTime=1, sleeptime=1)
-                                    self.findClick_try("UIBagItemReward", "BtnRead", "背包道具推送", 0.2, tryTime=1, sleeptime=1)
-                            else:
-                                self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,
-                                                   tryTime=1, sleeptime=2)
+                    list1.append(list)
+                list1.sort(key=lambda x: x.attr('_ilayer'), reverse=False)
+                listname=list1[len(list1) - 1].get_name()
+                print("listname:", listname)
+                for k in poplist:
+                    if listname==k["args"][0]:
+                        if listname == "UIGiftPopup":
+                            if self.find_try("UIGiftPopup", "推送礼包", 0.2, tryTime=1):
+                                self.findClick_try("GiftShake", "GiftBag3", "礼物", 0.2, tryTime=1, sleeptime=5)
+                                self.findClick_try("UIBagItemReward", "BtnStore", "会员卡", 0.2, tryTime=1, sleeptime=1)
+                                self.findClick_try("UIBagItemReward", "BtnRead", "背包道具推送", 0.2, tryTime=1, sleeptime=1)
+                        else:
+                            self.findClick_try(k["args"][0], k["args"][1], description=k["func_name"], waitTime=1,tryTime=1, sleeptime=2)
             elif self.poco("PopUpPanel").children():
                 print("进入PopUpPanel弹框判断")
                 try:

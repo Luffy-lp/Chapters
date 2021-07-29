@@ -261,9 +261,7 @@ class APiClass():
             try:
                 r = requests.get(address)
                 path = os.path.join(path_resource, addresslist[len(addresslist) - 1])
-                print("path", path)
                 pathbook = os.path.join(path_resource, bookid)
-                print("资源路径", pathbook)
                 with open(path, "wb") as code:
                     code.write(r.content)
                 sleep(5)

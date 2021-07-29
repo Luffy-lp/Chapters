@@ -4,6 +4,7 @@ from airtest.core.api import assert_equal, text, keyevent
 from common.COM_findobject import FindObject, log
 from date.Chapters_data import MyData
 
+
 # TODO:概率出现未成功点击书籍的
 
 class Bookfind(FindObject):
@@ -12,47 +13,50 @@ class Bookfind(FindObject):
     def __init__(self):
         FindObject.__init__(self)
 
-    def bookChoose_Search(self,bookName):
-        """通过书籍名称查找"""
-        self.findClick_object("SearchBar","SearchBar",description="查询按钮")
-        text(bookName)
-        time.sleep(3)
-        POCO=self.poco("BookItem(Clone)")[0].offspring("Image")
-        self.findClick_childobject(POCO,description="书籍封面")
-        POCO.click()
-        time.sleep(2)
-        POCO.click()
-    def newBookChoose_bookid(self,bookid):
-        """通过书籍ID查找"""
-        self.poco("InputField").set_text(bookid)
-        self.click_object("SearchBtn",description="bookid搜索按钮",waitTime=1,sleeptime=2)
-        if self.find_try("UIVisualDetailView", "书籍详情页", waitTime=2):
-            self.UIAlterPoP()
-        elif self.find_try("UIBookErrorEmail", "书籍详情页"):
-            log(Exception("书籍不存在"),snapshot=True)
-        else:
-            log(Exception("查找书籍异常原因未知"), snapshot=True)
-        # self.bookNewDetailPOP()
+    # def bookChoose_Search(self, bookName):
+    #     """通过书籍名称查找"""
+    #     self.findClick_object("SearchBar", "SearchBar", description="查询按钮")
+    #     text(bookName)
+    #     time.sleep(3)
+    #     POCO = self.poco("BookItem(Clone)")[0].offspring("Image")
+    #     self.findClick_childobject(POCO, description="书籍封面")
+    #     POCO.click()
+    #     time.sleep(2)
+    #     POCO.click()
 
-    def bookChoose_bookid(self,bookid):
-        """通过书籍ID查找"""
-        self.poco("InputField").set_text(bookid)
-        self.click_object("SearchBtn",description="bookid搜索按钮",waitTime=1,sleeptime=2)
-        if self.find_try("UIBookNewDetail", "书籍详情页", waitTime=2):
-            self.UIAlterPoP()
+    def bookChoose_bookid(self, bookid):
+        """新版本查找"""
+        self.poco("InputField").wait(3).set_text(bookid)
+        # self.click_object("InputField",description="搜索框")
+        # self.click_object("UIVisualDetailView",description="详情页")
+        self.click_object("SearchBtn", description="bookid搜索按钮", waitTime=3, sleeptime=2)
+        if self.find_try("UIVisualDetailView", "书籍详情页", waitTime=2):
+            pass
         elif self.find_try("UIBookErrorEmail", "书籍详情页"):
-            log(Exception("书籍不存在"),snapshot=True)
+            log(Exception("书籍不存在"), snapshot=True)
+            raise
         else:
             log(Exception("查找书籍异常原因未知"), snapshot=True)
-        # self.bookNewDetailPOP()
-    def bookChoose_Shelf(self,bookShelf,index):
+
+    # def bookChoose_bookid(self,bookid):
+    #     """通过书籍ID查找"""
+    #     self.poco("InputField").set_text(bookid)
+    #     self.click_object("SearchBtn",description="bookid搜索按钮",waitTime=1,sleeptime=2)
+    #     if self.find_try("UIBookNewDetail", "书籍详情页", waitTime=2):
+    #         self.UIAlterPoP()
+    #     elif self.find_try("UIBookErrorEmail", "书籍详情页"):
+    #         log(Exception("书籍不存在"),snapshot=True)
+    #     else:
+    #         log(Exception("查找书籍异常原因未知"), snapshot=True)
+    # self.bookNewDetailPOP()
+    def bookChoose_Shelf(self, bookShelf, index):
         """找到书架招数WeekView"""
         index = int(index)
-        View=bookShelf+"View"
-        Scr=bookShelf+"Scr"
+        View = bookShelf + "View"
+        Scr = bookShelf + "Scr"
         Myboopoco = self.poco(View)
-        self.find_childobject(Myboopoco, description=bookShelf+"书架")
-        self.findSwipe_object(bookShelf, 0.5, POCOobject=Myboopoco, swipeTye="y") #滑动找书架
+        self.find_childobject(Myboopoco, description=bookShelf + "书架")
+        self.findSwipe_object(bookShelf, 0.5, POCOobject=Myboopoco, swipeTye="y")  # 滑动找书架
         while True:
             try:
                 thebook = \

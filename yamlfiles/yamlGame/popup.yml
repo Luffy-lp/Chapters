@@ -20,7 +20,7 @@
         - ${内容推送弹框2(UITextPopup, BtnOk)}
         - ${推送礼包(UIGiftPopup, Popup)}
         - ${DayPass详情弹框(UIDayPassState, Button)}
-        - ${书籍详情页(UIBookNewDetail, Button)}
+        - ${书籍详情页(UIVisualDetailView, Close )}
         - ${奖励领取(UIClaimReward, BtnGet)}
         - ${领取Daypass奖励(UIDayPassReward, BtnRead)}
         - ${周礼包(UIWeekCardBuy, close)}
@@ -47,5 +47,5 @@
         - step.case_test
     step:
         - ${月签到(UISignActivity, Back)}
-        - ${周签到(FullScreenPanel, BtnClosed)}
+        - ${周签到(FullScreenPanel, CloseBtn)}
         - ${会员即将到期(UIMemberRenew, cancelBtn)} #renewBtn

@@ -5,9 +5,12 @@ UIAlter:
     Info: CenterBtn #renewBtn
     IMPORTANT: CenterBtn #renewBtn
 VisualRead:
-    UIVipSaleTip: CloseBtn
+    CloseBtn: CloseBtn
+    UIVipSaleTip: CloseBtn  #VIP弹框
     UITreasureShow: close
     UISub: BackBtn
+    UIFullBodyGuide: SetBtn #全身像
+    UIMeanGirls: btnclose
 dialogueEndPOP:
     RoleCard: BtnGet
     AdGroup: BtnGet

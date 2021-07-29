@@ -22,6 +22,7 @@ class FindObject(CommonDevices):
     androidpoco: AndroidUiautomationPoco = None
     globals()
     Popuplist = []
+    freeze_poco=None
     AlterTxt = {
         "Please Update Latest Chapter": "CenterBtn",
         "Attention": "LeftBtn",
@@ -83,7 +84,7 @@ class FindObject(CommonDevices):
             mylog.error("查找点击元素-【{}】--失败".format(findName))
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
-    def click_offspring(self, parentName, offspringName, description="", waitTime=1, tryTime=1, sleeptime=0):
+    def tryClick_offspring(self, parentName, offspringName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """父级关联查找"""
         print("正在寻找{0}".format(description))
         try:
@@ -92,12 +93,8 @@ class FindObject(CommonDevices):
             print("点击元素-【{}】--成功".format(description))
             sleep(sleeptime)
             return True
-        except Exception as e:
-            mylog.error("点击【{0}】出现未知错误，{1}".format(description, e))
+        except:
             return False
-        log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
-        raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
-
     def find_childobject(self, findPoco: poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
         waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
@@ -220,16 +217,38 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def assert_resource(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
+    def assert_resource(self,parentName, findName, findAttr,description="", waitTime=1, tryTime=2, reportError=True,
                         sleeptime=0):
-        # self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture")
+        if self.freeze_poco!=None:
+            poco=self.freeze_poco
+        else:
+            poco=self.poco
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
-                attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
+                attrValue = poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
                 if attrValue:
                     log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
                     return True
+            except:
+                log("资源检查异常重试")
+        else:
+            if reportError:
+                log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, findAttr)),
+                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr),snapshot=True, level="error")
+                return False
+    def assert_Body(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
+                        sleeptime=0):
+        while (tryTime > 0):
+            tryTime = tryTime - 1
+            try:
+                objectBody = self.poco(parentName).offspring(findName).wait(waitTime)
+                attrValue = objectBody.attr(findAttr)
+                if attrValue:
+                    log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
+                    self.freeze_poco = self.poco.freeze()
+                    name = objectBody.parent().parent().get_name()
+                    return name
             except:
                 log("资源检查异常重试")
         else:
@@ -534,7 +553,7 @@ class FindObject(CommonDevices):
 
     def common_Popup_Manage(self):
         """通用弹框"""
-        print("通用按钮判断")
+        print("通用弹框判断")
         list1 = []
         try:
             list = self.poco(nameMatches='.*Btn.*|Button')
@@ -547,10 +566,18 @@ class FindObject(CommonDevices):
         except:
             print("查询按钮列表异常")
 # FindObject1=FindObject()
-# aa=FindObject1.assert_getText("UICanvasStatic","Placeholder","TMPtext",description="角色名称")
-# aa=FindObject1.poco("").offspring("Placeholder").get_TMPtext()
-# print("dddddd",aa)
-# REST1=REST()
-# REST1.mytest()
-# test=FindObject1.get_sdk_version()
-# print("test",test)
+# clock()
+# Bodylist=FindObject1.assert_Body("VisualRoleRender","Body",findAttr="SpriteRenderer",description="角色身体")
+# print(Bodylist)
+# clock("stop")
+
+# bb=freeze_poco[1].parent().parent().get_name()
+# print(bb)
+# clock()
+# FindObject1.assert_resource(Bodylist[1],"Cloth",findAttr="SpriteRenderer",description="角色衣服")
+# FindObject1.assert_resource(Bodylist[1],"Hair",findAttr="SpriteRenderer",description="角色头发")
+# FindObject1.assert_resource(Bodylist[1],"Back1",findAttr="SpriteRenderer",description="角色头发")
+# FindObject1.assert_resource(Bodylist[1],"Face1",findAttr="SpriteRenderer",description="角色头发")
+# FindObject1.assert_resource(Bodylist[1],"Face1",findAttr="SpriteRenderer",description="角色头发")
+# # print(bb)
+# clock("stop")

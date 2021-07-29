@@ -332,7 +332,11 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# aa:dict=MyData.read_story_cfg_chapter("10001","10001001")
-# print(aa)
+# aa=MyData.getBookInfo(bookId="51766",uuid="35110")
+# if aa["sequel_from"]:
+#     pass
+# else:
+#     print("dddd")
+# print(aa["sequel_from"])
 # for k,v in aa.items():
 #     print(v)

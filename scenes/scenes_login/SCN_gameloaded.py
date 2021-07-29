@@ -81,12 +81,15 @@ class GameLoaded(FindObject):
             self.android_findClick("android:id/button1", "android:id/button1", description="Google框架提示处理")
             mylog.error("检测到未安装谷歌框架，无法执行相关操作")
         if self.find_try("Title", description="unity异常弹框判断"):
-            txtinfo=self.poco("Title").get_TMPtext()
-            if txtinfo=="Info":
+        #     txtinfo=self.poco("Title").get_TMPtext()
+        #     if txtinfo=="Info":
+            try:
                 TXT = self.poco("Context").get_TMPtext()
                 self.GameLoaded_info["ErrorTxt"].append(TXT)
-                self.click_object("CenterBtn", description="Try again", waitTime=5)
+                self.findClick_try("CenterBtn","CenterBtn", description="Try again", waitTime=3)
                 mylog.info("异常弹框，{0}".format(TXT))
+            except:
+                print("未发现弹框类型")
 #
 # GameLoaded1 = GameLoaded()
 # GameLoaded1.gameloading()
