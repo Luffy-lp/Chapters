@@ -2,6 +2,7 @@
 from time import sleep
 
 from airtest.core.api import *
+from airtest.report.report import simple_report
 from poco.drivers.std import StdPocoAgent
 from poco.exceptions import PocoNoSuchNodeException
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
@@ -94,7 +95,15 @@ class FindObject(CommonDevices):
             sleep(sleeptime)
             return True
         except:
+            log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
             return False
+    def trySetText(self,InputField,set_text):
+        """输入Text"""
+        try:
+            self.poco(InputField).set_text(str(set_text))
+            return True
+        except:
+            log(Exception("输入-【{}】-或失败".format(str(set_text))), desc="输入失败", snapshot=True)
     def find_childobject(self, findPoco: poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
         waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
@@ -285,18 +294,20 @@ class FindObject(CommonDevices):
         else:
             poco = self.poco
         try:
-            print("尝试寻找{0}".format(description))
-            # gameobject = self.poco(findName)
-            if poco(findName).wait(waitTime).exists():
-                print("发现{0}".format(description))
-                if poco(ClickName).wait(waitTime + 1).exists():
-                    print("发现{0}按钮，并点击".format(ClickName))
-                    poco(ClickName).click()
-                else:
-                    mylog.info("尝试点击-【{}】-元素失败".format(description))
-                    print("未触发点击")
+            # print("尝试寻找{0}".format(description))
+            # # gameobject = self.poco(findName)
+            # if poco(findName).wait(waitTime).exists():
+            #     print("发现{0}".format(description))
+            if poco(ClickName).wait(waitTime + 1).exists():
+                print("发现{0}按钮，并点击".format(description))
+                poco(ClickName).click()
+                return True
             else:
+                mylog.info("尝试点击-【{}】-元素失败".format(description))
+                print("未触发点击")
                 return False
+            # else:
+            #     return False
         except:
             log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
             mylog.error("尝试点击-【{}】-元素失败".format(description))
@@ -566,18 +577,13 @@ class FindObject(CommonDevices):
         except:
             print("查询按钮列表异常")
 # FindObject1=FindObject()
-# clock()
-# Bodylist=FindObject1.assert_Body("VisualRoleRender","Body",findAttr="SpriteRenderer",description="角色身体")
-# print(Bodylist)
-# clock("stop")
+# FindObject1.poco("Text Area").click()
+# for i in range(10):
+#     keyevent("67")
+# text(str(10300))
+# FindObject1.poco("Button").child("Text (TMP)").click()
+# sleep(0.2)
+# FindObject1.poco("Button").child("Text (TMP)").click()
+# outputpath = os.path.join(path_REPORT_DIR, "TEST.html")
+# simple_report(__file__, logpath=path_LOG_DIR, output=outputpath)
 
-# bb=freeze_poco[1].parent().parent().get_name()
-# print(bb)
-# clock()
-# FindObject1.assert_resource(Bodylist[1],"Cloth",findAttr="SpriteRenderer",description="角色衣服")
-# FindObject1.assert_resource(Bodylist[1],"Hair",findAttr="SpriteRenderer",description="角色头发")
-# FindObject1.assert_resource(Bodylist[1],"Back1",findAttr="SpriteRenderer",description="角色头发")
-# FindObject1.assert_resource(Bodylist[1],"Face1",findAttr="SpriteRenderer",description="角色头发")
-# FindObject1.assert_resource(Bodylist[1],"Face1",findAttr="SpriteRenderer",description="角色头发")
-# # print(bb)
-# clock("stop")

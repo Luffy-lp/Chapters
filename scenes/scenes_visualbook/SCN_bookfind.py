@@ -27,6 +27,7 @@ class Bookfind(FindObject):
     def bookChoose_bookid(self, bookid):
         """新版本查找"""
         self.poco("InputField").wait(3).set_text(bookid)
+        self.trySetText("InputField",bookid)
         # self.click_object("InputField",description="搜索框")
         # self.click_object("UIVisualDetailView",description="详情页")
         self.click_object("SearchBtn", description="bookid搜索按钮", waitTime=3, sleeptime=2)

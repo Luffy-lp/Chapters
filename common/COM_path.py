@@ -3,8 +3,7 @@ import os
 import yaml
 Desktoppath=None
 import winreg
-
-
+import datetime
 
 def yamldata_conf():
     # 读取yamlconf数据
@@ -97,7 +96,10 @@ path_LOG_DIR = os.path.join(path_REPORT_DIR, "log")
 path_LOG_MY = os.path.join(path_REPORT_DIR, "report/mylog")
 
 # 阅读截图
-path_BOOKREAD_ERROR_IMAGE = os.path.join(path_REPORT_DIR, "IMAGE")
+# path_BOOKREAD_ERROR_IMAGE = os.path.join(path_REPORT_DIR, "IMAGE")
+date = datetime.date.today()
+
+path_BOOKREAD_ERROR_IMAGE = os.path.join("D:\Read_Result", str(date))
 
 file=os.getcwd()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

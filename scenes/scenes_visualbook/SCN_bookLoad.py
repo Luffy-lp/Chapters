@@ -21,8 +21,9 @@ class BookLoad(FindObject):
             MyData.download_bookresource(bookid)
         while self.find_try("ChapterLoad", description="书籍加载界面", waitTime=3):
             loadtime = time.time() - startime
-            if self.find_try("Discover",description="大厅"):
-                log(Exception("加载书籍异常，大厅"),snapshot=True)
+            # self.common_Popup_Manage()
+            # if self.find_try("AlterView",description="异常弹框"):
+            #     log(Exception("加载书籍异常，大厅"),snapshot=True)
                 # raise Exception("加载书籍异常，大厅")
             print("书籍加载中", loadtime)
             if loadtime > 720:

@@ -35,13 +35,13 @@ class UserData(APiClass):
         self.Element_dir = {}
         self.language_dir = {}
         self.newPoP_dir = []
-        # self.book_list = []
         self.checklist=[]
         self.bookresult_dir = {}
         self.type_check_dir={}
-        self.getdata()
         self.downloadbook_sign = {}
         self.RpcClient = None
+        self.dialogueResult_dir={}
+        self.getdata()
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
     def getdata(self):
@@ -51,11 +51,11 @@ class UserData(APiClass):
         self.yaml_chattype()
         self.yaml_mobileconf()
         self.yaml_language()
-        # self.getbookData()
         self.yaml_bookinfo()
         self.yaml_newpopup()
         self.yaml_bookread_result()
         self.yaml_type_check()
+        self.r_yaml_dialogue_result()
 
     def __new__(cls):
         if cls._instance is None:
@@ -88,6 +88,8 @@ class UserData(APiClass):
         self.EnvData_dir["method"] = data["EnvData"]["method"]
         self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
         self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
+        self.EnvData_dir["sendDing"] = data["EnvData"]["sendDing"]
+        self.EnvData_dir["DingUrl"] = data["EnvData"]["DingUrl"]
         self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
         self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
         self.UserPath_dir["Desktoppath"] = data["PathData"]["Desktoppath"]
@@ -99,6 +101,18 @@ class UserData(APiClass):
             value = yaml.safe_load(file)
         return value
 
+    def r_yaml_dialogue_result(self):
+        """读书籍对白阅读记录"""
+        file_path = os.path.join(path_YAML_FILES, "dialogue_result.yml")
+        with open(file_path, encoding='utf-8') as file:
+            self.dialogueResult_dir = yaml.safe_load(file)
+        return self.dialogueResult_dir
+
+    def w_yaml_dialogue_result(self):
+        """写对白阅读记录"""
+        file_path = os.path.join(path_YAML_FILES, "dialogue_result.yml")
+        with open(file_path, 'w+', encoding="utf-8") as f:
+            yaml.dump(self.dialogueResult_dir, f, allow_unicode=True)
     def yaml_type_check(self):
         type_checkpath = os.path.join(path_YAML_FILES, "yamlGame/type_check.yml")
         self.type_check_dir = self.read_yaml(type_checkpath)
@@ -224,15 +238,14 @@ class UserData(APiClass):
 
     def getreadprogress_local(self, StdPocoAgent):
         """获取本地用户阅读进度返回chapterProgress和chatProgress["Item2"]["Item3"]"""
-        time = 10
+        time = 5
         readprogress = None
         while time > 0:
             time -= 1
             try:
                 readprogress = StdPocoAgent.get_ReadProgress()
-            except Exception as e:
+            except:
                 print("拉本地读书进度失败")
-                mylog("拉本地读书进度失败{}".format(e))
                 sleep(0.5)
             return readprogress
 
@@ -332,7 +345,11 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# aa=MyData.getBookInfo(bookId="51766",uuid="35110")
+# list=MyData.r_yaml_dialogue_result()
+# if "10001" not in MyData.dialogueResult_dir:
+#     print("首次阅读")
+# if 10379 in MyData.dialogueResult_dir["51460007"]:
+#     print("ddddddddd")
 # if aa["sequel_from"]:
 #     pass
 # else:

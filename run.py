@@ -1,6 +1,9 @@
 """步骤方法"""
 # from poco.drivers.osx.sdk.OSXUI import PocoSDKOSX
 # from poco.drivers.android.uiautomation import AndroidUiautomationPoco
+import json
+import requests
+from common.send_msg import *
 from poco.drivers.std import StdPocoAgent, StdPoco
 from step.test_SidePanel import *
 from step.test_login_step import *
@@ -35,6 +38,25 @@ class Run(MyAnalysis):
         self.alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
         self.errorLogpath = os.path.join(path_LOG_MY, "errorlog.txt")
 
+    def send_ding(self, text, title, messageUrl):
+        try:
+            headers = {'Content-Type': 'application/json;charset=utf-8'}
+            url = MyData.EnvData_dir["DingUrl"]
+            json_text = {
+                "msgtype": "link",
+                "link": {
+                    "text": text,
+                    "title": title,
+                    "picUrl": "",
+                    "messageUrl": messageUrl
+                }
+            }
+            json_text = json.dumps(json_text).encode(encoding='UTF8')
+            r = requests.post(url, json_text, headers=headers).content
+            log("发送到钉钉成功")
+            return r
+        except:
+            log("发送到钉钉失败")
     def initialize(self):
         """初始化"""
         # try:
@@ -122,6 +144,24 @@ class Run(MyAnalysis):
             print("完成读取errorlog")
         except BaseException as e:
             print("输出errorlog日志转化到log.txt中失败", e)
+    def send_fun(self):
+        """上传报告并发送钉钉"""
+        localhost2ossdata = localhost2oss(path_BOOKREAD_ERROR_IMAGE)
+        date = MyData.yaml_bookread_result()
+        OK = 0
+        Error = 0
+        errors_list = []
+        for i in date:
+            if date[i] == "True" or date[i] == "False":
+                OK += 1
+            if date[i] == 3:
+                Error += 1
+                errors_list.append(i)
+        if MyData.EnvData_dir["sendDing"]:
+            send_msg(num=OK, error=Error, date=localhost2ossdata[0], http_url=localhost2ossdata[1])
+            # myRun.send_ding(text=str(MyData.bookresult_dir),title="完成书籍阅读",messageUrl="http://www.baidu.com")
+        else:
+            print("配置为不推送到钉钉")
 
     def togetherReport(self):
         """生成最后的合成日志"""
@@ -181,10 +221,11 @@ class Run(MyAnalysis):
                     self.Case_info[k]["repeattime"] = 0
                 except Exception as e:
                     sleep(1)
-                    mylog.error("------第出现异常", e)
+                    # mylog.error("------第出现异常", e)
                     log(e, "------出现异常----------")
                     self.resetEnv(k)
                 finally:
+                    MyData.w_yaml_dialogue_result()
                     self.partReport(htmlname=htmlname, __title__=__title__, k=k)
                     # try:
                     #     stop_record(recordfile)
@@ -202,8 +243,8 @@ if __name__ == '__main__':
         mylog.error("------出现异常{}", e)
         log(e, "------出现异常--------")
 myRun.togetherReport()
+# myRun.send_fun()
 input('Press Enter to exit...')
     # myRun.pull_errorLog()
     # myRun.writelogs()
     # myRun.get_fileist()
-
