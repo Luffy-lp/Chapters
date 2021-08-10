@@ -67,18 +67,20 @@ class BookRead(FindObject):
         if self.progress_info["chatProgress"] == i:
             return True
         self.TextPOCO.set_text(str(i))
-        sleep(0.2)
+        sleep(0.1)
         touch(self.jumpPOS)
-        # self.findClick_try("Button","Text (TMP)",description="jump")
+        sleep(0.1)
         self.updte_readprogress()
-        time=5
+        time=2
         while time>0:
             time-=1
             if self.progress_info["chatProgress"] == i:
                 return True
             else:
                 self.TextPOCO.set_text(str(i))
+                sleep(0.1)
                 touch(self.jumpPOS)
+                sleep(0.1)
                 self.updte_readprogress()
         self.chat_typeconf()
     def out_find(self):
@@ -90,6 +92,7 @@ class BookRead(FindObject):
             print("补全：", i)
             self.updte_oldReadProgress()  # 保存老进度
             self.jumpToDialogue(i)
+            self.updte_readprogress()
             self.precondition()
             self.resource_judgment()
             self.progressjudge()  # 书籍阅读进度是否异常判断
@@ -131,6 +134,11 @@ class BookRead(FindObject):
             self.getbookprogress(bookid, chapterProgress)
             if self.jumpPOS == None:
                 pos = self.poco("Text (TMP)").wait(2).get_position()
+                if MyData.DeviceData_dir["offset"]:
+                    print(MyData.DeviceData_dir["offset"])
+                    pos[1]+=MyData.DeviceData_dir["offset"]
+                    print(pos[1])
+                # self.poco("Text (TMP)").click()
                 self.jumpPOS = COM_utilities.PosTurn(pos)
                 self.TextPOCO = self.poco("InputField").wait(2)
             if self.read_finish:
@@ -195,11 +203,11 @@ class BookRead(FindObject):
         self.filename_head = str(self.progress_info["chapterProgress"]) + "_" + self.achatProgress
         if self.option_record["scene_bg_id"] != self.progress_info["option_info"]["scene_bg_id"]:
             print("转场等待")
-            sleep(1.2)
+            sleep(2)
             self.sceneBG_check()
         if self.progress_info["option_info"]["is_need_around"] == 1:
             print("场景环绕等待")
-            sleep(2.5)
+            sleep(2)
         self.option_record["scene_bg_id"] = self.progress_info["option_info"]["scene_bg_id"]  # 背景
 
     def updte_readprogress(self):
@@ -465,18 +473,23 @@ class BookRead(FindObject):
             # is_touch=True
             print("点击操作")
         else:
-            try:
-                if self.randomNUM:
-                    self.randomNUM = False
-                    Item0 = self.poco("UIChapterSelectList").child("Item")[0].wait(1)
-                else:
-                    self.randomNUM = True
-                    Item0 = self.poco("UIChapterSelectList").child("Item(Clone)")[0].wait(1)
-                self.findClick_childobject(Item0, description="选项")
-            except:
-                print("未发现选项")
+            self.selectManage(select_id)
         self.touchtime = self.touchtime + 1
-
+    def selectManage(self,select_id):
+        # print("章节进度:", self.progress_info["chapterProgress"])
+        # print("对话总数:", self.progress_info["chat_num"])
+        # print("对话进度:", self.progress_info["chatProgress"])
+        print(MyData.selectResult_dir)
+        print(select_id)
+        try:
+            Item0 = self.poco("UIChapterSelectList").child("Item")[0].wait(1)
+            self.findClick_childobject(Item0, description="选项")
+        except:
+            print("未发现选项")
+        if str(select_id) in MyData.selectResult_dir:
+            MyData.selectResult_dir[str(select_id)]=1
+            print(MyData.selectResult_dir)
+            MyData.w_yaml_select_result()
     def progressjudge(self):
         """进度异常判断"""
         if self.option_record["oldChatProgress"] == str(self.progress_info["chatProgress"]):
@@ -487,7 +500,7 @@ class BookRead(FindObject):
             self.updte_readprogress()
         else:
             self._etime = 0
-        if self._etime >= 5:
+        if self._etime >= 4:
             self.BookRead_info["Jank"] = self.BookRead_info["Jank"] + 1
             VisualRead: dict = MyData.newPoP_dir["VisualRead"]
             for k, v in VisualRead.items():

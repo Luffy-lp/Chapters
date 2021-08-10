@@ -233,7 +233,6 @@ class Run(MyAnalysis):
                     # except:
                     #     mylog.info("【{0}】生成录制文件失败".format(__title__))
 
-
 if __name__ == '__main__':
     try:
         myRun = Run()
@@ -243,7 +242,11 @@ if __name__ == '__main__':
         mylog.error("------出现异常{}", e)
         log(e, "------出现异常--------")
 myRun.togetherReport()
-# myRun.send_fun()
+myRun.send_fun()
+if MyData.EnvData_dir["powerOff"] == "True":
+    print(MyData.EnvData_dir["powerOff"])
+    print("关机")
+    os.system('shutdown /s /t 20')
 input('Press Enter to exit...')
     # myRun.pull_errorLog()
     # myRun.writelogs()

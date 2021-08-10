@@ -23,7 +23,7 @@ class FindObject(CommonDevices):
     androidpoco: AndroidUiautomationPoco = None
     globals()
     Popuplist = []
-    freeze_poco=None
+    freeze_poco = None
     AlterTxt = {
         "Please Update Latest Chapter": "CenterBtn",
         "Attention": "LeftBtn",
@@ -39,16 +39,26 @@ class FindObject(CommonDevices):
         self.poco = MyData.DeviceData_dir["poco"]
         self.androidpoco = MyData.DeviceData_dir["androidpoco"]
 
-    def initialized(self):
-        """基于poco之后的初始化"""
-        MyData.DeviceData_dir["poco"] = UnityPoco()
+    def set_offset(self):
         ADBdevice = MyData.EnvData_dir["ADBdevice"]
         if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
             MyData.DeviceData_dir["poco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
+            mystr: str = MyData.mobileconf_dir["Notch_Fit"][ADBdevice]
+            mystr = mystr.replace("(", "")
+            mystr = mystr.replace(")", "")
+            NFlist = mystr.split(",")
+            MyData.DeviceData_dir["offset"] = 1 - (int(NFlist[3]) -int(NFlist[1]))/int(NFlist[3])
+            print(MyData.DeviceData_dir["offset"])
             mylog.info("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
             print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
+
+    def initialized(self):
+        """基于poco之后的初始化"""
+        MyData.DeviceData_dir["poco"] = UnityPoco()
+        self.set_offset()
         mylog.info("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
         print("完成Unity元素定位方法初始化【{}】".format(MyData.DeviceData_dir["poco"]))
+
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
@@ -85,6 +95,7 @@ class FindObject(CommonDevices):
             mylog.error("查找点击元素-【{}】--失败".format(findName))
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
+
     def tryClick_offspring(self, parentName, offspringName, description="", waitTime=1, tryTime=1, sleeptime=0):
         """父级关联查找"""
         print("正在寻找{0}".format(description))
@@ -97,13 +108,15 @@ class FindObject(CommonDevices):
         except:
             log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
             return False
-    def trySetText(self,InputField,set_text):
+
+    def trySetText(self, InputField, set_text):
         """输入Text"""
         try:
             self.poco(InputField).set_text(str(set_text))
             return True
         except:
             log(Exception("输入-【{}】-或失败".format(str(set_text))), desc="输入失败", snapshot=True)
+
     def find_childobject(self, findPoco: poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
         waitTime = waitTime + float(MyData.EnvData_dir["sleepLevel"])
@@ -226,12 +239,12 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def assert_resource(self,parentName, findName, findAttr,description="", waitTime=1, tryTime=2, reportError=True,
+    def assert_resource(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
                         sleeptime=0):
-        if self.freeze_poco!=None:
-            poco=self.freeze_poco
+        if self.freeze_poco != None:
+            poco = self.freeze_poco
         else:
-            poco=self.poco
+            poco = self.poco
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
@@ -244,10 +257,11 @@ class FindObject(CommonDevices):
         else:
             if reportError:
                 log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, findAttr)),
-                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr),snapshot=True, level="error")
+                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr), snapshot=True, level="error")
                 return False
+
     def assert_Body(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
-                        sleeptime=0):
+                    sleeptime=0):
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
@@ -263,15 +277,15 @@ class FindObject(CommonDevices):
         else:
             if reportError:
                 log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, findAttr)),
-                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr),snapshot=True, level="error")
+                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr), snapshot=True, level="error")
                 return False
 
     def assert_getText(self, parentName, findName, textAttr, description="", waitTime=1, tryTime=2, reportError=True,
-                        sleeptime=0):
+                       sleeptime=0):
         # self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture")
         while (tryTime > 0):
             tryTime = tryTime - 1
-            if textAttr=="TMPtext":
+            if textAttr == "TMPtext":
                 try:
                     mytext = self.poco(parentName).offspring(findName).wait(waitTime).get_TMPtext()
                     if mytext:
@@ -466,9 +480,9 @@ class FindObject(CommonDevices):
 
     def UIAlterPoP(self):
         is_UIAlterPoP = False
-        time=10
-        while time>1:
-            time-=1
+        time = 10
+        while time > 1:
+            time -= 1
             try:
                 if len(self.poco("UIOther").children().wait(0.5)) >= 2:
                     is_UIAlterPoP = True
@@ -495,8 +509,9 @@ class FindObject(CommonDevices):
                     print("UIOther弹框检测结束")
                     return is_UIAlterPoP
             except:
-                log(Exception("查找弹框异常"),snapshot=True)
+                log(Exception("查找弹框异常"), snapshot=True)
             return is_UIAlterPoP
+
     def PopupManage(self):
         """大厅弹框检查"""
         self.Popuplist = []
@@ -577,6 +592,17 @@ class FindObject(CommonDevices):
         except:
             print("查询按钮列表异常")
 # FindObject1=FindObject()
+# StdPocoAgent1 = StdPocoAgent()
+#
+# AA=FindObject1.assert_resource("RoleSay", "Hair", "SpriteRenderer", "右侧人物的Hair资源")
+# if StdPocoAgent1.get_Music():
+#     print(StdPocoAgent1.get_Music())
+#     if StdPocoAgent1.get_Music()["name"]:
+#         print("have yes")
+#     else:print("have no")
+#     log("【资源检查】:音乐资源->True")
+# else:
+#     log(ResourceError(errorMessage="资源异常：音乐资源组件异常"), desc="资源异常：音乐资源组件异常", snapshot=True)
 # FindObject1.poco("Text Area").click()
 # for i in range(10):
 #     keyevent("67")
@@ -586,4 +612,3 @@ class FindObject(CommonDevices):
 # FindObject1.poco("Button").child("Text (TMP)").click()
 # outputpath = os.path.join(path_REPORT_DIR, "TEST.html")
 # simple_report(__file__, logpath=path_LOG_DIR, output=outputpath)
-

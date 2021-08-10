@@ -8,15 +8,16 @@ UserData:
   loginpassword: "yo5161381" #绑定密码
   usertype: "bookread" #
 EnvData:
-  APKpackage: "Chapters_10009_176_610b43ad3acff.apk" #安装包名称
+  APKpackage: "Chapters_10009_3_6110cc92bb00e.apk" #安装包名称
   packageName: "com.mars.avgchapters" #apk包名称
-  ADBip: "192.168.191.36:5039"  #连接adb运行地址
-  ADBdevice: "R52M90DYELT" # android://192.168.191.36:5039/R52M90DYELTChapters_10009_176_610b43ad3acff
+  ADBip: "192.168.191.36:5039"  #连接adb运行地址 36  R52M90DYELT
+  ADBdevice: "7ed2cafc" # android://192.168.191.36:5039/R52M90DYELT  android://192.168.191.36:5039/7ed2cafc
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setup通用连接设备的参数
   simulator: "?cap_method=JAVACAP&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setupJAVA连接设备的参数
   device: "android" #连接设备类型
   sleepLevel: "5" #根据手机运行速度配置延迟
-  sendDing: True  #True
+  sendDing: False  #True
+  powerOff: "True" #True False #跑完后关机
 #  DingUrl: 'https://oapi.dingtalk.com/robot/send?access_token=24a07bab1bad3756399be5b6c97a1a159f36239fa503283abed368c5f86a2f29'
   DingUrl: 'https://oapi.dingtalk.com/robot/send?access_token=a7cb8133b77326963dfc27dd71fc37f1fbe29418cedd7a78650371536c78658c'
 APIData:

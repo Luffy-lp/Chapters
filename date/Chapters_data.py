@@ -19,6 +19,7 @@ class UserData(APiClass):
         self.DeviceData_dir = {}  # 设备信息配置表
         self.DeviceData_dir["poco"] = None
         self.DeviceData_dir["androidpoco"] = None
+        self.DeviceData_dir["offset"] = None
         self.EnvData_dir = {}  # 环境配置表
         self.UserData_dir = {}  # 用户基本数据表
         self.UserData_dir["bookDetailInfo"] = {}
@@ -33,7 +34,6 @@ class UserData(APiClass):
         self.popup_dir = {}  # 弹框配置表
         self.chat_type_dir = {}  # 对话类型配置表
         self.Element_dir = {}
-        self.language_dir = {}
         self.newPoP_dir = []
         self.checklist=[]
         self.bookresult_dir = {}
@@ -41,6 +41,8 @@ class UserData(APiClass):
         self.downloadbook_sign = {}
         self.RpcClient = None
         self.dialogueResult_dir={}
+        self.selectResult_dir={}
+        self.Story_select_dir={}
         self.getdata()
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
@@ -89,6 +91,7 @@ class UserData(APiClass):
         self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
         self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
         self.EnvData_dir["sendDing"] = data["EnvData"]["sendDing"]
+        self.EnvData_dir["powerOff"] = data["EnvData"]["powerOff"]
         self.EnvData_dir["DingUrl"] = data["EnvData"]["DingUrl"]
         self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
         self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
@@ -100,12 +103,27 @@ class UserData(APiClass):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
         return value
+    def r_yaml_select_result(self):
+        """读选项记录"""
+        file_path = os.path.join(path_YAML_FILES, "select_result.yml")
+        with open(file_path, encoding='utf-8') as file:
+            self.selectResult_dir = yaml.safe_load(file)
+        if self.dialogueResult_dir is None:
+            self.dialogueResult_dir={'00001001':1}
+        return self.selectResult_dir
 
+    def w_yaml_select_result(self):
+        """写选项记录"""
+        file_path = os.path.join(path_YAML_FILES, "select_result.yml")
+        with open(file_path, 'w+', encoding="utf-8") as f:
+            yaml.dump(self.selectResult_dir, f, allow_unicode=True)
     def r_yaml_dialogue_result(self):
         """读书籍对白阅读记录"""
         file_path = os.path.join(path_YAML_FILES, "dialogue_result.yml")
         with open(file_path, encoding='utf-8') as file:
             self.dialogueResult_dir = yaml.safe_load(file)
+        if self.dialogueResult_dir is None:
+            self.dialogueResult_dir={'00001001':[10001]}
         return self.dialogueResult_dir
 
     def w_yaml_dialogue_result(self):
@@ -182,8 +200,6 @@ class UserData(APiClass):
 
     def read_test(self):
         """输出errorlog日志转化到log.txt中"""
-        print(path_BASE_DIR)
-        print(self.adbpath)
         pull = self.adbpath + " pull " + MyData.UserPath_dir["errorLogpath"] + " " + self.errorLogpath
         connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
         print(pull)
@@ -262,6 +278,8 @@ class UserData(APiClass):
         with open(path, 'w') as f1:
             f1.seek(0)
             f1.truncate()
+        self.w_yaml_dialogue_result()
+        self.w_yaml_select_result()
         mylog.info("完成文件清空")
         print("完成文件清空")
 
@@ -277,15 +295,25 @@ class UserData(APiClass):
     def read_story_cfg_chapter(self, bookid, chapter_id):
         """读取当前章节信息txt"""
         bookpath = bookid + "\\data_s\\" + chapter_id + "_chat.txt"
+        selectpath=bookid + "\\data_s\\" + chapter_id + "_select.txt"
         path = os.path.join(path_resource, bookpath)
+        path1=os.path.join(path_resource, selectpath)
         with open(path, "r", encoding='utf-8') as f:  # 设置文件对象
             data = f.read()  # 可以是随便对文件的操作
             # print(data)
         data = eval(data)
         self.Story_cfg_chapter_dir = data
         self.Story_cfg_chapter_dir["length"] = len(data)
+        with open(path1, "r", encoding='utf-8') as f:  # 设置文件对象
+            selectdata = f.read()  # 可以是随便对文件的操作
+        self.Story_select_dir = eval(selectdata)
+        self.getselectlist()
         return self.Story_cfg_chapter_dir
-
+    def getselectlist(self):
+        mylist = list(self.Story_select_dir.keys())
+        for i in mylist:
+            self.selectResult_dir[i] = 0
+        print(self.selectResult_dir)
     def getLoginStatus(self):
         """获取用户登陆状态"""
         LoginStatus = self.LoginStatusApi(self.UserData_dir["uuid"], self.UserData_dir["device_id"])
