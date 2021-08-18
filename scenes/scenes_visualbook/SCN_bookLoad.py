@@ -14,11 +14,6 @@ class BookLoad(FindObject):
     def bookLoad(self,bookid=None):
         """书籍加载DefaultBg"""
         startime = time.time()
-        if MyData.UserData_dir["bookDetailInfo"]["BookID"]:
-            MyData.download_bookresource(MyData.UserData_dir["bookDetailInfo"]["BookID"])
-        else:
-            MyData.UserData_dir["bookDetailInfo"]["BookID"] = bookid
-            MyData.download_bookresource(bookid)
         while self.find_try("ChapterLoad", description="书籍加载界面", waitTime=3):
             loadtime = time.time() - startime
             if loadtime > 720:

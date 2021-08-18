@@ -146,6 +146,7 @@ class Run(MyAnalysis):
             print("输出errorlog日志转化到log.txt中失败", e)
     def send_fun(self):
         """上传报告并发送钉钉"""
+        print("发送钉钉")
         localhost2ossdata = localhost2oss(path_BOOKREAD_ERROR_IMAGE)
         date = MyData.yaml_bookread_result()
         OK = 0
@@ -158,7 +159,7 @@ class Run(MyAnalysis):
                 Error += 1
                 errors_list.append(i)
         if MyData.EnvData_dir["sendDing"]:
-            send_msg(num=OK, error=Error, date=localhost2ossdata[0], http_url=localhost2ossdata[1])
+            send_msg(num=OK, error=Error, date=localhost2ossdata[0], http_url=localhost2ossdata[1],chapterlist=errors_list)
             # myRun.send_ding(text=str(MyData.bookresult_dir),title="完成书籍阅读",messageUrl="http://www.baidu.com")
         else:
             print("配置为不推送到钉钉")
@@ -242,11 +243,10 @@ if __name__ == '__main__':
         mylog.error("------出现异常{}", e)
         log(e, "------出现异常--------")
 myRun.togetherReport()
-myRun.send_fun()
-if MyData.EnvData_dir["powerOff"] == "True":
-    print(MyData.EnvData_dir["powerOff"])
-    print("关机")
-    os.system('shutdown /s /t 20')
+# myRun.send_fun()
+# if MyData.EnvData_dir["powerOff"] == True:
+#     print("即将睡眠")
+#     os.system('rundll32 powrprof.dll,SetSuspendState')
 input('Press Enter to exit...')
     # myRun.pull_errorLog()
     # myRun.writelogs()

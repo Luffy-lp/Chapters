@@ -23,7 +23,6 @@ class CommonDevices():
                     MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
                     mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
                     print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                    print("DEVIEC:", G.DEVICE)
     def connect_devices(self):
         conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
             "ADBdevice"]

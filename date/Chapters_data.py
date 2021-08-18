@@ -2,12 +2,12 @@ from msilib.schema import Environment
 from time import sleep
 
 import yaml
+from numpy.core.defchararray import capitalize
+
 from common.COM_path import *
 from common.my_log import mylog
 from date.Chapters_API import APiClass
 import sqlite3
-
-
 # TODO:书架需要考虑新手手书架情况
 class UserData(APiClass):
     _instance = None
@@ -32,7 +32,6 @@ class UserData(APiClass):
         self.readprogressList_dir = {}  # {'chapterProgress': 10108001, 'chatProgress': 10006} 书籍进度表
         self.chat_type_dir = {}  # 对话类型配置表
         self.popup_dir = {}  # 弹框配置表
-        self.chat_type_dir = {}  # 对话类型配置表
         self.Element_dir = {}
         self.newPoP_dir = []
         self.checklist=[]
@@ -43,11 +42,13 @@ class UserData(APiClass):
         self.dialogueResult_dir={}
         self.selectResult_dir={}
         self.Story_select_dir={}
+        self.fashion_dir={}
         self.getdata()
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
     def getdata(self):
         self.clear()
+        self.UserData_dir["channel_id"] = self.get_set()
         self.yamldata_conf()
         self.yaml_stroy()
         self.yaml_chattype()
@@ -72,7 +73,6 @@ class UserData(APiClass):
         with open(path, encoding="utf-8") as f:
             data = yaml.load(f.read(), Loader=yaml.Loader)
         uuid = data["UserData"]["uuid"]
-        channel_id = data["UserData"]["channel_id"]
         device_platform = data["UserData"]["device_platform"]
         device_id = data["UserData"]["device_id"]
         self.UserData_dir["device_id"] = device_id
@@ -96,9 +96,9 @@ class UserData(APiClass):
         self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
         self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
         self.UserPath_dir["Desktoppath"] = data["PathData"]["Desktoppath"]
-        if not self.UserData_dir["uuid"]:
-            uuid = self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
-            self.UserData_dir["uuid"] = uuid
+        # if not self.UserData_dir["uuid"]:
+        #     uuid = self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
+        #     self.UserData_dir["uuid"] = uuid
     def read_yaml(self, filepath):
         with open(filepath, encoding='utf-8') as file:
             value = yaml.safe_load(file)
@@ -152,7 +152,6 @@ class UserData(APiClass):
     def yaml_mobileconf(self):
         mobileconfpath = os.path.join(path_YAML_FILES, "mobileconf.yml")
         self.mobileconf_dir = self.read_yaml(mobileconfpath)
-        # print(self.mobileconf_dir)
         return self.mobileconf_dir
 
     def yaml_language(self):
@@ -248,7 +247,7 @@ class UserData(APiClass):
         return readprogress
     def getBookInfo(self,uuid,bookId,channel_id="AVG10005"):
         """获取书籍信息"""
-        data = self.booklistInfoApi(uuid=uuid, channel_id=channel_id, bookId=bookId)
+        data = self.booklistInfoApi(uuid=uuid, bookId=bookId)
         self.bookInfo_dir = data["data"]
         return self.bookInfo_dir
 
@@ -260,10 +259,11 @@ class UserData(APiClass):
             time -= 1
             try:
                 readprogress = StdPocoAgent.get_ReadProgress()
+                if readprogress:
+                    return readprogress
             except:
                 print("拉本地读书进度失败")
                 sleep(0.5)
-            return readprogress
 
     def clear(self):
         """清空之前的报告和文件"""
@@ -342,13 +342,11 @@ class UserData(APiClass):
 
     def getUsercurrency(self):
         """	虚拟币类型currency"""
-        diamond = self.syncValueApi(self.UserData_dir["uuid"], value_type="diamond")["value"]
-        ticket = self.syncValueApi(self.UserData_dir["uuid"], value_type="ticket")["value"]
-        credit = self.memberInfoApi(self.UserData_dir["uuid"])["data"]["credit"]
-        self.UserData_dir["diamond"] = diamond
-        self.UserData_dir["ticket"] = ticket
-        self.UserData_dir["credit"] = credit
-        return self.UserData_dir
+        self.UserData_dir["diamond"] = self.syncValueApi(self.UserData_dir["uuid"], value_type="diamond")["value"]
+        self.UserData_dir["ticket"] = self.syncValueApi(self.UserData_dir["uuid"], value_type="ticket")["value"]
+        # credit = self.memberInfoApi(self.UserData_dir["uuid"])["data"]["credit"]
+        # self.UserData_dir["credit"] = credit
+        # return self.UserData_dir
     def updateUsercurrency(self,value_type,number):
         """	修改虚拟币类型currency"""
         self.syncValueApi(self.UserData_dir["uuid"], value_type=value_type,valuechange=number)
@@ -370,18 +368,88 @@ class UserData(APiClass):
                     return None
             else:
                 return None
+    def getfashion(self,bookid,role_id,fashion_id=None):
+        """获取角色fashion"""
+        role_list=[]
+        fashion_list=[]
+        if role_id:
+            if role_id not in self.fashion_dir:
+                date = self.storyrole(book_id=bookid,role_ids=role_id)
+                role_list=self.getfashion_list(date[0],role_id)
+                self.w_yaml_fashion()
+            else:
+              role_list=self.fashion_dir[role_id]
+            if fashion_id is not None and not "0":
+                if fashion_id not in self.fashion_dir:
+                    date = self.fashionShowApi(fashion_ids=fashion_id)
+                    fashion_list=self.getfashion_list(date[0],fashion_id)
+                    self.w_yaml_fashion()
+                else:
+                    fashion_list=self.fashion_dir[fashion_id]
+        # print("fashion_list:",fashion_list)
+        # print("role_list:",role_list)
+        newlist=role_list+fashion_list
+        newlist = sorted(set(newlist), key=newlist.index)
+        # print(newlist)
+        return newlist
+    def getfashion_list(self,data,fashion_id):
+        """装扮列表"""
+        list=['body','cloth','hair','back1','back2','back3','back4','dec1','dec2','dec4','dec5','face1','face2']
+        fashion_list=[]
+        for i in list:
+            if i in data.keys():
+                if data[i]:
+                    k=i.capitalize()
+                    fashion_list.append(k)
+        self.fashion_dir[fashion_id]=fashion_list
+        return fashion_list
+    def r_yaml_fashion(self):
+        """读角色fashion"""
+        file_path = os.path.join(path_YAML_FILES, "yamlBookRead/rolefashion.yml")
+        with open(file_path, encoding='utf-8') as file:
+            self.fashion_dir = yaml.safe_load(file)
+        if self.fashion_dir is None:
+            self.fashion_dir={'000000':["Body"]}
+        return self.fashion_dir
+
+    def w_yaml_fashion(self):
+        """写角色fashion"""
+        file_path = os.path.join(path_YAML_FILES, "yamlBookRead/rolefashion.yml")
+        with open(file_path, 'w+', encoding="utf-8") as f:
+            yaml.dump(self.fashion_dir, f, allow_unicode=True)
 
 
 MyData = UserData()
-# list=MyData.r_yaml_dialogue_result()
-# if "10001" not in MyData.dialogueResult_dir:
-#     print("首次阅读")
-# if 10379 in MyData.dialogueResult_dir["51460007"]:
-#     print("ddddddddd")
-# if aa["sequel_from"]:
-#     pass
+# bookid="52181"
+# # role_id="100022872"
+# # # fashion_ids1="1000037836"
+# # fashion_ids1="1000058865"
+# # # # role_id2="1605108"
+# # # # MyData.r_yaml_fashion()
+# # date=MyData.getfashion(bookid,role_id,fashion_ids1)
+# # print(date)
+# print(MyData.fashion_dir)
+# MyData.w_yaml_fashion()
+# fashion_dir={}
+# bookid="16051"
+# role_id="16051"
+# fashion_ids1="160510110"
+# fashion_ids2="1605108"
+#
+# date=APiClass1.storyrole(bookid,role_ids=role_id)
+# fashion_dir[role_id]=date[0]
+#
+#
+# date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
+# fashion_dir[fashion_ids1]=date[0]
+# print(fashion_dir)
+#
+# if fashion_ids2 in fashion_dir:
+#     cloth=fashion_dir[fashion_ids1]["cloth"]
+#     print(cloth)
 # else:
-#     print("dddd")
-# print(aa["sequel_from"])
-# for k,v in aa.items():
-#     print(v)
+#     date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
+#     fashion_dir[fashion_ids2] = date[0]
+#     cloth=fashion_dir[fashion_ids2]["cloth"]
+#     print(cloth)
+# print(fashion_dir)

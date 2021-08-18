@@ -24,20 +24,40 @@ class BookNewDetail(FindObject):
         self.BookNewDetail_info["BookName"] = UIbookName
         self.BookNewDetail_info["BookID"] = BookID
         MyData.UserData_dir["bookDetailInfo"] = self.BookNewDetail_info
-        print(MyData.UserData_dir)
+        print(MyData.bookInfo_dir["BookID"])
+        # print(MyData.UserData_dir)
         return True
 
     def get_readBookInfo(self):
         print("书籍类型检测")
+        MyData.UserData_dir["bookDetailInfo"]["BookID"] = MyData.bookInfo_dir["BookID"]
         data = MyData.getBookInfo(uuid=MyData.UserData_dir["uuid"], bookId=MyData.bookInfo_dir["BookID"])
-        self.BookNewDetail_info["sequel_from"] = data["sequel_from"]
-
+        try:
+            self.BookNewDetail_info["sequel_from"] = data["sequel_from"]
+        except:
+            self.BookNewDetail_info["sequel_from"]=False
+            print("不存在sequel_from")
     def book_chapters(self, index):
-        self.poco("TestInput").wait(1).set_text(index)
+        self.trySetText("TestInput",set_text=index)
         self.click_object("TestInput", description="搜索框")
         self.click_object("UIVisualDetailView", description="详情页")
+    def bookReadCondition(self,bookid):
+        """阅读条件检查"""
+        # if MyData.UserData_dir["bookDetailInfo"]["BookID"]:
+        #     MyData.download_bookresource(MyData.UserData_dir["bookDetailInfo"]["BookID"])
+        # else:
+        MyData.download_bookresource(bookid)
+        MyData.r_yaml_fashion()
+        MyData.getUsercurrency()
+        if self.BookNewDetail_info["sequel_from"]:
+            self.findClick_try("UpBtn", "UpBtn", description="Yes,I do")
+        if int(MyData.UserData_dir["diamond"]) < 4999:
+            MyData.updateUsercurrency("diamond", "4999")
+        if int(MyData.UserData_dir["ticket"]) < 99:
+            MyData.updateUsercurrency("ticket", "99")
+        MyData.r_yaml_fashion()
 
-    def book_Play(self, index=None):
+    def book_Play(self, bookid,index=None):
         """新版本的play"""
         self.get_readBookInfo()
         self.book_chapters(index)
@@ -45,44 +65,8 @@ class BookNewDetail(FindObject):
             pass
         else:
             self.findClick_object("DaypassPlay", "DaypassPlay", description="Daypass按钮", waitTime=1)
-        if self.BookNewDetail_info["sequel_from"]:
-            self.findClick_try("UpBtn", "UpBtn", description="Yes,I do")
-        if int(MyData.UserData_dir["diamond"]) < 4999:
-            MyData.updateUsercurrency("diamond", "4999")
-        if int(MyData.UserData_dir["ticket"]) < 99:
-            MyData.updateUsercurrency("ticket", "99")
+        self.bookReadCondition(bookid)
         return True
-
-    # def book_Play(self, index=None):
-    #     self.get_readBookInfo()
-    #     if index:
-    #         try:
-    #             POCO = self.poco("chapterBtn(Clone)")[int(index) - 1]
-    #             self.findClick_childobject(POCO, description="选择第{}章".format(index), waitTime=3)
-    #         except:
-    #             try:
-    #                 self.click_close()
-    #                 self.click_object("SearchBtn", description="bookid搜索按钮", waitTime=1)
-    #                 self.bookNewDetailPOP()
-    #                 POCO = self.poco("chapterBtn(Clone)")[int(index) - 1]
-    #                 self.findClick_childobject(POCO, description="选择第{}章".format(index), waitTime=3)
-    #             except:
-    #                 log(Exception("{}章节不存在请查询章节是否上传.......".format(index)))
-    #     if self.find_try("Play", description="Play按钮", waitTime=1):
-    #         self.findClick_object("Play", "Play", description="Play按钮", waitTime=1)
-    #         if self.BookNewDetail_info["sequel_from"]:
-    #             self.findClick_try("UpBtn", "UpBtn", description="Yes,I do")
-    #         if self.UIAlterPoP():
-    #             self.findClick_object("Play", "Play", description="Play按钮", waitTime=1)
-    #             if self.BookNewDetail_info["sequel_from"]:
-    #                 self.findClick_try("UpBtn", "UpBtn", description="Yes,I do")
-    #     else:
-    #         self.findClick_object("DaypassPlay", "DaypassPlay", description="Daypass按钮", waitTime=1)
-    #     if int(MyData.UserData_dir["diamond"]) < 4999:
-    #         MyData.updateUsercurrency("diamond", "4999")
-    #     if int(MyData.UserData_dir["ticket"]) < 99:
-    #         MyData.updateUsercurrency("ticket", "99")
-    #     return True
 
     def click_close(self):
         """详情页关闭按钮"""

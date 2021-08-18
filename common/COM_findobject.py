@@ -47,7 +47,7 @@ class FindObject(CommonDevices):
             mystr = mystr.replace("(", "")
             mystr = mystr.replace(")", "")
             NFlist = mystr.split(",")
-            MyData.DeviceData_dir["offset"] = 1 - (int(NFlist[3]) -int(NFlist[1]))/int(NFlist[3])
+            MyData.DeviceData_dir["offset"] = 1 - (int(NFlist[3]) - int(NFlist[1])) / int(NFlist[3])
             print(MyData.DeviceData_dir["offset"])
             mylog.info("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
             print("完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
@@ -111,11 +111,14 @@ class FindObject(CommonDevices):
 
     def trySetText(self, InputField, set_text):
         """输入Text"""
-        try:
-            self.poco(InputField).set_text(str(set_text))
-            return True
-        except:
-            log(Exception("输入-【{}】-或失败".format(str(set_text))), desc="输入失败", snapshot=True)
+        time = 2
+        while time > 0:
+            time -= 1
+            try:
+                self.poco(InputField).set_text(str(set_text))
+                return True
+            except:
+                log(Exception("输入-【{}】-或失败".format(str(set_text))), desc="输入失败", snapshot=True)
 
     def find_childobject(self, findPoco: poco, description="", waitTime=1, tryTime=3, sleeptime=0):
         """用于关联父级才能找到的元素"""
@@ -239,20 +242,23 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def assert_resource(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
+    def assert_resource(self, parentName, partName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
                         sleeptime=0):
-        if self.freeze_poco != None:
-            poco = self.freeze_poco
-        else:
-            poco = self.poco
         while (tryTime > 0):
+            if self.freeze_poco != None:
+                poco = self.freeze_poco
+            else:
+                poco = self.poco
             tryTime = tryTime - 1
             try:
-                attrValue = poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
+                attrValue = poco(parentName).offspring(partName).wait(waitTime).attr(findAttr)
                 if attrValue:
                     log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
+                    if self.freeze_poco is None:
+                        self.freeze_poco = self.poco.freeze()
                     return True
             except:
+                self.freeze_poco = None
                 log("资源检查异常重试")
         else:
             if reportError:
@@ -260,18 +266,16 @@ class FindObject(CommonDevices):
                     desc="【资源异常】：{0}->未找到{1}".format(description, findAttr), snapshot=True, level="error")
                 return False
 
-    def assert_Body(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
+    def assert_Body(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=3, reportError=True,
                     sleeptime=0):
         while (tryTime > 0):
             tryTime = tryTime - 1
             try:
-                objectBody = self.poco(parentName).offspring(findName).wait(waitTime)
-                attrValue = objectBody.attr(findAttr)
+                attrValue = self.poco(parentName).offspring(findName).wait(waitTime).attr(findAttr)
                 if attrValue:
                     log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
                     self.freeze_poco = self.poco.freeze()
-                    name = objectBody.parent().parent().get_name()
-                    return name
+                    return True
             except:
                 log("资源检查异常重试")
         else:
@@ -594,7 +598,7 @@ class FindObject(CommonDevices):
 # FindObject1=FindObject()
 # StdPocoAgent1 = StdPocoAgent()
 #
-# AA=FindObject1.assert_resource("RoleSay", "Hair", "SpriteRenderer", "右侧人物的Hair资源")
+# AA=FindObject1.assert_resource("SelfHead", "Body", "texture", "右侧人物的Hair资源")
 # if StdPocoAgent1.get_Music():
 #     print(StdPocoAgent1.get_Music())
 #     if StdPocoAgent1.get_Music()["name"]:

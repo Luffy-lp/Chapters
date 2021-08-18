@@ -43,7 +43,7 @@ def test_bookload_noassert(BookID=None):
 def test_bookread(BookID=None, bookchapter=None):
     """读书"""
     myVisual = BookRead()
-    actualValue = myVisual.bookRead(BookID, bookchapter)
+    actualValue = myVisual.process_bookRead(BookID, bookchapter)
     assert_equal(actualValue, True, "阅读详情{0}".format(myVisual.progress_info))
     sleep(5)
 
@@ -93,16 +93,15 @@ def booktraversal(bookchapter):
     bookid = bookchapter[:5]
     chapterid = bookchapter[5:]
     MyData.bookInfo_dir["BookID"]=bookid
+    print(MyData.bookInfo_dir["BookID"])
     MyData.UserData_dir["bookDetailInfo"]["BookID"] = None
     Bookfind1 = Bookfind()
     myVisual = BookRead()
-    # myVisual.progress_info = {}
-    # myVisual.BookRead_info = {}
     bookNewDetail = BookNewDetail()
     Bookfind1.bookChoose_bookid(bookid)
-    bookNewDetail.book_Play(chapterid)
+    bookNewDetail.book_Play(bookid,index=chapterid)
     test_bookload_noassert(bookid)
-    myVisual.bookRead(bookid, bookchapter)
+    myVisual.process_bookRead(bookid, bookchapter)
     bookNewDetail.bookNewDetailPOP()
     bookNewDetail.click_close()
     test_discoverPopup_noassert()

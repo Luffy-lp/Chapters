@@ -7,15 +7,24 @@ import sys, os, zipfile
 # from keras.utils.data_utils import get_file
 # from common.COM_utilities import *
 from common.COM_path import *
+from common.COM_path import *
 
 
 class APiClass():
     Header = {"TIMECLOSE": "1"}
     url = "http://dev-chapters-int.stardustgod.com/"
+    channel_id = "AVG10005"
+    _response = None
 
-    def __init__(self):
+    def get_set(self):
         self._response = None
-        print("调用接口类")
+        filepath=os.path.join(path_YAML_FILES,"apiconf.yml")
+        print(filepath)
+        with open(filepath, encoding='utf-8') as file:
+            value = yaml.safe_load(file)
+        self.channel_id=value["channel_id"]
+        self.url=value["url"]
+        return self.channel_id
 
     def try_APIlink(self, url, headers, body, name, trytime=100, timeout=10):
         """requests公共方法"""
@@ -29,19 +38,19 @@ class APiClass():
                 print("拉取{0}接口失败，重试".format(name))
                 sleep(1)
             else:
-                dir_json=json.loads(self._response.text)
+                dir_json = json.loads(self._response.text)
                 dir = eval(str(dir_json))
                 # print(self._response.text)
                 # my_re=\n[\s\S]*
                 print("拉取{0}接口成功".format(name))
                 return dir
 
-    def registerApi5(self, bind_type="device", channel_id="AVG10005", device_id="490000000326402",
+    def registerApi5(self, bind_type="device", device_id="490000000326402",
                      device_platform="android"):
         """游戏用户登录注册接口v3"""
         url = self.url + 'registerApi5.Class.php?DEBUG=true'
         body = {"device_platform": device_platform,
-                "channel_id": channel_id,
+                "channel_id": self.channel_id,
                 "app_version": "605.0.0",
                 "base_code_version": "605.0.0",
                 "device_id": device_id,
@@ -70,7 +79,7 @@ class APiClass():
         url = self.url + "summaryApi3.Class.php?DEBUG=true"
         Header = {"TIMECLOSE": "1",
                   "language": language}
-        body = {"channel_id": "AVG10005",
+        body = {"channel_id": self.channel_id,
                 "uuid": UUID,
                 }
         data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10, name="summaryApi3")
@@ -85,7 +94,7 @@ class APiClass():
         Header = {"platform": "android",
                   "Accept": "application/json",
                   "language": language}
-        body = {"channel_id": "AVG50005",
+        body = {"channel_id": self.channel_id,
                 "uuid": UUID,
                 }
         data = self.try_APIlink(url=url, headers=Header, body=body, trytime=10, name="story_v1_hall")
@@ -138,7 +147,7 @@ class APiClass():
         """心跳接口"""
         url = self.url + "heartbeatsApi3.Class.php?DEBUG=true"
         body = {"uuid": UUID,
-                "channel_id": channel_id,
+                "channel_id": self.channel_id,
                 "device_id": device_id,
                 "big_version": "991"
                 }
@@ -153,11 +162,16 @@ class APiClass():
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="getAllStoryInfoApi")
         return data
 
-    def syncValueApi(self, UUID, value_type, channel_id="AVG10005", valuechange=0):
+    def syncValueApi(self, UUID, value_type, valuechange=0):
         """虚拟币类型，值有：diamond，ticket"""
+        # Header = {
+        #     "language": "en-US",
+        #     "platform": "Android",
+        #     "Accept": "application/json"
+        # }
         url = self.url + "syncValueApi.Class.php?DEBUG=true"
         body = {"uuid": UUID,
-                "channel_id": channel_id,
+                "channel_id": self.channel_id,
                 "random_id": str(time.time()),
                 "tag": "charge",
                 "value_type": value_type,
@@ -165,7 +179,6 @@ class APiClass():
                 "value_change": valuechange
                 }
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="syncValueApi")
-        print(data)
         return data
 
     def todayCheckNewPushApi(self, UUID):
@@ -174,7 +187,6 @@ class APiClass():
         body = {"uuid": UUID,
                 }
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="todayCheckNewPushApi")
-        print(data)
         return data
 
     def memberInfoApi(self, UUID):
@@ -185,17 +197,17 @@ class APiClass():
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="memberInfoApi")
         return data
 
-    def booklistInfoApi(self, uuid,channel_id, bookId):
+    def booklistInfoApi(self, uuid, bookId):
         """书籍详情v2"""
         Header = {
             "language": "en-US",
-            "platform":"Android",
-            "Accept":"application/json"
+            "platform": "Android",
+            "Accept": "application/json"
         }
         url = self.url + "/na/story/v1/story/view?debug=1"
         body = {
-            "uuid":uuid,
-            "channel_id": channel_id,
+            "uuid": uuid,
+            "channel_id": self.channel_id,
             "book_id": bookId,
         }
         data = self.try_APIlink(url=url, headers=Header, body=body, name="booklistInfoApi")
@@ -240,21 +252,55 @@ class APiClass():
             zip_file.extract(f, folder_abs)
         zip_file.close()
 
+    def storyrole(self, book_id,role_ids):
+        """书籍角色"""
+        Header = {
+            "language": "en-US",
+            "platform": "Android",
+            "Accept": "application/json"
+        }
+        role_ids=json.dumps(role_ids)
+        url = self.url + "/na/story/v1/role/show/more?debug=true"
+        body = {"channel_id": self.channel_id,
+                "book_id": book_id,
+                "role_ids":role_ids
+                }
+        data = self.try_APIlink(url=url, headers=Header, body=body, name="storyrole")
+        # print(date)
+        # print(type(date["error_code"]))
+        return data["data"]
+        # else:
+        #     return False
+
+    def fashionShowApi(self, fashion_ids):
+        """书籍角色资源"""
+        Header = {
+            "language": "en-US",
+            "platform": "Android",
+            "Accept": "application/json"
+        }
+        fashion_ids=json.dumps(fashion_ids)
+        url = self.url + "/na/story/v1/role/fashion/show/more?debug=true"
+        body = {
+                "fashion_ids": fashion_ids,
+                "channel_id": self.channel_id,
+                }
+        data = self.try_APIlink(url=url, headers=Header, body=body, name="fashionShowApi")
+        return data["data"]
+
     def avgcontentApi(self, bookid, channel_id="AVG10005", country_code="CN"):
         """获取章节资源下载地址"""
         url = self.url + "avgcontentApi.Class.php?DEBUG=true"
         body = {"chapter_id": bookid,
                 "source_type": "t0",
-                "channel_id": channel_id,
+                "channel_id": self.channel_id,
                 "country_code": country_code,
                 }
         response = self.try_APIlink(url=url, headers=self.Header, body=body, name="avgcontentApi")
         address: str = response["address"]
         addresslist = address.split('/')
-        print(address)
         address = address.replace("\\", "")
         print(address)
-        print(type(address))
         time = 5
         while (time > 1):
             time = time - 1
@@ -280,9 +326,45 @@ class APiClass():
                 print("书籍资源读取成功")
         print("下载书籍资源失败")
         # raise Exception("下载书籍资源失败")
-
-
 # APiClass1 = APiClass()
-# data = APiClass1.booklistInfoApi(uuid="47566",channel_id="AVG10005", bookId=16051)
-# data=data["data"]
-# print("data111111", data["sequel_from"])
+# fashion_dir={}
+# bookid="16051"
+# role_id="16051"
+# fashion_ids1="160510110"
+# fashion_ids2="1605108"
+#
+# date=APiClass1.storyrole(bookid,role_ids=role_id)
+# fashion_dir[role_id]=date[0]
+#
+#
+# date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
+# fashion_dir[fashion_ids1]=date[0]
+# print(fashion_dir)
+#
+# if fashion_ids2 in fashion_dir:
+#     cloth=fashion_dir[fashion_ids1]["cloth"]
+#     print(cloth)
+# else:
+#     date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
+#     fashion_dir[fashion_ids2] = date[0]
+#     cloth=fashion_dir[fashion_ids2]["cloth"]
+#     print(cloth)
+# print(fashion_dir)
+#
+# roleShow = {'body': None,
+#             'cloth': None,
+#             'hair': None,
+#             'cloth': None,
+#             'hair': None,
+#             'back1': None,
+#             'back2': None,
+#             'back3': None,
+#             'back4': None,
+#             'dec1': None,
+#             'dec2': None,
+#             'dec3': None,
+#             'dec4': None,
+#             'dec5': None,
+#             'face1': None,
+#             'face2': None,
+#             }

@@ -34,7 +34,6 @@ class GameLoaded(FindObject):
             UserID = StdPocoAgent1.get_UserID()
             MyData.UserData_dir["uuid"] = UserID
             print("UserID:", UserID)
-            MyData.getUsercurrency()
             self.GameLoaded_info["loadtime"]=0
             return
         while self.poco("Handle Slide Area").wait(1).exists():
