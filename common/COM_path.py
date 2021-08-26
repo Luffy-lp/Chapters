@@ -98,7 +98,6 @@ path_LOG_MY = os.path.join(path_REPORT_DIR, "report/mylog")
 # 阅读截图
 # path_BOOKREAD_ERROR_IMAGE = os.path.join(path_REPORT_DIR, "IMAGE")
 date = datetime.date.today()
-
 path_BOOKREAD_ERROR_IMAGE = os.path.join("D:\Read_Result", str(date))
 
 file=os.getcwd()

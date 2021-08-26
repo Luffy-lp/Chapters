@@ -242,29 +242,66 @@ class FindObject(CommonDevices):
         log(PocoNoSuchNodeException("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
         raise PocoNoSuchNodeException("点击-【{}】-元素失败".format(description))
 
-    def assert_resource(self, parentName, partName, findAttr, description="", waitTime=1, tryTime=2, reportError=True,
+    def assert_resource(self, parentName, partName, findAttr, description="", waitTime=1, tryTime=3, reportError=True,
                         sleeptime=0):
         while (tryTime > 0):
+            tryTime = tryTime - 1
             if self.freeze_poco != None:
                 poco = self.freeze_poco
             else:
+                sleep(0.2)
                 poco = self.poco
-            tryTime = tryTime - 1
             try:
-                attrValue = poco(parentName).offspring(partName).wait(waitTime).attr(findAttr)
+                attrValue = poco(parentName).offspring(partName).attr(findAttr)
                 if attrValue:
                     log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
                     if self.freeze_poco is None:
                         self.freeze_poco = self.poco.freeze()
-                    return True
+                    return attrValue
+                else:
+                    self.freeze_poco = None
+                    sleep(0.2)
+                    log("{0}资源检查异常重试".format(description))
             except:
                 self.freeze_poco = None
-                log("资源检查异常重试")
-        else:
-            if reportError:
-                log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, findAttr)),
-                    desc="【资源异常】：{0}->未找到{1}".format(description, findAttr), snapshot=True, level="error")
-                return False
+                sleep(0.2)
+                log("{0}资源检查异常重试".format(description))
+        if reportError:
+            log(ResourceError(errorMessage="【资源异常】：{0}->未找到{1}".format(description, findAttr)),
+                desc="【资源异常】：{0}->未找到{1}".format(description, findAttr), snapshot=True, level="error")
+            return False
+
+    def assert_face(self, parentName, partName, findAttr, face_id, description="", tryTime=3):
+        """表情检测"""
+        while (tryTime > 0):
+            tryTime -= 1
+            # self.freeze_poco=None
+            # if self.freeze_poco != None:
+            #     poco = self.freeze_poco
+            # else:
+            #     poco = self.poco
+            try:
+                attrValue = self.poco(parentName).offspring(partName).attr(findAttr)
+                if attrValue:
+                    result = face_id in attrValue
+                    if result:
+                        log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue),
+                            desc="【资源检查】:{0}->{1}->{2}")
+                        if self.freeze_poco is None:
+                            self.freeze_poco = self.poco.freeze()
+                        return True
+                    else:
+                        self.freeze_poco = None
+                        sleep(0.2)
+                        log("配置表情{0}表情不匹配".format(description))
+            except:
+                # self.freeze_poco = None
+                sleep(0.2)
+                # log(ResourceError(errorMessage="【表情异常】：未找到{}表情".format(face_id, findAttr)),
+                #     desc="【资源异常】：{0}->未找到{1}".format(description, findAttr), snapshot=True, level="error")
+        log(ResourceError(errorMessage="【表情异常】：{0}->未找到{1}表情".format(description, face_id)),
+            desc="【表情异常】：{0}->未找到{1}".format(description, face_id), snapshot=True, level="error")
+        return False
 
     def assert_Body(self, parentName, findName, findAttr, description="", waitTime=1, tryTime=3, reportError=True,
                     sleeptime=0):
@@ -312,10 +349,6 @@ class FindObject(CommonDevices):
         else:
             poco = self.poco
         try:
-            # print("尝试寻找{0}".format(description))
-            # # gameobject = self.poco(findName)
-            # if poco(findName).wait(waitTime).exists():
-            #     print("发现{0}".format(description))
             if poco(ClickName).wait(waitTime + 1).exists():
                 print("发现{0}按钮，并点击".format(description))
                 poco(ClickName).click()
@@ -324,13 +357,11 @@ class FindObject(CommonDevices):
                 mylog.info("尝试点击-【{}】-元素失败".format(description))
                 print("未触发点击")
                 return False
-            # else:
-            #     return False
         except:
             log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)
             mylog.error("尝试点击-【{}】-元素失败".format(description))
             return False
-        else:
+        finally:
             sleep(sleeptime)
             self.Popuplist.append(description)
             mylog.info("尝试点击-【{}】-元素成功并加入弹框列表".format(description))
@@ -596,9 +627,12 @@ class FindObject(CommonDevices):
         except:
             print("查询按钮列表异常")
 # FindObject1=FindObject()
-# StdPocoAgent1 = StdPocoAgent()
-#
-# AA=FindObject1.assert_resource("SelfHead", "Body", "texture", "右侧人物的Hair资源")
+# clock()
+# AA=FindObject1.assert_resource("RoleSay", "Body", "texture", "右侧人物的Body资源")
+# AA=FindObject1.assert_resource("RoleSay", "Hair", "texture", "右侧人物的Hair资源")
+# AA=FindObject1.assert_resource("RoleSay", "Cloth", "texture", "右侧人物的Cloth资源")
+# AA=FindObject1.assert_resource("RoleSay", "Face1", "texture", "右侧人物的Face1资源")
+# clock("stop")
 # if StdPocoAgent1.get_Music():
 #     print(StdPocoAgent1.get_Music())
 #     if StdPocoAgent1.get_Music()["name"]:

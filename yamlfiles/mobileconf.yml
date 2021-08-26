@@ -6,6 +6,7 @@ Notch_Fit: #刘海屏
   66J5T18B16003920: (0,80,1080, 2244) #华为mate 20
   RFCNC0YGQVA: (0,86,1080, 2400) #三星S20
   88Y0219B06010006: (0,80,1080, 2340) #华为M30
+  24081ec80521: (0,70,1080, 2340)
 Upload_Image: #UGC上传图片com.google.android.apps.photos:id/image
   KPS4C19122001081: ["com.android.gallery3d:id/album_cover_image",[130,338],"com.android.gallery3d:id/head_select_right","com.android.gallery3d:id/head_select_right"]
   R52M90DYELT: ["com.google.android.apps.photos:id/image",[293,679],"com.google.android.apps.photos:id/photos_photoeditor_fragments_editor3_save"]#三星平板 设备ID: [点击元素，[130,338]点击某个点]

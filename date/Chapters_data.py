@@ -280,6 +280,7 @@ class UserData(APiClass):
             f1.truncate()
         self.w_yaml_dialogue_result()
         self.w_yaml_select_result()
+        self.w_yaml_fashion()
         mylog.info("完成文件清空")
         print("完成文件清空")
 
@@ -313,7 +314,6 @@ class UserData(APiClass):
         mylist = list(self.Story_select_dir.keys())
         for i in mylist:
             self.selectResult_dir[i] = 0
-        print(self.selectResult_dir)
     def getLoginStatus(self):
         """获取用户登陆状态"""
         LoginStatus = self.LoginStatusApi(self.UserData_dir["uuid"], self.UserData_dir["device_id"])
@@ -368,30 +368,51 @@ class UserData(APiClass):
                     return None
             else:
                 return None
-    def getfashion(self,bookid,role_id,fashion_id=None):
-        """获取角色fashion"""
-        role_list=[]
+    def getDefaultFashion(self,bookid,role_id):
+        """获取角色默认fashion"""
+        role_id = str(role_id)
+        if role_id not in self.fashion_dir:
+            date = self.storyrole(book_id=bookid,role_ids=role_id)
+            role_list=self.getfashion_list(date[len(date)-1],role_id)
+            newrole_list = self.getUserStoryData_fashion(self.UserData_dir["uuid"], bookid, role_id)
+            if len(newrole_list) > 0:
+                newlist = role_list + newrole_list
+                newlist = sorted(set(newlist), key=newlist.index)
+                self.fashion_dir[role_id] = newlist
+                role_list=newlist
+            else:
+                self.fashion_dir[role_id]=role_list
+            self.w_yaml_fashion()
+        else:
+            role_list=self.fashion_dir[role_id]
+        return role_list
+
+    def getDIYFashion(self,fashion_id):
+        """获取DIY装扮"""
         fashion_list=[]
-        if role_id:
-            if role_id not in self.fashion_dir:
-                date = self.storyrole(book_id=bookid,role_ids=role_id)
-                role_list=self.getfashion_list(date[0],role_id)
+        if fashion_id is not None and not "0":
+            if fashion_id not in self.fashion_dir:
+                fashion_id=str(fashion_id)
+                date = self.fashionShowApi(fashion_ids=fashion_id)
+                fashion_list=self.getfashion_list(date[0],fashion_id)
+                self.fashion_dir[fashion_id] = fashion_list
                 self.w_yaml_fashion()
             else:
-              role_list=self.fashion_dir[role_id]
-            if fashion_id is not None and not "0":
-                if fashion_id not in self.fashion_dir:
-                    date = self.fashionShowApi(fashion_ids=fashion_id)
-                    fashion_list=self.getfashion_list(date[0],fashion_id)
-                    self.w_yaml_fashion()
-                else:
-                    fashion_list=self.fashion_dir[fashion_id]
-        # print("fashion_list:",fashion_list)
-        # print("role_list:",role_list)
-        newlist=role_list+fashion_list
-        newlist = sorted(set(newlist), key=newlist.index)
-        # print(newlist)
-        return newlist
+                fashion_list=self.fashion_dir[fashion_id]
+        return fashion_list
+    def getfashion(self,bookid,role_id,fashion_id=None):
+        """获取最终形象"""
+        role_list=self.getDefaultFashion(bookid,role_id)
+        if fashion_id:
+            DIY_list = []
+            DIY_list=self.getDIYFashion(fashion_id)
+            if len(DIY_list)>0:
+                endlist=role_list+DIY_list
+                endlist = sorted(set(endlist), key=endlist.index)
+                return endlist
+            return role_list
+        else:
+            return role_list
     def getfashion_list(self,data,fashion_id):
         """装扮列表"""
         list=['body','cloth','hair','back1','back2','back3','back4','dec1','dec2','dec4','dec5','face1','face2']
@@ -403,6 +424,36 @@ class UserData(APiClass):
                     fashion_list.append(k)
         self.fashion_dir[fashion_id]=fashion_list
         return fashion_list
+    def getUserStoryData_fashion(self,uuid,bookid,roleid):
+        """获取角色存档信息"""
+        roleid_list=[]
+        list=['body','cloth','hair','back1','back2','back3','back4','dec1','dec2','dec4','dec5','face1','face2']
+        roleidData={}
+        try:
+            roleidData=self.getUserStoryDataApi(uuid,bookid)
+            roleidData = roleidData["fashion"][str(roleid)]
+        except:
+            roleidData={}
+        if roleidData:
+            for i in list:
+                if i in roleidData.keys():
+                    if roleidData[i]:
+                        k=i.capitalize()
+                        roleid_list.append(k)
+        return roleid_list
+    def updateUserRoleFashion(self,bookid,roleid):
+        """更新角色装扮"""
+        print("更新角色装扮")
+        newlist=[]
+        newrole_list=self.getUserStoryData_fashion(self.UserData_dir["uuid"],bookid,roleid)
+        if len(newrole_list)>0:
+            fashion_list=self.getfashion(bookid,roleid,fashion_id=None)
+            newlist=newrole_list+fashion_list
+            newlist = sorted(set(newlist), key=newlist.index)
+            self.fashion_dir[roleid]=newlist
+            self.w_yaml_fashion()
+            print("有更新：",self.fashion_dir[roleid])
+        print("self.fashion_dir",self.fashion_dir)
     def r_yaml_fashion(self):
         """读角色fashion"""
         file_path = os.path.join(path_YAML_FILES, "yamlBookRead/rolefashion.yml")
@@ -420,36 +471,19 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# bookid="52181"
-# # role_id="100022872"
-# # # fashion_ids1="1000037836"
-# # fashion_ids1="1000058865"
-# # # # role_id2="1605108"
+# bookid="52059"
+# role_id="100017245"
+# fashion_ids1=""
+# # fashion_ids1="1000050135"
+# # # role_id2="1605108"
 # # # # MyData.r_yaml_fashion()
-# # date=MyData.getfashion(bookid,role_id,fashion_ids1)
-# # print(date)
-# print(MyData.fashion_dir)
-# MyData.w_yaml_fashion()
-# fashion_dir={}
-# bookid="16051"
-# role_id="16051"
+# date=MyData.getfashion(bookid,role_id,fashion_ids1)
+# print(date)
+
+# APiClass1 = APiClass()
+# # fashion_dir={}
+# bookid="52059"
+# # role_id="16051"
 # fashion_ids1="160510110"
-# fashion_ids2="1605108"
-#
-# date=APiClass1.storyrole(bookid,role_ids=role_id)
-# fashion_dir[role_id]=date[0]
-#
-#
-# date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
-# fashion_dir[fashion_ids1]=date[0]
-# print(fashion_dir)
-#
-# if fashion_ids2 in fashion_dir:
-#     cloth=fashion_dir[fashion_ids1]["cloth"]
-#     print(cloth)
-# else:
-#     date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
-#     fashion_dir[fashion_ids2] = date[0]
-#     cloth=fashion_dir[fashion_ids2]["cloth"]
-#     print(cloth)
-# print(fashion_dir)
+# aa=APiClass1.getUserStoryDataApi(uuid="47395",book_id="52059")
+# print(aa["fashion"]["100017243"])

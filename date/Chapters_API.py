@@ -38,9 +38,9 @@ class APiClass():
                 print("拉取{0}接口失败，重试".format(name))
                 sleep(1)
             else:
+                # print(self._response.text)
                 dir_json = json.loads(self._response.text)
                 dir = eval(str(dir_json))
-                # print(self._response.text)
                 # my_re=\n[\s\S]*
                 print("拉取{0}接口成功".format(name))
                 return dir
@@ -252,7 +252,7 @@ class APiClass():
             zip_file.extract(f, folder_abs)
         zip_file.close()
 
-    def storyrole(self, book_id,role_ids):
+    def storyrole(self, book_id,role_ids=None):
         """书籍角色"""
         Header = {
             "language": "en-US",
@@ -266,8 +266,6 @@ class APiClass():
                 "role_ids":role_ids
                 }
         data = self.try_APIlink(url=url, headers=Header, body=body, name="storyrole")
-        # print(date)
-        # print(type(date["error_code"]))
         return data["data"]
         # else:
         #     return False
@@ -282,10 +280,25 @@ class APiClass():
         fashion_ids=json.dumps(fashion_ids)
         url = self.url + "/na/story/v1/role/fashion/show/more?debug=true"
         body = {
-                "fashion_ids": fashion_ids,
-                "channel_id": self.channel_id,
+                "fashion_ids": '"160510110"',
+                "channel_id": "AVG10008",
                 }
         data = self.try_APIlink(url=url, headers=Header, body=body, name="fashionShowApi")
+        return data["data"]
+
+    def getUserStoryDataApi(self, uuid,book_id):
+        """拉取用户视觉小说书籍数据"""
+        # Header = {
+        #     "language": "en-US",
+        #     "platform": "Android",
+        #     "Accept": "application/json"
+        # }
+        url = self.url + "/Controllers/story/read/GetUserStoryDataApi.php?DEBUG=true"
+        body = {
+                "uuid": uuid,
+                "book_id": book_id,
+                }
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="fashionShowApi")
         return data["data"]
 
     def avgcontentApi(self, bookid, channel_id="AVG10005", country_code="CN"):
@@ -327,44 +340,9 @@ class APiClass():
         print("下载书籍资源失败")
         # raise Exception("下载书籍资源失败")
 # APiClass1 = APiClass()
-# fashion_dir={}
-# bookid="16051"
-# role_id="16051"
+# # fashion_dir={}
+# bookid="52059"
+# # role_id="16051"
 # fashion_ids1="160510110"
-# fashion_ids2="1605108"
-#
-# date=APiClass1.storyrole(bookid,role_ids=role_id)
-# fashion_dir[role_id]=date[0]
-#
-#
-# date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
-# fashion_dir[fashion_ids1]=date[0]
-# print(fashion_dir)
-#
-# if fashion_ids2 in fashion_dir:
-#     cloth=fashion_dir[fashion_ids1]["cloth"]
-#     print(cloth)
-# else:
-#     date = APiClass1.fashionShowApi(fashion_ids=fashion_ids1)
-#     fashion_dir[fashion_ids2] = date[0]
-#     cloth=fashion_dir[fashion_ids2]["cloth"]
-#     print(cloth)
-# print(fashion_dir)
-#
-# roleShow = {'body': None,
-#             'cloth': None,
-#             'hair': None,
-#             'cloth': None,
-#             'hair': None,
-#             'back1': None,
-#             'back2': None,
-#             'back3': None,
-#             'back4': None,
-#             'dec1': None,
-#             'dec2': None,
-#             'dec3': None,
-#             'dec4': None,
-#             'dec5': None,
-#             'face1': None,
-#             'face2': None,
-#             }
+# aa=APiClass1.getUserStoryDataApi(uuid="47395",book_id="52059")
+# print(aa["fashion"]["100017243"])
