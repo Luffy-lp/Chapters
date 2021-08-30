@@ -390,10 +390,11 @@ class UserData(APiClass):
     def getDIYFashion(self,fashion_id):
         """获取DIY装扮"""
         fashion_list=[]
-        if fashion_id is not None and not "0":
+        if fashion_id is not None and fashion_id != "0":
             if fashion_id not in self.fashion_dir:
                 fashion_id=str(fashion_id)
                 date = self.fashionShowApi(fashion_ids=fashion_id)
+                print("date",date)
                 fashion_list=self.getfashion_list(date[0],fashion_id)
                 self.fashion_dir[fashion_id] = fashion_list
                 self.w_yaml_fashion()

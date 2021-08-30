@@ -280,8 +280,8 @@ class APiClass():
         fashion_ids=json.dumps(fashion_ids)
         url = self.url + "/na/story/v1/role/fashion/show/more?debug=true"
         body = {
-                "fashion_ids": '"160510110"',
-                "channel_id": "AVG10008",
+                "fashion_ids": fashion_ids,
+                "channel_id": self.channel_id,
                 }
         data = self.try_APIlink(url=url, headers=Header, body=body, name="fashionShowApi")
         return data["data"]

@@ -437,7 +437,10 @@ class BookRead(FindObject):
                 description = des + i
                 self.resource_check(parentName, i, attr, description)
             if face_id:
-                self.face_check(parentName, "Face1", "texture", face_id,"表情")
+                partName = "Face1"
+                if self.progress_info["option_info"]["chat_type"] == 10:
+                    partName="Face2"
+                self.face_check(parentName,partName, "texture", face_id,"表情")
         else:
             log(Exception("role_id不存在"), snapshot=True)
             return
