@@ -249,7 +249,7 @@ if MyData.EnvData_dir["powerOff"] == True:
     print("即将睡眠")
     os.system('rundll32 powrprof.dll,SetSuspendState')
 
-# input('Press Enter to exit...')
+input('Press Enter to exit...')
     # myRun.pull_errorLog()
     # myRun.writelogs()
     # myRun.get_fileist()

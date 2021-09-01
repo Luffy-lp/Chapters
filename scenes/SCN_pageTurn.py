@@ -12,19 +12,28 @@ class PageTurn(FindObject):
     def getState(self):
         self.find_try("DiscoverCanvas")
 
-    def toTurn(self, finishScene):
-        pass
+    def get_HomePOS(self):
+        """跳转按钮位置获取"""
+        pos = self.poco("Home").get_position()
+        if MyData.DeviceData_dir["offset"]:
+            print(MyData.DeviceData_dir["offset"])
+            pos[1] += MyData.DeviceData_dir["offset"]
+        pos= COM_utilities.PosTurn(pos)
+        # self.poco("Text (TMP)").click()
+        return pos
+
     def Bottom_click(self, index):
         """0~4对应底部主场景"""
         index = str(index)
         if index == "0":
             time=5
             while self.find_try("Home",description="小房子"):
+
                 time-=1
                 if time<0:
                     return
-                pos = self.poco("Home").get_position()
-                touch(COM_utilities.PosTurn(pos))
+                pos =self.get_HomePOS()
+                touch(pos)
                 sleep(1)
         if self.find_object("Bottom", description="底部跳转", waitTime=3):
             Bottom = self.poco("Bottom").child(index)

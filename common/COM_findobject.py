@@ -619,7 +619,8 @@ class FindObject(CommonDevices):
         try:
             list = self.poco(nameMatches='.*Btn.*|Button')
             for i in list:
-                if i.get_name() != "Btn":
+                name=i.get_name()
+                if name != "Btn" and name !="MaskBtn":
                     list1.append(i)
             list1.sort(key=lambda x: x.attr('_ilayer'), reverse=False)
             print(list1[len(list1) - 1].get_name())

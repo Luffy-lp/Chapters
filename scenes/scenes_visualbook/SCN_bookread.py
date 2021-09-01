@@ -608,19 +608,20 @@ class BookRead(FindObject):
         else:
             self._etime = 0
         if self._etime >= 4:
-            self.BookRead_info["Jank"] = self.BookRead_info["Jank"] + 1
+            self.BookRead_info["Jank"] +=1
+            print(self.BookRead_info["Jank"])
             VisualRead: dict = MyData.newPoP_dir["VisualRead"]
             for k, v in VisualRead.items():
                 mybool = self.findClick_try(k, v, description="突发性弹框")
-                if mybool:
-                    return
-            print("卡顿或异常次数：", self.BookRead_info["Jank"])
-            if self.BookRead_info["Jank"] > 30:
+            print("卡顿或异常次数:", self.BookRead_info["Jank"])
+            if self.BookRead_info["Jank"] > 10:
                 print("卡顿或异常次数较多", self.BookRead_info["Jank"])
                 mylog.error("异常次数过多或检查启用新存档是否失败")
                 log(Exception("异常次数过多或检查启用新存档是否失败"), snapshot=True)
                 raise Exception
                 return False
+            if mybool:
+                return
 
     def reset_read(self):
         """阅读参数初始化"""
@@ -639,6 +640,7 @@ class BookRead(FindObject):
     def dialogueEndPOP(self):
         """章节尾弹框"""
         if int(self.option_record["oldChatProgress"]) == self.progress_info["chat_num"]:
+        # if 1==1:
             self.isstopRead = True
             MyData.w_yaml_dialogue_result()
             sleep(1)
@@ -673,3 +675,5 @@ class BookRead(FindObject):
         self.findClick_try("UIChapterStar", "CloseBtn", description="阅读分享", waitTime=1)
         self.findClick_try("UIChapterContinue", "BtnGet", description="章节尾奖励", sleeptime=0.5)
         self.findClick_try("UIChapterContinue", "ContinueBtn", description="章节尾弹框", sleeptime=0.5)
+# aa=BookRead()
+# aa.dialogueEndPOP()
