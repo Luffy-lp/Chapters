@@ -10,8 +10,8 @@ UserData:
 EnvData:
   APKpackage: "Chapters_10009_17_05.apk" #安装包名称
   packageName: "com.mars.avgchapters" #apk包名称
-  ADBip: "192.168.191.22:5039"  #android://192.168.191.22:5039/R28M32N5LXM
-  ADBdevice: "9889a4443354554539" #android://192.168.191.22:5039/9889a4443354554539
+  ADBip: "192.168.191.71:5039"  #aandroid://192.168.191.22:5039/R28M32N5LXM
+  ADBdevice: "66J5T18B16003920" #android://192.168.191.71:5039/66J5T18B16003920
   method: "?cap_method=MINICAP_STREAM&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setup通用连接设备的参数
   simulator: "?cap_method=JAVACAP&&ori_method=MINICAPORI&&touch_method=MINITOUCH" #auto_setupJAVA连接设备的参数
   device: "android" #连接设备类型

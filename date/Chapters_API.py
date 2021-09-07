@@ -340,6 +340,7 @@ class APiClass():
         print("下载书籍资源失败")
         # raise Exception("下载书籍资源失败")
 # APiClass1 = APiClass()
+# APiClass1.syncValueApi()
 # # fashion_dir={}
 # bookid="52059"
 # # role_id="16051"

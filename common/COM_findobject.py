@@ -354,8 +354,7 @@ class FindObject(CommonDevices):
                 poco(ClickName).click()
                 return True
             else:
-                mylog.info("尝试点击-【{}】-元素失败".format(description))
-                print("未触发点击")
+                print("尝试点击-【{}】-元素失败".format(description))
                 return False
         except:
             log(Exception("点击-【{}】-元素失败".format(description)), desc="点击元素失败", snapshot=True)

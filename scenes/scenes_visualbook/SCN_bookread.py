@@ -309,6 +309,7 @@ class BookRead(FindObject):
         try:
             show_id = self.progress_info["option_info"]["show_id"]
         except:
+            show_id=None
             log("【资源检查】:无show_id字段")
         if show_id:
             self.Result_info["goods"]=self.resource_check("UIShowGoods", "Img", "texture", "物品")
@@ -431,6 +432,7 @@ class BookRead(FindObject):
     def roleParts_check(self, parentName, attr, des, role_id, fashion_id=None, face_id=None):
         """通用角色部件遍历"""
         bookid = self.progress_info["BookID"]
+        role_id=str(role_id)
         if role_id and role_id is not "0":
             fashion_list = MyData.getfashion(bookid, role_id, fashion_id)
             for i in fashion_list:
@@ -618,7 +620,7 @@ class BookRead(FindObject):
                 print("卡顿或异常次数较多", self.BookRead_info["Jank"])
                 mylog.error("异常次数过多或检查启用新存档是否失败")
                 log(Exception("异常次数过多或检查启用新存档是否失败"), snapshot=True)
-                raise Exception
+                raise Exception("异常次数过多或检查启用新存档是否失败")
                 return False
             if mybool:
                 return

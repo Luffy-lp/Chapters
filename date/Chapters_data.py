@@ -38,7 +38,6 @@ class UserData(APiClass):
         self.Element_dir = {}
         self.newPoP_dir = []
         self.checklist = []
-        self.bookresult_dir = {}
         self.type_check_dir = {}
         self.downloadbook_sign = {}
         self.RpcClient = None
@@ -46,6 +45,7 @@ class UserData(APiClass):
         self.selectResult_dir = {}
         self.Story_select_dir = {}
         self.fashion_dir = {}
+        self.book_list={}
         self.getdata()
         mylog.info("完成数据初始化")
         print("导入用户数据成功")
@@ -59,8 +59,11 @@ class UserData(APiClass):
         self.yaml_mobileconf()
         self.yaml_language()
         self.yaml_bookinfo()
+        # self.yaml_bookread_result()
+        self.format_bookread_yml()
+        self.yaml_bookinfo()
+        # self.yaml_bookread_result()
         self.yaml_newpopup()
-        self.yaml_bookread_result()
         self.yaml_type_check()
         self.r_yaml_dialogue_result()
 
@@ -174,22 +177,37 @@ class UserData(APiClass):
         return self.newPoP_dir
 
     def yaml_bookinfo(self):
-        if self.UserData_dir["usertype"] == "bookread":
-            yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
-        else:
-            yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
+        """书籍阅读记录yml"""
+        yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
         self.book_list = self.read_yaml(yamlbook_listpath)
         return self.book_list
 
+    def format_bookread_yml(self):
+        """格式化书籍阅读记录yml"""
+        mydir = {}
+        if type(self.book_list) == dict:
+            return
+        try:
+            list1 = self.book_list.split("第")
+            if list1:
+                for i in range(0, len(list1) - 1):
+                    if list1[i]:
+                        list2 = list1[i].split("：")[1]
+                        list3 = list2.split("[new]")[0]
+                        mydir[list3] = None
+
+            yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
+            with open(yamlbook_listpath, 'w+', encoding="utf-8") as f:
+                yaml.dump(mydir, f, allow_unicode=True)
+        except:
+            pass
+
     def yaml_bookread_result(self):
-        if self.UserData_dir["usertype"] == "bookread":
-            # print("ifDesktoppath",Desktoppath)
-            file_path = os.path.join(Desktoppath, "bookread_result.yml")
-        else:
-            file_path = os.path.join(path_YAML_FILES, "bookread_result.yml")
+        """书籍阅读结果"""
+        file_path = os.path.join(Desktoppath, "bookread_result.yml")
         with open(file_path, encoding='utf-8') as file:
-            self.bookresult_dir = yaml.safe_load(file)
-        return self.bookresult_dir
+            self.book_list = yaml.safe_load(file)
+        return self.book_list
 
     def update_record_bookread(self, chapter, result):
         """更新已经阅读的书籍信息"""
@@ -197,13 +215,13 @@ class UserData(APiClass):
             file_path = os.path.join(Desktoppath, "bookread_result.yml")
         else:
             file_path = os.path.join(Desktoppath, "bookread_result.yml")
-        if type(self.bookresult_dir) != dict:
-            self.bookresult_dir = {}
-        self.bookresult_dir[chapter] = result
+        if type(self.book_list) != dict:
+            self.book_list = {}
+        self.book_list[chapter] = result
         with open(file_path, 'w+', encoding="utf-8") as f:
-            yaml.dump(self.bookresult_dir, f, allow_unicode=True)
-        print("记录阅读结果", self.bookresult_dir)
-        return self.bookresult_dir
+            yaml.dump(self.book_list, f, allow_unicode=True)
+        print("记录阅读结果", self.book_list)
+        return self.book_list
 
     def read_test(self):
         """输出errorlog日志转化到log.txt中"""
@@ -317,13 +335,13 @@ class UserData(APiClass):
         with open(path1, "r", encoding='utf-8') as f:  # 设置文件对象
             selectdata = f.read()  # 可以是随便对文件的操作
         self.Story_select_dir = eval(selectdata)
-        self.getselectlist()
+        # self.getselectlist()
         return self.Story_cfg_chapter_dir
 
-    def getselectlist(self):
-        mylist = list(self.Story_select_dir.keys())
-        for i in mylist:
-            self.selectResult_dir[i] = 0
+    # def getselectlist(self):
+    #     mylist = list(self.Story_select_dir.keys())
+    #     for i in mylist:
+    #         self.selectResult_dir[i] = 0
 
     def getLoginStatus(self):
         """获取用户登陆状态"""
@@ -386,7 +404,10 @@ class UserData(APiClass):
         role_id = str(role_id)
         if role_id not in self.fashion_dir:
             date = self.storyrole(book_id=bookid, role_ids=role_id)
-            role_list = self.getfashion_list(date[len(date) - 1], role_id)
+            if len(date)>0:
+                role_list = self.getfashion_list(date[len(date) - 1], role_id)
+            else:
+                raise Exception("资源获取失败请检查渠道等相关配置是否正确", self.channel_id)
             newrole_list = self.getUserStoryData_fashion(self.UserData_dir["uuid"], bookid, role_id)
             if len(newrole_list) > 0:
                 newlist = role_list + newrole_list
@@ -407,9 +428,12 @@ class UserData(APiClass):
         if fashion_id is not None and fashion_id != "0":
             if fashion_id not in self.fashion_dir:
                 fashion_id = str(fashion_id)
-                date = self.fashionShowApi(fashion_ids=fashion_id)
-                print("date", date)
-                fashion_list = self.getfashion_list(date[0], fashion_id)
+                data= self.fashionShowApi(fashion_ids=fashion_id)
+                print("data", data)
+                if len(data)>0:
+                    fashion_list = self.getfashion_list(data[len(data)-1], fashion_id)
+                else:
+                    raise Exception("资源获取失败请检查渠道等相关配置是否正确",self.channel_id)
                 self.fashion_dir[fashion_id] = fashion_list
                 self.w_yaml_fashion()
             else:
@@ -495,9 +519,9 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# bookid = "51730"
-# role_id = "100008585"
-# fashion_ids1 = "1000023980"
+# bookid = "51748"
+# role_id = "100009039"
+# fashion_ids1 = "1000025641"
 # # fashion_ids1="1000050135"
 # # # role_id2="1605108"
 # # # # MyData.r_yaml_fashion()

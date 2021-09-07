@@ -27,4 +27,4 @@
 27: ["特殊特效类型","music_check"]#这个音乐也异常
 28: ["角色选择确认ui","sceneBG_check", "content_check","music_check","selectRole_check"]
 29: ["打电话ui","sceneBG_check", "content_check","music_check","head_check"]
-30: ["三选竖版换装","sceneBG_check", "content_check","music_check","head_check"]
+30: ["三选竖版换装","sceneBG_check", "content_check","music_check"]

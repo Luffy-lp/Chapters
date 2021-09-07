@@ -51,7 +51,7 @@ def test_bookread(BookID=None, bookchapter=None):
 def test_booklist():
     """阅读列表遍历"""
     print("书籍列表:", MyData.book_list)
-    for bookchapter in MyData.book_list:
+    for bookchapter in list(MyData.book_list.keys()):
         if len(bookchapter) == 8:
             if MyData.book_list[bookchapter] is None or type( MyData.book_list[bookchapter])==int:
                 booktraversal(bookchapter)
@@ -74,19 +74,19 @@ def test_booklist():
 
 def booktraversal(bookchapter):
     """阅读列表执行"""
-    if bookchapter not in MyData.bookresult_dir.keys():
-        MyData.bookresult_dir[bookchapter] = 1
+    if bookchapter not in MyData.book_list.keys():
+        MyData.book_list[bookchapter] = 1
         print("newchapter is none")
-    elif MyData.bookresult_dir[bookchapter] == "True" or MyData.bookresult_dir[bookchapter] == "False":
-        print(bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
+    elif MyData.book_list[bookchapter] == "True" or MyData.book_list[bookchapter] == "False":
+        print(bookchapter + "已存在结果{}".format(MyData.book_list[bookchapter]))
         # assert_equal(True, True, bookchapter + "已存在结果{}".format(MyData.bookresult_dir[bookchapter]))
         return True
-    elif type(MyData.bookresult_dir[bookchapter]) == int:
-        if MyData.bookresult_dir[bookchapter] >= 3:
+    elif type(MyData.book_list[bookchapter]) == int:
+        if MyData.book_list[bookchapter] >= 3:
             print(bookchapter + "失败3次跳过阅读")
             return True
         else:
-            result= MyData.bookresult_dir[bookchapter] + 1
+            result= MyData.book_list[bookchapter] + 1
             MyData.update_record_bookread(bookchapter, result)
     else:
         MyData.update_record_bookread(bookchapter, 1)

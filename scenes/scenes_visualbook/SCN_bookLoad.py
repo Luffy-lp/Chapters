@@ -16,7 +16,7 @@ class BookLoad(FindObject):
         startime = time.time()
         while self.find_try("ChapterLoad", description="书籍加载界面", waitTime=3):
             loadtime = time.time() - startime
-            if loadtime > 720:
+            if loadtime > 2000:
                 self.findClick_object("HomeBtn", "HomeBtn", description="加载书籍超时,返回大厅")
                 # log(loadtime, timestamp=time.time(), desc="加载书籍超时", snapshot=True)
                 log(Exception("加载书籍异常"),snapshot=True)

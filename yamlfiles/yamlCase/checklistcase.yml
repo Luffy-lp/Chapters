@@ -107,7 +107,7 @@ booktraversal:
     caseauthor: "lipeng"
     casename: "视觉小说遍历"
     casedec: "视觉小说遍历"
-    repeattime: "50"
+    repeattime: "70"
     reportname: "视觉小说遍历"
     step:
         - ${pageTurn(Bottom,0)}
