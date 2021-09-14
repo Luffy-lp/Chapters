@@ -250,6 +250,6 @@ if MyData.EnvData_dir["powerOff"] == True:
     os.system('rundll32 powrprof.dll,SetSuspendState')
 
 input('Press Enter to exit...')
-# myRun.pull_errorLog()
-# myRun.writelogs()
-# myRun.get_fileist()
+# # myRun.pull_errorLog()
+# # myRun.writelogs()
+# # myRun.get_fileist()

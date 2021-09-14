@@ -244,26 +244,51 @@ class BookRead(FindObject):
     # def resource_result(self, result, findAtrr, des):
     #     """检测结果"""
     #     if result is False:
-    #         dec = self.filename_head + des
-    #         self.BookRead_info["result"] = False
-    #         self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
-    #         myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+    #         if self.progress_info["BookID"][0] == "1" and ("电话呼叫方头像" in des or "Back1" in des):
+    #             role_id = str(self.progress_info["option_info"]["role_id"])
+    #             dec = self.old_filename_head +"roleID"+role_id+des
+    #             if dec not in self.oldBookErrorList:
+    #                 self.oldBookErrorList.append(dec)
+    #                 self.BookRead_info["result"] = False
+    #                 self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
+    #                 myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+    #         else:
+    #             dec = self.filename_head + des
+    #             self.BookRead_info["result"] = False
+    #             self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
+    #             myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+
     def resource_result(self, result, findAtrr, des):
         """检测结果"""
         if result is False:
-            if self.progress_info["BookID"][0] == "1" and ("电话呼叫方头像" in des or "Back1" in des):
-                role_id = str(self.progress_info["option_info"]["role_id"])
-                dec = self.old_filename_head +"roleID"+role_id+des
-                if dec not in self.oldBookErrorList:
-                    self.oldBookErrorList.append(dec)
-                    self.BookRead_info["result"] = False
-                    self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
-                    myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-            else:
-                dec = self.filename_head + des
+            role_id = str(self.progress_info["option_info"]["role_id"])
+            dec = self.old_filename_head +"_"+role_id+des
+            # dec = self.filename_head + des
+            if dec not in self.oldBookErrorList:
+                self.oldBookErrorList.append(dec)
                 self.BookRead_info["result"] = False
                 self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
                 myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+        # else:
+        #     dec = self.filename_head + des
+        #     self.BookRead_info["result"] = False
+        #     self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
+        #     myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+        # if result is False:
+        #     if self.progress_info["BookID"][0] == "1" and ("电话呼叫方头像" in des or "Back1" in des):
+        #         role_id = str(self.progress_info["option_info"]["role_id"])
+        #         dec = self.old_filename_head +"roleID"+role_id+des
+        #         if dec not in self.oldBookErrorList:
+        #             self.oldBookErrorList.append(dec)
+        #             self.BookRead_info["result"] = False
+        #             self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
+        #             myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+        #     else:
+        #         dec = self.filename_head + des
+        #         self.BookRead_info["result"] = False
+        #         self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
+        #         myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
+
     def sceneBG_check(self):
         # 背景检测
         SceneBGbool = self.assert_resource("Root", "SceneBG", "SpriteRenderer", "背景", waitTime=1, reportError=False)

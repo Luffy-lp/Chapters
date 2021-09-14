@@ -429,7 +429,6 @@ class UserData(APiClass):
             if fashion_id not in self.fashion_dir:
                 fashion_id = str(fashion_id)
                 data= self.fashionShowApi(fashion_ids=fashion_id)
-                print("data", data)
                 if len(data)>0:
                     fashion_list = self.getfashion_list(data[len(data)-1], fashion_id)
                 else:
@@ -477,6 +476,8 @@ class UserData(APiClass):
         try:
             roleidData = self.getUserStoryDataApi(uuid, bookid)
             roleidData = roleidData["fashion"][str(roleid)]
+            print("roleidData",roleidData)
+
         except:
             roleidData = {}
         if roleidData:
@@ -519,11 +520,13 @@ class UserData(APiClass):
 
 
 MyData = UserData()
-# bookid = "51748"
-# role_id = "100009039"
-# fashion_ids1 = "1000025641"
+# bookid = "52259"
+# uuid="47447"
+# role_id = "100022998"
+# fashion_ids1 = "1000068307"
 # # fashion_ids1="1000050135"
 # # # role_id2="1605108"
+# date=MyData.getUserStoryData_fashion(uuid,bookid,role_id)
 # # # # MyData.r_yaml_fashion()
 # date = MyData.getfashion(bookid, role_id, fashion_ids1)
 # print(date)
