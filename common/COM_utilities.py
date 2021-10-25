@@ -115,8 +115,14 @@ def timethis(func):
         end = time.time()
         print(end - start)
         return r
-
     return wrapper
+
+def time_difference(time_start):
+    """计算时间差"""
+    time_end = time.time()  # 结束计时
+    time_c = time_end - time_start  # 运行所花时间
+    return time_c
+
 def nude_test(fname,scale):
     """裸体检测 False没有 True有裸体"""
     # fname='D:/testimage/1.png'

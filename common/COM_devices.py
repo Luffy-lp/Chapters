@@ -41,6 +41,7 @@ class CommonDevices():
             print("conf",conf)
             method = MyData.EnvData_dir["method"]
             auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method, ], project_root=path_BASE_DIR)
+            print("连接成功")
             return True
     def adb_dispose(self):
         """初始化"""

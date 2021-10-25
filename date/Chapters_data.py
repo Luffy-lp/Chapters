@@ -425,14 +425,16 @@ class UserData(APiClass):
     def getDIYFashion(self, fashion_id):
         """获取DIY装扮"""
         fashion_list = []
+
         if fashion_id is not None and fashion_id != "0":
             if fashion_id not in self.fashion_dir:
                 fashion_id = str(fashion_id)
                 data= self.fashionShowApi(fashion_ids=fashion_id)
                 if len(data)>0:
                     fashion_list = self.getfashion_list(data[len(data)-1], fashion_id)
-                else:
-                    raise Exception("资源获取失败请检查渠道等相关配置是否正确",self.channel_id)
+                # else:
+                #     return False
+                #     raise Exception("资源获取失败请检查渠道等相关配置是否正确",self.channel_id)
                 self.fashion_dir[fashion_id] = fashion_list
                 self.w_yaml_fashion()
             else:

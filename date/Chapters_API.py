@@ -178,6 +178,7 @@ class APiClass():
                 "value_all": "",
                 "value_change": valuechange
                 }
+        print(body)
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="syncValueApi")
         return data
 

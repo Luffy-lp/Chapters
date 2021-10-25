@@ -627,6 +627,8 @@ class FindObject(CommonDevices):
         except:
             print("查询按钮列表异常")
 # FindObject1=FindObject()
+# cc=FindObject1.poco("UIVisualDetailView").offspring("Detail").get_TMPtext()
+# print(cc)
 # clock()
 # AA=FindObject1.assert_resource("RoleSay", "Body", "texture", "右侧人物的Body资源")
 # AA=FindObject1.assert_resource("RoleSay", "Hair", "texture", "右侧人物的Hair资源")

@@ -38,9 +38,17 @@ class BookNewDetail(FindObject):
             self.BookNewDetail_info["sequel_from"]=False
             print("不存在sequel_from")
     def book_chapters(self, index):
-        self.trySetText("TestInput",set_text=index)
-        self.click_object("TestInput", description="搜索框")
-        self.click_object("UIVisualDetailView", description="详情页")
+        time=3
+        while time>0:
+            time-=1
+            self.trySetText("TestInput",set_text=index)
+            self.click_object("TestInput", description="搜索框",sleeptime=1)
+            self.click_object("UIVisualDetailView", description="详情页")
+            chapterInfo=self.poco("UIVisualDetailView").offspring("Detail").get_TMPtext()
+            listInfo=chapterInfo.split(" ")
+            if int(listInfo[1])==int(index):
+                return True
+        raise Exception("选择章节异常")
     def bookReadCondition(self,bookid):
         """阅读条件检查"""
         # if MyData.UserData_dir["bookDetailInfo"]["BookID"]:
@@ -51,8 +59,8 @@ class BookNewDetail(FindObject):
         MyData.getUsercurrency()
         if self.BookNewDetail_info["sequel_from"]:
             self.findClick_try("UpBtn", "UpBtn", description="Yes,I do")
-        if int(MyData.UserData_dir["diamond"]) < 4999:
-            MyData.updateUsercurrency("diamond", "4999")
+        if int(MyData.UserData_dir["diamond"]) < 3000:
+            MyData.updateUsercurrency("diamond", "3000")
         if int(MyData.UserData_dir["ticket"]) < 99:
             MyData.updateUsercurrency("ticket", "99")
         MyData.r_yaml_fashion()
@@ -70,7 +78,7 @@ class BookNewDetail(FindObject):
 
     def click_close(self):
         """详情页关闭按钮"""
-        self.findClick_try("UIVisualDetailView", "Close", description="关闭详情页按钮")
+        self.findClick_try("UIVisualDetailView", "Close", description="关闭详情页按钮",waitTime=5)
 
     def click_Reset(self, type="SetBook"):
         """SetBook,SetChapter"""

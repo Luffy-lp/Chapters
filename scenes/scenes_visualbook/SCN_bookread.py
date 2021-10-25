@@ -8,7 +8,7 @@ from poco.exceptions import PocoNoSuchNodeException
 from common.COM_findobject import FindObject
 from common import COM_utilities
 from date.Chapters_data import MyData
-from common.COM_utilities import clock, myscreenshot
+from common.COM_utilities import clock, myscreenshot, time_difference
 from common.my_log import mylog
 from pages.shop.shop import Shop
 from common.COM_Error import ResourceError
@@ -49,9 +49,11 @@ class BookRead(FindObject):
         self.TextPOCO = None
         self.read_finish = False
         self.oldBookErrorList=[]
+        self.time_start=0
 
     def process_bookRead(self, bookid=None, chapterProgress=None):
         """视觉小说阅读流程"""
+        self.time_start = time.time()  # 开始计时
         self.reset_read()  # 阅读前参数处理
         if self.find_try("UIDialogue", description="阅读界面", waitTime=3):
             clock()
@@ -191,6 +193,23 @@ class BookRead(FindObject):
             keyevent("HOME")
             start_app("com.mars.avgchapters")
             sleep(2)
+            touch(self._POS)
+            keyevent("HOME")
+            start_app("com.mars.avgchapters")
+            sleep(2)
+    # def manage_AD(self):
+    #     """广告处理"""
+    #     self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励")
+    #     # if self.find_try("TxtFree", "非付费用户章节头广告"):
+    #     touch(self._POS)
+    #     keyevent("HOME")
+    #     start_app("com.mars.avgchapters")
+    #     sleep(2)
+        # if self.find_try("TxtFree", "非付费用户章节头广告"):
+        #     touch(self._POS)
+        #     keyevent("HOME")
+        #     start_app("com.mars.avgchapters")
+        #     sleep(2)
 
     def FullBody(self):
         """全身像处理"""
@@ -626,6 +645,11 @@ class BookRead(FindObject):
 
     def progressjudge(self):
         """进度异常判断"""
+        reTime=time_difference(self.time_start)
+        if reTime>1800:
+            mylog.error("阅读时间{0},阅读超时".format(reTime))
+            log(Exception("阅读时间{0},阅读超时".format(reTime)), snapshot=True)
+            raise Exception("阅读时间{0},阅读超时".format(reTime))
         if self.option_record["oldChatProgress"] == str(self.progress_info["chatProgress"]):
             self._etime = self._etime + 1
             print("进度相同容错处理")
@@ -666,8 +690,12 @@ class BookRead(FindObject):
 
     def dialogueEndPOP(self):
         """章节尾弹框"""
+        is_finished=False
+        if str(self.progress_info["option_info"]["is_finished"])=="1":
+            is_finished=True
         if int(self.option_record["oldChatProgress"]) == self.progress_info["chat_num"]:
-        # if 1==1:
+            is_finished=True
+        if is_finished==True:
             self.isstopRead = True
             MyData.w_yaml_dialogue_result()
             sleep(1)
