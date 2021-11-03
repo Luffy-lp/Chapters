@@ -24,7 +24,6 @@ class UserData(APiClass):
         self.DeviceData_dir["androidpoco"] = None
         self.DeviceData_dir["offset"] = None
         self.EnvData_dir = {}  # 环境配置表
-        self.reportConf={} #自动阅读配置表
         self.UserData_dir = {}  # 用户基本数据表
         self.UserData_dir["bookDetailInfo"] = {}
         self.UserData_dir["bookDetailInfo"]["BookID"] = None
@@ -98,20 +97,12 @@ class UserData(APiClass):
         self.EnvData_dir["method"] = data["EnvData"]["method"]
         self.EnvData_dir["simulator"] = data["EnvData"]["simulator"]
         self.EnvData_dir["sleepLevel"] = data["EnvData"]["sleepLevel"]
+        self.EnvData_dir["sendDing"] = data["EnvData"]["sendDing"]
+        self.EnvData_dir["powerOff"] = data["EnvData"]["powerOff"]
+        self.EnvData_dir["DingUrl"] = data["EnvData"]["DingUrl"]
         self.UserPath_dir["errorLogpath"] = data["PathData"]["errorLogpath"]
         self.UserPath_dir["adbpath"] = data["PathData"]["adbpath"]
         self.UserPath_dir["Desktoppath"] = data["PathData"]["Desktoppath"]
-        self.reportConf["des"] = data["ReportConf"]["des"]
-        self.reportConf["powerOff"] = data["ReportConf"]["powerOff"]
-        self.reportConf["sendDing"] = data["ReportConf"]["sendDing"]
-        self.reportConf["DingUrl"] = data["ReportConf"]["DingUrl"]
-        self.reportConf["endpoint"] = data["ReportConf"]["endpoint"]
-        self.reportConf["accesskey_id"] = data["ReportConf"]["accesskey_id"]
-        self.reportConf["accesskey_secret"] = data["ReportConf"]["accesskey_secret"]
-        self.reportConf["bucket_name"] = data["ReportConf"]["bucket_name"]
-        self.reportConf["baseUploadPath"] = data["ReportConf"]["baseUploadPath"]
-        self.reportConf["url"] = data["ReportConf"]["url"]
-
         # if not self.UserData_dir["uuid"]:
         #     uuid = self.registerApi5(channel_id, device_id, device_platform)["user"]["uuid"]
         #     self.UserData_dir["uuid"] = uuid
@@ -197,20 +188,19 @@ class UserData(APiClass):
         if type(self.book_list) == dict:
             return
         try:
-            list1 = self.book_list.split("[new]")
+            list1 = self.book_list.split("第")
             if list1:
                 for i in range(0, len(list1) - 1):
-                    if "-" in list1[i]:
-                        chapter = list1[i][len(list1[i]) - 17:len(list1[i])]
-                        mydir[chapter] = None
-                    else:
-                        chapter = list1[i][len(list1[i]) - 8:len(list1[i])]
-                        mydir[chapter] = None
+                    if list1[i]:
+                        list2 = list1[i].split("：")[1]
+                        list3 = list2.split("[new]")[0]
+                        mydir[list3] = None
+
             yamlbook_listpath = os.path.join(Desktoppath, "bookread_result.yml")
             with open(yamlbook_listpath, 'w+', encoding="utf-8") as f:
                 yaml.dump(mydir, f, allow_unicode=True)
         except:
-            print("检测列表格式异常！")
+            pass
 
     def yaml_bookread_result(self):
         """书籍阅读结果"""

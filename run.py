@@ -24,7 +24,6 @@ from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
 
-
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
     file_stream_path = []
@@ -58,7 +57,6 @@ class Run(MyAnalysis):
             return r
         except:
             log("发送到钉钉失败")
-
     def initialize(self):
         """初始化"""
         # try:
@@ -146,20 +144,10 @@ class Run(MyAnalysis):
             print("完成读取errorlog")
         except BaseException as e:
             print("输出errorlog日志转化到log.txt中失败", e)
-
-    def send_fun(self, time, countTime):
+    def send_fun(self,time):
         """上传报告并发送钉钉"""
-        channel_id = MyData.UserData_dir["channel_id"]
-        ADBdevice = MyData.EnvData_dir["ADBdevice"]
-        des = MyData.reportConf["des"]
-        dingrobot = MyData.reportConf["DingUrl"]
-        endpoint = MyData.reportConf["endpoint"]
-        accesskey_id = MyData.reportConf["accesskey_id"]
-        accesskey_secret = MyData.reportConf["accesskey_secret"]
-        bucket_name = MyData.reportConf["bucket_name"]
-        baseUploadPath = MyData.reportConf["baseUploadPath"]  # OSS文件目录
-        url = MyData.reportConf["url"]
-
+        print("发送钉钉")
+        localhost2ossdata = localhost2oss(path_BOOKREAD_ERROR_IMAGE)
         date = MyData.yaml_bookread_result()
         OK = 0
         Error = 0
@@ -170,13 +158,9 @@ class Run(MyAnalysis):
             if date[i] == 3:
                 Error += 1
                 errors_list.append(i)
-        if MyData.reportConf["sendDing"]:
-            print("发送钉钉")
-            localhost2ossdata = localhost2oss(path_BOOKREAD_ERROR_IMAGE, endpoint, accesskey_id, accesskey_secret,
-                                              bucket_name, baseUploadPath, url)
-            print("localhost2ossdata:", localhost2ossdata[1])
-            send_msg(time, countTime, num=OK, error=Error, http_url=localhost2ossdata[1], chapterlist=errors_list,
-                     channel_id=channel_id, ADBdevice=ADBdevice, des=des, dingrobot=dingrobot,data=date)
+        if MyData.EnvData_dir["sendDing"]:
+            send_msg(time,num=OK, error=Error, http_url=localhost2ossdata[1],chapterlist=errors_list)
+            # myRun.send_ding(text=str(MyData.bookresult_dir),title="完成书籍阅读",messageUrl="http://www.baidu.com")
         else:
             print("配置为不推送到钉钉")
 
@@ -217,7 +201,6 @@ class Run(MyAnalysis):
             test_GameLoaded()
             test_discoverPopup()
         mylog.info("--------完成异常重启------")
-
     def runing(self):
         for k, v in self.Runlist_dir.items():
             repeattime = self.Case_info[k]["repeattime"]
@@ -241,10 +224,7 @@ class Run(MyAnalysis):
                     sleep(1)
                     # mylog.error("------第出现异常", e)
                     log(e, "------出现异常----------")
-                    try:
-                        self.resetEnv(k)
-                    except Exception as e:
-                        log(e, "------重启是出现异常--------")
+                    self.resetEnv(k)
                 finally:
                     MyData.w_yaml_dialogue_result()
                     self.partReport(htmlname=htmlname, __title__=__title__, k=k)
@@ -254,10 +234,8 @@ class Run(MyAnalysis):
                     # except:
                     #     mylog.info("【{0}】生成录制文件失败".format(__title__))
 
-
 if __name__ == '__main__':
-    start = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    begintime = time.time()
+    time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     try:
         myRun = Run()
         myRun.initialize()
@@ -265,14 +243,12 @@ if __name__ == '__main__':
     except Exception as e:
         mylog.error("------出现异常{}", e)
         log(e, "------出现异常--------")
-    endtime = time.time()
-    countTime = (datetime.datetime.fromtimestamp(endtime) - datetime.datetime.fromtimestamp(begintime)).seconds
 myRun.togetherReport()
-myRun.send_fun(start, countTime)
-
-if MyData.reportConf["powerOff"] == True:
+myRun.send_fun(time)
+if MyData.EnvData_dir["powerOff"] == True:
     print("即将睡眠")
     os.system('rundll32 powrprof.dll,SetSuspendState')
+
 input('Press Enter to exit...')
 # # myRun.pull_errorLog()
 # # myRun.writelogs()

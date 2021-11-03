@@ -71,6 +71,7 @@ def test_booklist():
             print("书籍列表配置错误，请注意格式")
             return
 
+
 def booktraversal(bookchapter):
     """阅读列表执行"""
     if bookchapter not in MyData.book_list.keys():

@@ -1,6 +1,2 @@
 # Project exclude paths
 /venv/
-!/build/
-!/dist/
-!/resource/
-!/result/

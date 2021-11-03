@@ -40,7 +40,7 @@ class BookRead(FindObject):
         self.pos_id = None  # 当前选项self.pos_id值
         self.chat_type = None
         self.filename_head = None
-        self.old_filename_head = None
+        self.old_filename_head=None
         self.Result_info = {}
         self.all_list = []
         self.no_test_list = []
@@ -48,8 +48,8 @@ class BookRead(FindObject):
         self.selectPOS = None
         self.TextPOCO = None
         self.read_finish = False
-        self.oldBookErrorList = []
-        self.time_start = 0
+        self.oldBookErrorList=[]
+        self.time_start=0
 
     def process_bookRead(self, bookid=None, chapterProgress=None):
         """视觉小说阅读流程"""
@@ -187,19 +187,16 @@ class BookRead(FindObject):
 
     def manage_AD(self):
         """广告处理"""
-        re = MyData.getAdConfigApi(MyData.UserData_dir["uuid"])
-        if re["is_pay_user"] == 0:
-            if self.find_try("TxtFree", "非付费用户章节头广告"):
-                touch(self._POS)
-                keyevent("HOME")
-                start_app("com.mars.avgchapters")
-                sleep(2)
-                keyevent("HOME")
-                start_app("com.mars.avgchapters")
-                sleep(2)
-        else:
-            self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励")
-
+        self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励")
+        if self.find_try("TxtFree", "非付费用户章节头广告"):
+            touch(self._POS)
+            keyevent("HOME")
+            start_app("com.mars.avgchapters")
+            sleep(2)
+            touch(self._POS)
+            keyevent("HOME")
+            start_app("com.mars.avgchapters")
+            sleep(2)
     # def manage_AD(self):
     #     """广告处理"""
     #     self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励")
@@ -208,11 +205,11 @@ class BookRead(FindObject):
     #     keyevent("HOME")
     #     start_app("com.mars.avgchapters")
     #     sleep(2)
-    # if self.find_try("TxtFree", "非付费用户章节头广告"):
-    #     touch(self._POS)
-    #     keyevent("HOME")
-    #     start_app("com.mars.avgchapters")
-    #     sleep(2)
+        # if self.find_try("TxtFree", "非付费用户章节头广告"):
+        #     touch(self._POS)
+        #     keyevent("HOME")
+        #     start_app("com.mars.avgchapters")
+        #     sleep(2)
 
     def FullBody(self):
         """全身像处理"""
@@ -239,7 +236,7 @@ class BookRead(FindObject):
         """前置处理"""
         self.achatProgress = str(self.progress_info["chatProgress"])
         self.filename_head = str(self.progress_info["chapterProgress"]) + "_" + self.achatProgress
-        self.old_filename_head = str(self.progress_info["chapterProgress"])
+        self.old_filename_head=str(self.progress_info["chapterProgress"])
         if self.option_record["scene_bg_id"] != self.progress_info["option_info"]["scene_bg_id"]:
             print("切换场景")
             sleep(3)
@@ -284,7 +281,7 @@ class BookRead(FindObject):
         """检测结果"""
         if result is False:
             role_id = str(self.progress_info["option_info"]["role_id"])
-            dec = self.old_filename_head + "_" + role_id + des
+            dec = self.old_filename_head +"_"+role_id+des
             # dec = self.filename_head + des
             if dec not in self.oldBookErrorList:
                 self.oldBookErrorList.append(dec)
@@ -356,10 +353,10 @@ class BookRead(FindObject):
         try:
             show_id = self.progress_info["option_info"]["show_id"]
         except:
-            show_id = None
+            show_id=None
             log("【资源检查】:无show_id字段")
         if show_id:
-            self.Result_info["goods"] = self.resource_check("UIShowGoods", "Img", "texture", "物品")
+            self.Result_info["goods"]=self.resource_check("UIShowGoods", "Img", "texture", "物品")
 
     def selectRole_check(self):
         """角色选择资源"""
@@ -382,7 +379,6 @@ class BookRead(FindObject):
         for key, vlus in enumerate(list):
             name = vlus.get_name()
             self.roleParts_check(name, "texture", "角色换装", role_id=role_id, fashion_id=fashion_id, face_id=face_id)
-
     def manyVideo_check(self):
         """多人视频检测"""
         try:
@@ -390,9 +386,9 @@ class BookRead(FindObject):
             role_id = self.progress_info["option_info"]["role_id"]
             sayParentName, attr = "SayHead", "texture"
             videoList = video_id.split("#")
-            chatIdList = videoList[0].split("*")
+            chatIdList=videoList[0].split("*")
             bgList = videoList[1].split("*")
-            if len(chatIdList) != len(bgList):
+            if len(chatIdList)!=len(bgList):
                 self.resource_result(False, "_chat.txt", des="多人视频背景和角色数不匹配")
                 log("{0}配置检查异常".format("多人视频背景和角色数不匹配"))
                 return
@@ -411,8 +407,7 @@ class BookRead(FindObject):
     def role_check(self):
         """角色检测"""
         parameter = self.role_parameter()
-        self.roleParts_check(parameter["parentName"], parameter["attr"], parameter["des"], parameter["role_id"],
-                             parameter["fashion_id"], parameter["face_id"])
+        self.roleParts_check(parameter["parentName"], parameter["attr"], parameter["des"], parameter["role_id"],parameter["fashion_id"], parameter["face_id"])
 
     def setRoleName_check(self):
         """角色名称检测"""
@@ -437,11 +432,11 @@ class BookRead(FindObject):
         """电话头像检测"""
         friend_id = self.friendID_check()
         if friend_id:
-            friend_id = str(friend_id)
+            friend_id=str(friend_id)
             try:
                 friend_fashion_id = str(self.progress_info["option_info"]["friend_fashion_id"])
             except:
-                friend_fashion_id = None
+                friend_fashion_id=None
             role_id = str(self.progress_info["option_info"]["role_id"])
             fashion_id = str(self.progress_info["option_info"]["fashion_id"])
             fashion_id = str(self.progress_info["option_info"]["fashion_id"])
@@ -472,16 +467,16 @@ class BookRead(FindObject):
         self.resource_result(bool, Attr, description)
         return bool
 
-    def face_check(self, parentName, partName, Attr, face_id, description):
+    def face_check(self,parentName, partName, Attr, face_id,description):
         """face检测"""
-        bool = self.assert_face(parentName, partName, Attr, face_id, description)
-        description = face_id + description
+        bool = self.assert_face(parentName, partName, Attr,face_id,description)
+        description=face_id+description
         self.resource_result(bool, Attr, description)
 
     def roleParts_check(self, parentName, attr, des, role_id, fashion_id=None, face_id=None):
         """通用角色部件遍历"""
         bookid = self.progress_info["BookID"]
-        role_id = str(role_id)
+        role_id=str(role_id)
         if role_id and role_id is not "0":
             fashion_list = MyData.getfashion(bookid, role_id, fashion_id)
             for i in fashion_list:
@@ -490,17 +485,15 @@ class BookRead(FindObject):
             if face_id:
                 partName = "Face1"
                 if self.progress_info["option_info"]["chat_type"] == 10:
-                    partName = "Face2"
-                self.face_check(parentName, partName, "texture", face_id, "表情")
+                    partName="Face2"
+                self.face_check(parentName,partName, "texture", face_id,"表情")
         else:
             log(Exception("role_id不存在"), snapshot=True)
             return
-
     def checkSleep(self):
         """检测过快会导致问题"""
         sleep(0.1)
         print("睡眠")
-
     def content_check(self):
         """内容检测"""
         self.Result_info["content"] = False
@@ -622,12 +615,10 @@ class BookRead(FindObject):
         else:
             self.selectManage(select_id)
         self.touchtime = self.touchtime + 1
-
     def ChangeDress_Manage(self):
         """更新角色形象"""
-        roleID = str(self.progress_info["option_info"]["role_id"])
-        MyData.updateUserRoleFashion(self.progress_info["BookID"], roleID)
-
+        roleID=str(self.progress_info["option_info"]["role_id"])
+        MyData.updateUserRoleFashion(self.progress_info["BookID"],roleID)
     def get_selectPOS(self):
         """跳转按钮位置获取"""
         if self.selectPOS == None:
@@ -654,11 +645,10 @@ class BookRead(FindObject):
 
     def progressjudge(self):
         """进度异常判断"""
-        reTime = time_difference(self.time_start)
-        if reTime > 1200:
+        reTime=time_difference(self.time_start)
+        if reTime>1800:
             mylog.error("阅读时间{0},阅读超时".format(reTime))
             log(Exception("阅读时间{0},阅读超时".format(reTime)), snapshot=True)
-            self.resource_result(False, "阅读", "阅读时间超过20分钟")
             raise Exception("阅读时间{0},阅读超时".format(reTime))
         if self.option_record["oldChatProgress"] == str(self.progress_info["chatProgress"]):
             self._etime = self._etime + 1
@@ -669,7 +659,7 @@ class BookRead(FindObject):
         else:
             self._etime = 0
         if self._etime >= 4:
-            self.BookRead_info["Jank"] += 1
+            self.BookRead_info["Jank"] +=1
             print(self.BookRead_info["Jank"])
             VisualRead: dict = MyData.newPoP_dir["VisualRead"]
             for k, v in VisualRead.items():
@@ -700,13 +690,12 @@ class BookRead(FindObject):
 
     def dialogueEndPOP(self):
         """章节尾弹框"""
-        is_finished = False
-        if "is_finished" in self.progress_info["option_info"]:
-            if str(self.progress_info["option_info"]["is_finished"]) == "1":
-                is_finished = True
+        is_finished=False
+        if str(self.progress_info["option_info"]["is_finished"])=="1":
+            is_finished=True
         if int(self.option_record["oldChatProgress"]) == self.progress_info["chat_num"]:
-            is_finished = True
-        if is_finished == True:
+            is_finished=True
+        if is_finished==True:
             self.isstopRead = True
             MyData.w_yaml_dialogue_result()
             sleep(1)
