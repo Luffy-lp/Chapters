@@ -1,33 +1,12 @@
-from common.COM_data import MyData
-import inspect
+from date.Chapters_data import MyData
 import re
-import sys
 import types
-from case.test_case import *
 from common import COM_utilities
-from common.COM_path import *
 import importlib
-from time import sleep
 from common.COM_path import *
-from airtest.core.api import assert_equal
-from airtest.report.report import simple_report
-from scenes.scenes_login.SCN_gamestart import GameStart
-from scenes.scenes_login.SCN_gameloaded import GameLoaded
-from scenes.scenes_login.SCN_newuser import NewUserGuide
-from scenes.scenes_discover.SCN_discover import Discover
-from scenes.scenes_visualbook.SCN_bookread import BookRead
-from scenes.scenes_visualbook.SCN_bookdetail import BookNewDetail
-from scenes.scenes_login.SCN_signin import SignIn
-from scenes.SCN_pageTurn import PageTurn
-from scenes.scenes_community.SCN_chapteredit import ChapterEdit
-from scenes.scenes_community.SCN_community import Community
-from scenes.scenes_community.SCN_readUGCbook import ReadUGCBook
-
-
-# import allure
-
 
 class MyAnalysis():
+    """解析用例"""
     function_regexp = re.compile(r"^\$\{(\w+)\(([\$\w =,]*)\)\}$")
     stepdata_list = []
     Runlist = []
@@ -36,7 +15,8 @@ class MyAnalysis():
     Case_dir = {}
     Runlist_dir = {}
     popup_list=[]
-    path = os.path.join(path_YAML_FILES, "yamlCase/casedatas.yml")
+    path=None
+    # path = os.path.join(path_YAML_FILES, "yamlCase/casedatas.yml")
     Popuopath = os.path.join(path_YAML_FILES, "yamlGame/popup.yml")
 
 
@@ -47,6 +27,7 @@ class MyAnalysis():
         self.yaml_data_popup(self.Popuopath)
 
     def file_name(self):
+        """解析当前路径的目录"""
         path = os.path.join(path_YAML_FILES, "yamlCase")
         for root, dirs, files in os.walk(path):
             # print(root) #当前目录路径
@@ -56,9 +37,9 @@ class MyAnalysis():
             self.Case_info["casename"]=filesName
             self.path=os.path.join(path, files[0])
 
-    def is_functon(self, content):
-        matched = self.function_regexp.match(content)
-        return True if matched else False
+    # def is_functon(self, content):
+    #     matched = self.function_regexp.match(content)
+    #     return True if matched else False
 
     def parse_function(self, content):
         """解析字符串"""
@@ -83,21 +64,21 @@ class MyAnalysis():
 
         return function_meta
 
-    def is_function(self, tup):
-        """ Takes (name, object) tuple, returns True if it is a function.
-        """
-        name, item = tup
-        if isinstance(item, types.FunctionType):
-            aa = eval(str(item.__name__))
-        return
+    # def is_function(self, tup):
+    #     """ Takes (name, object) tuple, returns True if it is a function.
+    #     """
+    #     name, item = tup
+    #     if isinstance(item, types.FunctionType):
+    #         aa = eval(str(item.__name__))
+    #     return
 
-    def import_module_functions(self, modules):
-        """ import modules and bind all functions within the context
-        """
-        for module_name in modules:
-            imported = importlib.import_module(module_name)
-            imported_functions_dict = dict(filter(self.is_function, vars(imported).items()))
-        return imported_functions_dict
+    # def import_module_functions(self, modules):
+    #     """ import modules and bind all functions within the context
+    #     """
+    #     for module_name in modules:
+    #         imported = importlib.import_module(module_name)
+    #         imported_functions_dict = dict(filter(self.is_function, vars(imported).items()))
+    #     return imported_functions_dict
 
     def yaml_data(self, path):
         """解析yamlcase数据"""

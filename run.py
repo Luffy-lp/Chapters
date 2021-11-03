@@ -1,42 +1,72 @@
-import logging
-
-from common.COM_path import *
+"""步骤方法"""
+# from poco.drivers.osx.sdk.OSXUI import PocoSDKOSX
+# from poco.drivers.android.uiautomation import AndroidUiautomationPoco
+import json
+import requests
+from common.send_msg import *
+from poco.drivers.std import StdPocoAgent, StdPoco
+from step.test_SidePanel import *
+from step.test_login_step import *
+from step.test_common_step import *
+from step.test_UGC_step import *
+from step.test_profile_step import *
+from step.test_VisualRead_step import *
+from step.test_shop_step import *
+from scenes.SCN_pageTurn import *
 from common.COM_findobject import FindObject
-from airtest.report import report
+
+import logging
+from date.Chapters_data import MyData
+# from common.COM_path import *
 from airtest.report.report import simple_report
-from case.test_case import *
-# from importlib_metadata.docs import conf
-import shutil
 from common.COM_analysis import MyAnalysis
 from common.COM_devices import CommonDevices
 from common.my_log import mylog
 from common.COM_utilities import *
 
 
-# from  airtest.core.android.adb import *
 class Run(MyAnalysis):
     logging.DEBUG = 0  # 20
+    file_stream_path = []
 
     def __init__(self):
         MyAnalysis.__init__(self)
         print(path_BASE_DIR)
         self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
-        print("path_BASE_DIR",self.adbpath)
         self.logpath = os.path.join(path_LOG_DIR, "log.txt")
         print(self.logpath)
         self.logspath = os.path.join(path_LOG_DIR, "logs.txt")
         self.alllogspath = os.path.join(path_LOG_DIR, "alllogs.txt")
         self.errorLogpath = os.path.join(path_LOG_MY, "errorlog.txt")
 
+    def send_ding(self, text, title, messageUrl):
+        try:
+            headers = {'Content-Type': 'application/json;charset=utf-8'}
+            url = MyData.EnvData_dir["DingUrl"]
+            json_text = {
+                "msgtype": "link",
+                "link": {
+                    "text": text,
+                    "title": title,
+                    "picUrl": "",
+                    "messageUrl": messageUrl
+                }
+            }
+            json_text = json.dumps(json_text).encode(encoding='UTF8')
+            r = requests.post(url, json_text, headers=headers).content
+            log("发送到钉钉成功")
+            return r
+        except:
+            log("发送到钉钉失败")
+
     def initialize(self):
         """初始化"""
-        try:
-            print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
-            print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
-            sleep(3)
-        except:
-            pass
-        self.clear()
+        # try:
+        #     print("adb" in os.popen('tasklist /FI "IMAGENAME eq adb.exe"').read())
+        #     print(os.system('TASKKILL /F /IM adb.exe'))  # 杀死进程
+        #     sleep(10)
+        # except:
+        #     pass
         CommonDevices()
 
     def get_eval_value(self, args, func_name):
@@ -64,8 +94,8 @@ class Run(MyAnalysis):
     def writelogs(self):
         """转存log到logs"""
         try:
-            log_file= open(self.logpath, "r")
-            logs_file=open(self.logspath, "a")
+            log_file = open(self.logpath, "r")
+            logs_file = open(self.logspath, "a")
             lines = log_file.readlines()
             for val in range(len(lines)):
                 # alllog_file = open(alllogspath, "a")
@@ -73,14 +103,29 @@ class Run(MyAnalysis):
                 # if "assert_equal" in lines[val] or "traceback" in lines[val]:
                 logs_file.write(lines[val])
         except Exception as e:
-            print("转存log到logs失败",e)
-            mylog.error("转存log到logs失败",e)
+            print("转存log到logs失败", e)
+            mylog.error("转存log到logs失败", e)
         else:
             print("转存log到logs成功")
             mylog.info("转存log到logs成功")
         finally:
             log_file.close()
             logs_file.close()
+
+    def get_fileist(self):
+        # print(os.system(self.adbpath + " devices"))
+        connected = self.adbpath + " connect " + MyData.EnvData_dir["ADBdevice"]
+        print(os.system(connected))
+        sleep(3)
+        with open("errorfilelist.txt", 'w+') as file:
+            file.truncate(0)
+        file_list = self.adbpath + " shell ls %s >>errorfilelist.txt 2>&1"
+        self.file_stream_path = []
+        os.system(file_list % MyData.UserPath_dir["errorLogpath"])
+        with open("errorfilelist.txt", 'r+') as sl:
+            for line in sl:
+                self.file_stream_path.append(line)
+        # if self.file_stream_path
 
     def pull_errorLog(self):
         """输出errorlog日志转化到log.txt中"""
@@ -99,21 +144,41 @@ class Run(MyAnalysis):
             sleep(3)
             print(os.popen(pull))
             print("完成读取errorlog")
-            # if errorLog_file:
-            #     lines = errorLog_file.readlines()
-            #     print("存在错误日志", errorLog_file.read())
-            #     # text_file = open(errorLogpath, "r")
-            #     for val in range(len(lines)):
-            #         time = 1612407756.9300864 + int(val)
-            #         print(type(time))
-            #         print("val", val)
-            #         print(lines[val])
-            #         log(Exception("Unity异常" + lines[val]), timestamp=time)
-            # errorLog_file.close()
-            # # auto_setup(logdir=path_LOG_DIR)
-            # print("输出errorlog日志转化到log.txt中成功")
         except BaseException as e:
-            print("输出errorlog日志转化到log.txt中失败",e)
+            print("输出errorlog日志转化到log.txt中失败", e)
+
+    def send_fun(self, time, countTime):
+        """上传报告并发送钉钉"""
+        channel_id = MyData.UserData_dir["channel_id"]
+        ADBdevice = MyData.EnvData_dir["ADBdevice"]
+        des = MyData.reportConf["des"]
+        dingrobot = MyData.reportConf["DingUrl"]
+        endpoint = MyData.reportConf["endpoint"]
+        accesskey_id = MyData.reportConf["accesskey_id"]
+        accesskey_secret = MyData.reportConf["accesskey_secret"]
+        bucket_name = MyData.reportConf["bucket_name"]
+        baseUploadPath = MyData.reportConf["baseUploadPath"]  # OSS文件目录
+        url = MyData.reportConf["url"]
+
+        date = MyData.yaml_bookread_result()
+        OK = 0
+        Error = 0
+        errors_list = []
+        for i in date:
+            if date[i] == "True" or date[i] == "False":
+                OK += 1
+            if date[i] == 3:
+                Error += 1
+                errors_list.append(i)
+        if MyData.reportConf["sendDing"]:
+            print("发送钉钉")
+            localhost2ossdata = localhost2oss(path_BOOKREAD_ERROR_IMAGE, endpoint, accesskey_id, accesskey_secret,
+                                              bucket_name, baseUploadPath, url)
+            print("localhost2ossdata:", localhost2ossdata[1])
+            send_msg(time, countTime, num=OK, error=Error, http_url=localhost2ossdata[1], chapterlist=errors_list,
+                     channel_id=channel_id, ADBdevice=ADBdevice, des=des, dingrobot=dingrobot,data=date)
+        else:
+            print("配置为不推送到钉钉")
 
     def togetherReport(self):
         """生成最后的合成日志"""
@@ -125,7 +190,7 @@ class Run(MyAnalysis):
             with open(logspath, 'r') as f1:
                 with open(logpath, 'w') as f2:
                     f2.write(f1.read())
-            simple_report(__file__, logpath=path_LOG_DIR, output=htmlpath, MY_DEFAULT_LOG_FILE="logs.txt")
+            simple_report(__file__, logpath=path_LOG_DIR, output=htmlpath)
         except:
             print("未发现logs日志")
 
@@ -141,31 +206,17 @@ class Run(MyAnalysis):
         mylog.info("完成html测试报告，等待生产录制文件需要一定时间")
 
     def resetEnv(self, k):
+        """重跑"""
         print(self.Runlist_dir[k])
         if "登陆" in self.Case_info[k]["casename"]:
             pass
         else:
             mylog.info("----------正在进行异常重启------")
-            test_startgame(0)
+            test_stopgame()
+            test_startgame()
+            test_GameLoaded()
             test_discoverPopup()
         mylog.info("--------完成异常重启------")
-
-    def clear(self):
-        """清空之前的报告和文件"""
-        fileNamelist = [path_LOG_DIR, path_REPORT_DIR, path_RES_DIR]
-        for fileName in fileNamelist:
-            filelist = os.listdir(fileName)
-            for f in filelist:
-                filepath = os.path.join(fileName, f)
-                if os.path.isfile(filepath):
-                    os.remove(filepath)
-                # elif os.path.isdir(filepath):
-                #     shutil.rmtree(filepath, True)
-        path = os.path.join(path_LOG_MY, "logging.log")
-        with open(path, 'w') as f1:
-            f1.seek(0)
-            f1.truncate()
-        mylog.info("完成文件清空")
 
     def runing(self):
         for k, v in self.Runlist_dir.items():
@@ -178,29 +229,35 @@ class Run(MyAnalysis):
                 htmlname = self.Case_info[k]["reportname"] + str(
                     repeattime - (self.Case_info[k]["repeattime"] - 1)) + ".html"
                 # logname = self.Case_info[k]["reportname"] + str(repeattime - (self.Case_info[k]["repeattime"] - 1)) + "log.txt"
-                try:
-                    start_record()
-                    mylog.info("【{0}】启动录制成功".format(__title__))
-                except:
-                    mylog.info("【{0}】启动录制失败".format(__title__))
+                # try:
+                #     start_record()
+                #     mylog.info("【{0}】启动录制成功".format(__title__))
+                # except:
+                #     mylog.info("【{0}】启动录制失败".format(__title__))
                 try:
                     self.runcase(self.Runlist_dir[k])
                     self.Case_info[k]["repeattime"] = 0
                 except Exception as e:
                     sleep(1)
-                    mylog.error("------第出现异常", e)
+                    # mylog.error("------第出现异常", e)
                     log(e, "------出现异常----------")
-                    self.resetEnv(k)
-                finally:
-                    self.partReport(htmlname=htmlname, __title__=__title__, k=k)
                     try:
-                        stop_record(recordfile)
-                        mylog.info("【{0}】生成录制文件成功".format(__title__))
-                    except:
-                        mylog.info("【{0}】生成录制文件失败".format(__title__))
+                        self.resetEnv(k)
+                    except Exception as e:
+                        log(e, "------重启是出现异常--------")
+                finally:
+                    MyData.w_yaml_dialogue_result()
+                    self.partReport(htmlname=htmlname, __title__=__title__, k=k)
+                    # try:
+                    #     stop_record(recordfile)
+                    #     mylog.info("【{0}】生成录制文件成功".format(__title__))
+                    # except:
+                    #     mylog.info("【{0}】生成录制文件失败".format(__title__))
 
 
 if __name__ == '__main__':
+    start = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    begintime = time.time()
     try:
         myRun = Run()
         myRun.initialize()
@@ -208,6 +265,15 @@ if __name__ == '__main__':
     except Exception as e:
         mylog.error("------出现异常{}", e)
         log(e, "------出现异常--------")
-    # myRun.pull_errorLog()
-    # myRun.writelogs()
-    myRun.togetherReport()
+    endtime = time.time()
+    countTime = (datetime.datetime.fromtimestamp(endtime) - datetime.datetime.fromtimestamp(begintime)).seconds
+myRun.togetherReport()
+myRun.send_fun(start, countTime)
+
+if MyData.reportConf["powerOff"] == True:
+    print("即将睡眠")
+    os.system('rundll32 powrprof.dll,SetSuspendState')
+input('Press Enter to exit...')
+# # myRun.pull_errorLog()
+# # myRun.writelogs()
+# # myRun.get_fileist()

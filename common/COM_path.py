@@ -1,4 +1,34 @@
 import os
+
+import yaml
+Desktoppath=None
+import winreg
+import datetime
+
+def yamldata_conf():
+    # 读取yamlconf数据
+    data = None
+    loginInfo = {}
+    path = os.path.join(path_YAML_FILES, "conf.yml")
+    os.path.join(path_BASE_DIR, "yamlfiles")
+    with open(path, encoding="utf-8") as f:
+        data = yaml.load(f.read(), Loader=yaml.Loader)
+    Desktoppath = data["PathData"]["Desktoppath"]
+    return Desktoppath
+
+def get_desktop():
+    Dpath=yamldata_conf()
+    if Dpath:
+        print("桌面配置路径",Dpath)
+        Desktoppath=Dpath
+    else:
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                              r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders',)
+        Desktoppath=winreg.QueryValueEx(key, "Desktop")[0]
+    print("实际桌面路径",Desktoppath)
+    return Desktoppath
+
+
 def mkdir(path):
     # 引入模块
     import os
@@ -39,36 +69,39 @@ path_RESOURCE_IMAGE = os.path.join(path_BASE_DIR, "resource/IMAGE")
 path_YAML_FILES = os.path.join(path_BASE_DIR, "yamlfiles")
 
 # 测试用例的目录路径
-path_CASE_DIR = os.path.join(path_BASE_DIR, "case/testcases")
-
-# 测试结果的目录路径
-path_REPORT_DIR = os.path.join(path_BASE_DIR, "result")
-
-# 测试报告的目录路径
-path_REPORT_DIR = os.path.join(path_BASE_DIR, "result/report")
-
-# 测试报告录屏的目录路径
-path_RES_DIR = os.path.join(path_BASE_DIR, "result/res")
-
-# airtest日志目录的项目路径
-path_LOG_DIR = os.path.join(path_BASE_DIR, "result/log")
-
-# 自定义日志目录的项目路径
-path_LOG_MY = os.path.join(path_BASE_DIR, "result/report/mylog")
-
-# 用例数据的项目路径
-path_DATA_DIR = os.path.join(path_BASE_DIR, "casedatas")
+path_CASE_DIR = os.path.join(path_BASE_DIR, "step/testcases")
 
 # 配置文件目录的路径
 path_CONF_DIR = os.path.join(path_BASE_DIR, "conf")
 
-# 错误截图存放的路径
-path_ERROR_IMAGE = os.path.join(path_BASE_DIR, "result/error_images")
+# 用例数据的项目路径
+path_DATA_DIR = os.path.join(path_BASE_DIR, "casedatas")
 
+Desktoppath=get_desktop()
+
+# 测试结果的目录路径
+# path_REPORT_DIR = os.path.join(path_BASE_DIR, "result")
+path_REPORT_DIR = os.path.join(Desktoppath, "result")
+
+# 测试报告的目录路径
+path_REPORT_DIR = os.path.join(path_REPORT_DIR, "report")
+
+# 测试报告录屏的目录路径
+path_RES_DIR = os.path.join(path_REPORT_DIR, "res")
+
+# airtest日志目录的项目路径
+path_LOG_DIR = os.path.join(path_REPORT_DIR, "log")
+
+# 自定义日志目录的项目路径
+path_LOG_MY = os.path.join(path_REPORT_DIR, "report/mylog")
+
+# 阅读截图
+# path_BOOKREAD_ERROR_IMAGE = os.path.join(path_REPORT_DIR, "IMAGE")
+date = datetime.date.today()
+path_BOOKREAD_ERROR_IMAGE = os.path.join("D:\Read_Result", str(date))
 
 file=os.getcwd()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
 mkdir(path_REPORT_DIR)#测试结果
 mkdir(path_REPORT_DIR)#测试报告
 mkdir(path_LOG_MY)#mylog日志
@@ -76,6 +109,6 @@ mkdir(path_LOG_DIR)#log日志
 mkdir(path_resource)#资源路径
 mkdir(path_RESOURCE_IMAGE)#图片资源路径
 mkdir(path_RES_DIR)#测试报告录屏的目录路径
-
+mkdir(path_BOOKREAD_ERROR_IMAGE)
 
 

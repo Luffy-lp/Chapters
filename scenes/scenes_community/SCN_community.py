@@ -12,7 +12,7 @@ class Community(FindObject):
 
     def into_workshop(self):
         """进入工作室"""
-        self.findClick_object("UINewBookRack", "CreateBtn", description="进入工作室", sleeptime=5)
+        self.findClick_object("UINewBookRack", "CreateBtn", description="进入工作室", sleeptime=2)
         return True
 
     def storiesPOP(self):

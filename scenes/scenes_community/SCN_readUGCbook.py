@@ -51,7 +51,7 @@ class ReadUGCBook(FindObject):
             self.Chattime = self.Chattime - 1
             if self.Chattime <= 0:
                 BackObject = self.poco("OptionItem(Clone)").child("Options").child("Center").child("Back")
-                self.findClick_childobject(BackObject, description="返回到主界面")
+                self.findClick_childobject(BackObject, description="返回到主界面",sleeptime=3)
                 return True
             if self.find_try("UIChatStoryEndAd", description="章节尾广告"):
                 self.click_object("BtnUnlock", description="选择使用票")  # poco("BtnAD")选择看广告

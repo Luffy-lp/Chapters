@@ -10,7 +10,7 @@ class Achievement(FindObject):
     def click_achievement(self):
         """点击跳到个人信息的achievement"""
         AchievementPOCO=self.poco("ToptGroup").child("Achievement").child("Label")
-        self.findClick_childobject(AchievementPOCO, description="achievement按钮", waitTime=1)
+        self.findClick_childobject(AchievementPOCO, description="achievement按钮并点击", waitTime=1)
 
     #成就Baby Steps
     def click_babysteps(self):
@@ -60,18 +60,10 @@ class Achievement(FindObject):
 
     #成就Technocrat
     def click_technocrat(self):
-        """点击成就Technocrat"""
+        # print("点击成就Technocrat")
         object = None
-        list = self.poco("RightItem").child("Title")
-        for i in list:
-            if i.get_TMPtext() == "Technocrat":
-                print(i.get_TMPtext())
-                object = i
-                break
-            else:print("failed")
-        print(object.get_name())
-        print("ccc:",object.parent().get_name())
-        object.parent().click()
+        POCO = self.poco("LeftItem").child("Title")[0]
+        self.findClick_childobject(POCO,description="选择第一个成就",sleeptime=2)
 
         # 成就Loyal Reader
     def click_loyalreader(self):
@@ -204,12 +196,14 @@ class Achievement(FindObject):
 
     def click_Getreward(self):
         """点击GetRaward按钮"""
-        if self.find_try("Button",description="可解锁/获取奖励"):
-            AchievementPOCO = self.poco("Center").child("ScrollView").offspring("Text (TMP)")
-            AchievementPOCO.click([0.5,0.25])
+        # if self.find_try("Button",description="可解锁/获取奖励"):
+        #     self.click_object("Button")
+        self.findClick_try("Button","Button",description="可解锁/获取奖励",waitTime=2,sleeptime=2)
+            # AchievementPOCO = self.poco("Center").child("ScrollView").offspring("Text (TMP)")
+            # AchievementPOCO.click([0.5,0.25])
             # self.findClick_childobject(AchievementPOCO, description="按钮",waitTime=1)
 
     def click_discoverback(self):
         """点击返回上一级"""
         discoverbackPOCO = self.poco("DiscoverBack").child("IgRed")
-        self.findClick_childobject(discoverbackPOCO, description="点击返回", waitTime=1)
+        self.findClick_childobject(discoverbackPOCO, description="返回按钮并点击", waitTime=1)

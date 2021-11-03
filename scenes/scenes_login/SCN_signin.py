@@ -1,5 +1,6 @@
-from common import COM_utilities
-from common.COM_data import MyData
+from poco.drivers.std import StdPocoAgent
+
+from date.Chapters_data import MyData
 from common.COM_findobject import FindObject
 from common.COM_utilities import *
 # from pages.startgame.page_loginView import LoginView
@@ -30,6 +31,10 @@ class SignIn(FindObject):
                 self.SignIn_info["用户登陆状态"] = "尝试登陆失败"
                 raise Exception("检测是否登陆成功失败")
         self.SignIn_info["用户登陆状态"] = "完成登陆"
+        StdPocoAgent1 = StdPocoAgent()
+        UserID = StdPocoAgent1.get_UserID()
+        MyData.UserData_dir["uuid"] = UserID
+        print("UserID:", UserID)
         return True
 
     def loginGuide(self):
@@ -37,7 +42,7 @@ class SignIn(FindObject):
         if MyData.UserData_dir["loginInfo"]["loginGuide"] == "Google":
             self.click_Google()
             self.mysleep(5)
-            if self.android_tryfind("com.google.android.gms:id/list", description="Google绑定用户选择", waitTime=3):
+            if self.android_tryfind("com.google.android.gms:id/account_name", description="Google绑定用户选择", waitTime=3):
                 try:
                     listname = self.androidpoco("com.google.android.gms:id/account_name")
                     for i in listname:

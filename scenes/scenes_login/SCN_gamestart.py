@@ -1,14 +1,17 @@
-import sys
-
 from airtest.core.api import *
 from pathlib import Path
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from common.my_log import mylog
+from common.COM_devices import CommonDevices
+
 
 class GameStart():
     isStarGame = False
     GameStart_info = {}
     _instance = None
+
+    # def __init__(self):
+    #     CommonDevices.__init__(self)
 
     def installGame(self):  # 安装应用
         packageName = MyData.EnvData_dir["packageName"]
@@ -54,14 +57,15 @@ class GameStart():
     def starGame(self):  # 启动游戏
         wake()
         print("尝试启动游戏")
-        mylog.info("启动游戏")
         start_app(MyData.EnvData_dir["packageName"])
-        print("等待加载")
+        print("启动游戏")
         self.isStarGame = True
+
 
     def stopGame(self):
         stop_app(MyData.EnvData_dir["packageName"])
         MyData.DeviceData_dir["poco"] = None
+        MyData.RpcClient= None
         # MyData.DeviceData_dir["androidpoco"] = None
         print("停止游戏")
         mylog.info("停止游戏")
@@ -71,3 +75,9 @@ class GameStart():
         clear_app(MyData.EnvData_dir["packageName"])
         print("清理设备上的游戏数据")
 
+
+# GameStart1 = GameStart()
+# # CommonDevices1=CommonDevices()
+# GameStart1.installGame()
+# print("MyData.EnvData_dir", MyData.EnvData_dir["packageName"])
+# GameStart1.uninstallGame(package=MyData.EnvData_dir["packageName"])

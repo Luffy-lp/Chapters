@@ -21,7 +21,7 @@ class ChapterEdit(FindObject):
 
     def into_IntroduceEdit(self):
         """编辑简介入口"""
-        if self.find_try("btnEdit", description="简介第一次编辑", waitTime=3):
+        if self.find_try(findName="btnEdit", description="简介第一次编辑", waitTime=3):
             self.findClick_object("NoCover(Clone)", "btnEdit", description="进入简介编辑", waitTime=1,
                                   sleeptime=2)
         else:
@@ -44,7 +44,7 @@ class ChapterEdit(FindObject):
     def process_creationStoryFlow(self, bookname):
         """创作室主流程"""
         MainStudio1 = MainStudio()
-        MainStudio1.mainprocess()
+        MainStudio1.branchprocess()
         self.into_IntroduceEdit()
         IntroduceEdit1 = IntroduceEdit()
         IntroduceEdit1.mainprocess(bookname)
@@ -65,5 +65,7 @@ class ChapterEdit(FindObject):
             self.ChapterEdit_info["stroyStatus"] = stroyStatus
         except:
             mylog.error("等待-【{}】-元素可见超时".format("书籍详情信息"))
+        return True
 # ChapterEdit1=ChapterEdit()
+# ChapterEdit.into_IntroduceEdit()
 # ChapterEdit1.process_creationStoryFlow("lipeng0000")

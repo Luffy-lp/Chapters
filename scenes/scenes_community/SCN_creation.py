@@ -10,7 +10,7 @@ class Creation(FindObject):
         # self.workshop()
 
     def workshop(self):
-        self.find_object("LuaUIStudio", description="作者小说列表界面", waitTime=10)
+        self.find_object("LuaUIStudio", description="创作小说列表界面", waitTime=10)
         self.findClick_try("UIWriterIntroduceDlg", "BtnOK", description="创作小说条款",waitTime=3)
 
     def click_createNewBook(self):
@@ -51,4 +51,4 @@ class Creation(FindObject):
         self.click_createNewBook()
         self.mysleep(2)
         self.select_genre()
-        return  True
+        return True

@@ -228,9 +228,9 @@ class Profile(FindObject):
         """初始进入默认展示，没有移动"""
         x = 0
         y = random.randint(0,2)
-        print("选择背景角色",x,y)
+        print("选择随机背景角色：",x,y)
         bgroundPOCO = self.poco("PerRoleItems(Clone)")[x].child("PerRoleItem")[y]
-        self.findClick_childobject(bgroundPOCO, description="随机角色形象", waitTime=1)
+        self.findClick_childobject(bgroundPOCO, description="随机角色形象并选取", waitTime=1)
         self.Profile_info["_instanceId"] = bgroundPOCO.attr("_instanceId")
         return self.Profile_info["_instanceId"]
         #采用图片来匹配方法
@@ -254,20 +254,40 @@ class Profile(FindObject):
             else:
                 print("failed")
         self.Profile_info = object.get_TMPtext()
+        print("表情：", object)
         object.parent().click()
         return self.Profile_info
 
-    def swipe_expression(self,Sting=""):
+    def swipe_expression_down(self,sTing=""):
         """对表情进行滑动（预留一下）"""
         object = None
         list = self.poco("EmoticonsItem").child("Name")
         for i in list:
-            if i.get_TMPtext() == Sting:
+            if i.get_TMPtext() == sTing:
                 print(i.get_TMPtext())
                 object = i
                 break
             else:
                 print("failed")
+        self.Profile_info = object.get_TMPtext()
+        self.findSwipe_object("xxx", 0.86, object.parent(), swipeTye="y", beginPos=[0.5, 0.8])
+        return self.Profile_info
+
+    def swipe_expression_up(self,sTing=""):
+        """对表情进行滑动（预留一下）"""
+        object = None
+        list = self.poco("EmoticonsItem").child("Name")
+        for i in list:
+            if i.get_TMPtext() == sTing:
+                print(i.get_TMPtext())
+                object = i
+                break
+            else:
+                print("failed")
+        self.Profile_info = object.get_TMPtext()
+        self.findSwipe_object("xxx", 0.72, object.parent(), swipeTye="y", beginPos=[0.5, 0.8])
+        return self.Profile_info
+
     def click_angry(self):
         """选择表情--生气"""
         object = None
@@ -425,12 +445,12 @@ class Profile(FindObject):
     def click_changn(self):
         """检测是否有提醒弹窗并进行选择-现在改变"""
         if self.find_try("LaterBtn",description="检测是否有弹框提醒解锁新物品"):
-            self.click_object("UseBtn")
+            self.click_object("UseBtn",waitTime=1,description="可能稍后使用")
 
     def click_maybel(self):
         """检测是否有提醒弹窗并进行-稍后变换"""
         if self.find_try("LaterBtn",description="检测是否有弹框提醒解锁新物品"):
-            self.click_object("LaterBtn")
+            self.click_object("LaterBtn",waitTime=1,description="可能稍后使用")
 
     def click_back(self):
         """背景部分编辑的点击返回"""

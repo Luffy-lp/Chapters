@@ -1,38 +1,71 @@
-import logging
+import string
+
 from airtest.cli.parser import cli_setup
-from airtest.core.android.adb import ADB
 from airtest.core.api import *
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
-from common.COM_data import MyData
+from date.Chapters_data import MyData
 from common.COM_path import *
 from common.my_log import mylog
-from airtest.core.api import connect_device, sleep
 
 
 class CommonDevices():
+
     def __init__(self):
         if G.DEVICE == None:
+            self.adbpath = os.path.join(path_BASE_DIR, MyData.UserPath_dir["adbpath"])
             if not cli_setup():
-                conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
-                    "ADBdevice"]
-                method = MyData.EnvData_dir["method"]
-                if "127" in  MyData.EnvData_dir["ADBdevice"]:
-                    method= MyData.EnvData_dir["simulator"]
-                auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method,], project_root=path_BASE_DIR)
-                if MyData.DeviceData_dir["androidpoco"] == None:
+                # i=5
+                # while i>=0:
+                #     i-=1
+                self.connect_devices()
+                if MyData.DeviceData_dir["androidpoco"] is None:
                     MyData.DeviceData_dir["androidpoco"] = AndroidUiautomationPoco()
                     mylog.info("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
                     print("完成android原生元素定位方法初始化【{}】".format(MyData.DeviceData_dir["androidpoco"]))
-                    # ADBdevice = MyData.EnvData_dir["ADBdevice"]
-                    # print(MyData.mobileconf_dir["Notch_Fit"])
-                    # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-                    #     print("报错把刚开始了解")
-                    #     MyData.DeviceData_dir["androidpoco"].use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][
-                    #         ADBdevice])
-                    #     mylog.info("androidpoco完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
-                    #     print("androidpoco完成【{}】刘海屏特殊渲染处理".format(ADBdevice))
-                print("DEVIEC:", G.DEVICE)
+    def connect_devices(self):
+        conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + MyData.EnvData_dir[
+            "ADBdevice"]
+        print("尝试连接配置的adb",conf)
+        method = MyData.EnvData_dir["method"]
+        try:
+            if "127" in MyData.EnvData_dir["ADBdevice"]:
+                method = MyData.EnvData_dir["simulator"]
+            auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method, ], project_root=path_BASE_DIR)
+        except:
+            print("尝试查看电脑连接的可用移动设备")
+            self.adb_dispose()
+            MyData.EnvData_dir["ADBip"] = "127.0.0.1:5037"
+            conf = MyData.EnvData_dir["device"] + "://" + MyData.EnvData_dir["ADBip"] + "/" + \
+                   MyData.EnvData_dir["ADBdevice"]
+            print("conf",conf)
+            method = MyData.EnvData_dir["method"]
+            auto_setup(__file__, logdir=path_LOG_DIR, devices=[conf + method, ], project_root=path_BASE_DIR)
+            print("连接成功")
+            return True
+    def adb_dispose(self):
+        """初始化"""
+        i = 10
+        devlist=None
+        while i>=0:
+            i=i-1
+            try:
+                # print(os.open(self.adbpath + " devices"))
+                print(self.adbpath)
+                connectfile = os.popen(self.adbpath + ' devices')
+                devlist = connectfile.readlines()
+                # print("devlist",devlist)
+                for i in range(1,len(devlist)):
+                    if "device" in devlist[i]:
+                        list = devlist[i].split("	device")
+                        MyData.EnvData_dir["ADBdevice"] = list[0]
+                        print("连接adb可用列表中", MyData.EnvData_dir["ADBdevice"])
+                        return True
+                raise
+            except:
+                sleep(8)
+                print("查询设备信息异常")
+
     def getdevlist(self):
         devlist = []
         connectfile = os.popen('adb devices')
@@ -53,7 +86,6 @@ class CommonDevices():
         1. 是否有连接上手机？请连接上手机选并重新check连接性!
         2. 是否有开启"开发者选项\\USB调试模式"?\n'''
         connectinfolist = self.getdevlist()
-
         if len(connectinfolist) == 0:
             return False
         if len(connectinfolist) == 1:
@@ -68,3 +100,4 @@ class CommonDevices():
                 print(f'设备{i + 1} SN: {connectinfolist[i]}')
             return True
 # CommonDevices1=CommonDevices()
+# CommonDevices1.adb_dispose()

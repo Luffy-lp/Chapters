@@ -1,12 +1,14 @@
 from airtest.core.api import *
 from common.COM_findobject import FindObject
 from common.COM_utilities import *
+from common.COM_Error import ResourceError
 
 
 # TODO:返回到上一个界面应该用树代替
 
 class MainStudio(FindObject):
     """作家工作室"""
+    MainStudio={}
     chapterDlg = 0
 
     def __init__(self):
@@ -18,7 +20,7 @@ class MainStudio(FindObject):
         self.findClick_object("UINewBookRack", "CreateBtn", description="进入工作室", waitTime=1, sleeptime=2)
 
     def LuaUIStudio(self):
-        """的"""
+        """新手引导界面检查"""
         self.find_object("LuaUIStudio", description="工作室显示UI", waitTime=3)
         clock()
         while self.find_try("LuaUIGuide", description="新手引导界面"):
@@ -26,7 +28,7 @@ class MainStudio(FindObject):
             mytime = float(clock("stop"))
             if mytime > 80:
                 print("新手引导界面异常")
-                log(Exception("查找新手引导界面异常"),snapshot=True)
+                log(Exception("查找新手引导界面异常"), snapshot=True)
                 raise Exception("查找新手引导界面异常")
 
     def storiesPOP(self):
@@ -34,7 +36,6 @@ class MainStudio(FindObject):
 
     def chooseHead(self):
         """选择角色头像"""
-
         if self.findClick_object("LuaUIRoleCreateDlg", "Head", description="选择头像弹框", waitTime=1):
             self.click_object("BtnHead", description="选择图像")
             self.find_object("UIBottomForm", description="选择角色方式", waitTime=3)
@@ -72,7 +73,7 @@ class MainStudio(FindObject):
                 len(Supportinglist) - 1].child("HeadMask").wait(2)
             self.findClick_childobject(SuPOCO, description="次角色图像框", waitTime=1)
 
-    def talk(self, name, txt="this Characterinput"):
+    def talk(self, name, txt="this Characterinput"):  # Narration系统说话
         """对话内容角色编对话方法 name：main,Narration，角色名称 名称不能超过7个字母否则无法找到txt："""
         if name == "main":
             print("主角色发言")
@@ -110,8 +111,8 @@ class MainStudio(FindObject):
             print("未找到对应的角色,创建此角色")
             self.creatCharacter(name)
 
-    def creatChoice(self):
-        """创建选项"""
+    def click_addChoice(self):
+        """点击工具弹框添加选项按钮"""
         if self.find_try("BtnTool", description="工具弹框"):
             self.click_object("BtnTool", description="工具弹框按钮")
             if self.find_try("TutorialWindow", description="新书籍新手引导", waitTime=1):
@@ -120,46 +121,44 @@ class MainStudio(FindObject):
             self.click_object("BtnChoice", description="添加选项")
         else:
             print("已经存在创建的选项")
-        POCOA = self.poco("OptionA").child("InputField").child("Text Area").wait(1)
-        AtXt = POCOA.child("Text").get_TMPtext()
-        if AtXt:
-            self.findClick_childobject(POCOA, description="A选择描述框")
-            text("CHOICE OptionA")
-            if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
-                pass
-            else:
-                self.android_findClick("com.mars.avgchapters:id/btn_send", "com.mars.avgchapters:id/btn_send",
-                                       description="点击提交按钮")
 
-        POCOB = self.poco("OptionB").child("InputField").child("Text Area").wait(1)
-        BtXt = POCOB.child("Text").get_TMPtext()
-        if BtXt:
-            self.findClick_childobject(POCOB, description="B选择描述框")
-            text("CHOICE OptionB")
-            if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
-                pass
-            else:
-                self.android_findClick("com.mars.avgchapters:id/btn_send", "com.mars.avgchapters:id/btn_send",
-                                       description="点击提交按钮")
+    def editorOptionDES(self, OptionName, description):
+        """修改选项描述，OptionA，OptionB"""
+        POCO = self.poco(OptionName).child("InputField").child("Text Area")
+        tXt = POCO.child("Text").get_TMPtext()
+        self.findClick_childobject(POCO, description="A选择描述框")
+        text(description)
 
-        if not self.find_try("OptionC", description="查看是否有C选项"):
-            self.findClick_childobject(self.poco("Create").child("OptionAdd"), description="创建一个新分支选项", sleeptime=1)
-            POCOC = self.poco("OptionC").child("InputField").child("Text Area").wait(1)
-            self.findClick_childobject(POCOC, description="C选择描述框")
-            text("CHOICE OptionC")
-            if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
-                pass
-            else:
-                self.android_findClick("com.mars.avgchapters:id/btn_send", "com.mars.avgchapters:id/btn_send",
-                                       description="点击提交按钮")
-        self.findClick_childobject(self.poco("Create").child("Button"), description="创建一个新分支选项", sleeptime=1)
+    def click_Paperplanebutton(self):
+        """内容提交按钮"""
+        if self.findClick_Image("Paperplanebutton.png", record_pos=(0.454, 0.312)):
+            pass
+        else:
+            self.android_findClick("com.mars.avgchapters:id/btn_send", "com.mars.avgchapters:id/btn_send",
+                                   description="点击提交按钮")
+    def click_confirm(self):
+        """点击confirm按钮"""
+        self.findClick_object("Button","Button",description="confirm", sleeptime=1)
+    def click_con(self):
+        """点击修改确认弹框按钮"""
         self.findClick_try("AlterView", "LeftBtn", description="修改确认弹框", waitTime=1, sleeptime=2)
 
-    def intoOption(self, type):
-        """type:A，B选项选择进入选项场景"""
-        Option = "Option" + type
-        OptionNextPOCP = self.poco(Option).child("Next")
-        self.findClick_childobject(OptionNextPOCP, description="A选择选项分支场景",waitTime=8)
+
+    def creat_Choice(self, OptionName, description):
+        """创建新选项
+        OptionName-> 选项名称
+         description  -> 选项描述 """
+        if not self.find_try(OptionName, description="查看是否有" + OptionName + "选项"):
+            self.findClick_childobject(self.poco("Create").child("OptionAdd"), description="创建一个新分支选项", sleeptime=1)
+        else:log("已经存在{0}选项",format(OptionName))
+
+    def intoOption(self, OptionName):
+        """选择进入的选项编辑
+        type:  A，B选择进入的
+        """
+        OptionNextPOCP = self.poco(OptionName).child("Next")
+        sleep(2)
+        self.findClick_childobject(OptionNextPOCP, description=OptionName + "选择选项分支场景", waitTime=5, sleeptime=2)
 
     def creatCharacter(self, name, characterType="supporting"):
         """name：角色名称characterType：角色类型main,supporting
@@ -178,37 +177,55 @@ class MainStudio(FindObject):
 
     def back_click(self):
         """返回上个界面按钮"""
-        self.findClick_childobject(self.poco("TopBar").child("BtnBack"), description="返回到上一个界面",waitTime=2,sleeptime=2)
+        self.findClick_childobject(self.poco("TopBar").child("BtnBack"), description="返回到上一个界面", waitTime=2,
+                                   sleeptime=2)
 
-    def toolBar(self, type):
-        """分支工具界面Img,Choice,Jump"""
+    def toolBar(self, type, Index=4):
+        """分支工具界面
+        Img ->添加图片
+        Choice ->创建选项
+        Jump - 设置跳转
+        Index - jump 3,设置章节结束 其他未做
+        """
+        int(Index)
         self.click_object("BtnTool", description="点击工具按钮")
         if type == "Img":
-            self.findClick_childobject(self.poco("ToolBar").child("BtnImg"), description="创建图片")
+            self.findClick_childobject(self.poco("BtnImg"), description="创建图片")
         if type == "Choice":
-            self.findClick_childobject(self.poco("ToolBar").child("BtnChoice"), description="创建选项")
+            self.findClick_childobject(self.poco("BtnChoice"), description="创建选项")
         if type == "Jump":
-            self.findClick_childobject(self.poco("ToolBar").child("BtnJump"), description="创建跳转")
-            setEnd = self.poco("UIBottomForm").child("Buttons").child("Options").child("Button(Clone)")[3]
+            self.findClick_childobject(self.poco("BtnJump"), description="创建跳转",waitTime=2)
+            setEnd = self.poco("UIBottomForm").child("Buttons").child("Options").child("Button(Clone)")[Index]
             self.findClick_childobject(setEnd, description="设置章节结束", sleeptime=2)
+        else:
+            log(MyException, desc="填写了错误的下标", snapshot=True)
 
     def branchprocess(self):
         """分成创作页面流程"""
-        self.creatChoice()
-        self.intoOption("A")
+        self.click_addChoice()  #点击工具弹框添加选项按钮
+        self.creat_Choice("OptionC","这是C选项") #创建新选项
+        self.editorOptionDES("OptionC","这是C选项") #修改选项描述
+        self.click_Paperplanebutton() #提交内容
+        self.editorOptionDES("OptionA","这是A选项")
+        self.click_Paperplanebutton()
+        self.editorOptionDES("OptionB","这是B选项")
+        self.click_Paperplanebutton()
+        self.click_confirm() #点击confirm按钮
+        # self.click_con()
+        self.intoOption("OptionA")  #选择进入的选项编辑
         txt = "abcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghi" \
               "jklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyz"
-        self.creatCharacter("lipeng", "main")
+        # self.creatCharacter("lipeng", "main")
         self.talk("lipeng", txt)
         self.talk("lilei", txt)
         self.toolBar("Jump")
         self.back_click()
-        self.intoOption("B")
+        self.intoOption("OptionB")
         self.talk("lipeng", txt)
         self.talk("lilei", txt)
         self.toolBar("Jump")
         self.back_click()
-        self.intoOption("C")
+        self.intoOption("OptionC")
         self.talk("lipeng", txt)
         self.talk("lilei", txt)
         self.toolBar("Jump")
@@ -216,19 +233,36 @@ class MainStudio(FindObject):
         sleep(2)
         self.back_click()
 
-    def mainprocess(self):
-        """封装好工作室流程"""
+    # def branchprocess(self):
+    #     """封装好分支创作工作室流程"""
+    #     txt = "abcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghi" \
+    #           "jklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyz"
+    #     self.LuaUIStudio()
+    #     self.creatCharacter("lipeng", "main")
+    #     self.creatCharacter("lilei")
+    #     time = 2
+    #     while (time > 0):
+    #         time = time - 1
+    #         self.talk("Narration", str(time))
+    #         self.talk("lipeng", txt)
+    #         self.talk("lilei", txt)
+    #     self.branchprocess()
+
+    def commonprocess(self):
+        """封装好分支创作工作室流程"""
         txt = "abcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghi" \
               "jklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyzabcdefghijklmnopqrstuvwsyz"
-        self.LuaUIStudio()
-        self.creatCharacter("lipeng", "main")
-        self.creatCharacter("lilei")
+        self.LuaUIStudio()#新手引导界面检查
+        self.creatCharacter("lipeng", "main")#创建角色流程
+        self.creatCharacter("lilei")#创建角色流程
         time = 2
         while (time > 0):
             time = time - 1
             self.talk("Narration", str(time))
             self.talk("lipeng", txt)
             self.talk("lilei", txt)
-        self.branchprocess()
-# MainStudio1=MainStudio()
-# MainStudio1.mainprocess()
+        self.branchprocess() #分成创作页面流程
+
+
+# MainStudio1 = MainStudio()
+# MainStudio1.commonprocess()

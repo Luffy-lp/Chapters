@@ -1,16 +1,12 @@
-import time
-from airtest.core.api import *
-from common.COM_findobject import FindObject
 from pages.shop.shop import *
-from common.COM_API import *
-from common.COM_data import *
+from date.Chapters_data import *
 from common.my_log import mylog
 from common.COM_utilities import *
 # from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 class Shopmodule(Shop):
     Shopmodule_info ={}
-    #滑动商品
+
     def swipe_diamonds(self):
         """滑动钻石商品"""
         shopPOCO = self.poco("LuaUIShopFrame").offspring("Content1").offspring("29-1004")[0]
@@ -34,14 +30,17 @@ class Shopmodule(Shop):
         self.click_ticket_enter()
         self.click_buy_ticket(nString)
         self.mysleep(2)
-        self.dealwith_error()
-        self.mysleep(5)
+        # self.dealwith_error()
+        # self.mysleep(3)
         self.click_keytobuy()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[1]
             self.findClick_childobject(androidpoco,description="一律启用",waitTime=1,sleeptime=1)
             self.mysleep(3)
             self.click_affirm()
+        # if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
+        # poco("com.android.vending:id/0_resource_name_obfuscated").child(
+        #     "com.android.vending:id/0_resource_name_obfuscated")[0].click()
         self.mysleep(3)
         self.click_claim_shop()
         # 购买完后展示用户信息
@@ -59,8 +58,8 @@ class Shopmodule(Shop):
         increment = MyData.UserData_dir["diamond"]
         self.click_buy_diamond(nString)
         self.mysleep(3)
-        self.dealwith_error()
-        self.mysleep(3)
+        # self.dealwith_error()
+        # self.mysleep(3)
         self.click_keytobuy()
         if self.android_tryfind("android.widget.RadioButton",description="购买身份验证",waitTime=2):
             androidpoco=self.androidpoco("android.widget.RadioButton")[0]
@@ -87,43 +86,57 @@ class Shopmodule(Shop):
         self.click_buy_member()
         if self.poco(nameMatches=".*SubBtn").wait(5).exists():
             self.click_subs()#点击订阅会员按钮
-            time.sleep(2)
-            self.dealwith_error()
-            self.mysleep(5)
-            self.click_subscribed()
-            boolis = True
-            clock()
-            while boolis:
-                if self.android_tryfind("android.widget.RadioButton", description="购买身份验证", waitTime=2):
-                    androidpoco = self.androidpoco("android.widget.RadioButton")[0]
-                    self.findClick_childobject(androidpoco, description="一律启用", waitTime=1, sleeptime=1)
-                    self.mysleep(3)
-                    self.click_affirm()
-                time.sleep(5)
+            self.mysleep(3)
+            if self.androidpoco(text="错误").wait(5).exists():
+                self.click_affirm()
                 try:
-                    self.poco("BtnReturn").click()
-                    boolis=False
-                    print("订阅后点击返回按钮")
-                    mylog.info("订阅后点击返回按钮")
+                    self.click_top_back()
                 except:
                     pass
-                mytime = float(clock("stop"))
-                if mytime>30:
-                    mylog.error("未发现订阅返回按钮")
-                    log(Exception("未发现订阅返回按钮"),snapshot=True)
-            try:
-                self.click_top_back()
-            except:
-                pass
-            try:
-                self.click_top_back()
-            except:
-                pass            # 购买完后的用户数据
-            MyData.getUsermemberinfo()
-            mylog.info("用户会员状态：【{}】".format(MyData.UserData_dir))
-            self.Shopmodule_info["member_type"] = MyData.UserData_dir["member_type"]
-            self.Shopmodule_info["member_type_old"] = MyData.UserData_dir["member_type_old"]
-            return self.Shopmodule_info
+                try:
+                    self.click_top_back()
+                except:
+                    pass  # 购买完后的用户数据
+                MyData.getUsermemberinfo()
+                mylog.info("用户会员状态：【{}】".format(MyData.UserData_dir))
+                self.Shopmodule_info["member_type"] = MyData.UserData_dir["member_type"]
+                self.Shopmodule_info["member_type_old"] = MyData.UserData_dir["member_type_old"]
+                return self.Shopmodule_info
+            else:
+                self.click_subscribed()
+                boolis = True
+                clock()
+                while boolis:
+                    if self.android_tryfind("android.widget.RadioButton", description="购买身份验证", waitTime=2):
+                        androidpoco = self.androidpoco("android.widget.RadioButton")[0]
+                        self.findClick_childobject(androidpoco, description="一律启用", waitTime=1, sleeptime=1)
+                        self.mysleep(3)
+                        self.click_affirm()
+                    self.mysleep(3)
+                    try:
+                        self.poco("BtnReturn").click()
+                        boolis=False
+                        print("订阅后点击返回按钮")
+                        mylog.info("订阅后点击返回按钮")
+                    except:
+                        pass
+                    mytime = float(clock("stop"))
+                    if mytime>30:
+                        mylog.error("未发现订阅返回按钮")
+                        log(Exception("未发现订阅返回按钮"),snapshot=True)
+                try:
+                    self.click_top_back()
+                except:
+                    pass
+                try:
+                    self.click_top_back()
+                except:
+                    pass            # 购买完后的用户数据
+                MyData.getUsermemberinfo()
+                mylog.info("用户会员状态：【{}】".format(MyData.UserData_dir))
+                self.Shopmodule_info["member_type"] = MyData.UserData_dir["member_type"]
+                self.Shopmodule_info["member_type_old"] = MyData.UserData_dir["member_type_old"]
+                return self.Shopmodule_info
         else:
             self.click_topbackbtn()
             self.click_top_back()
@@ -143,9 +156,9 @@ class Shopmodule(Shop):
         MyData.getUsercurrency()
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
         self.click_buy_diamondcard()
-        time.sleep(10)
+        self.mysleep(3)
         self.click_keytobuy()
-        self.mysleep(5)
+        self.mysleep(3)
         self.click_claim_shop()
         #购买完后的用户数据
         MyData.getUsercurrency()
@@ -156,9 +169,9 @@ class Shopmodule(Shop):
         MyData.getUsercurrency()
         mylog.info("用户信息【{}】".format(MyData.UserData_dir))
         self.click_buy_packges1()
-        time.sleep(10)
+        self.mysleep(3)
         self.click_keytobuy()
-        time.sleep(20)
+        self.mysleep(3)
         self.click_claim_shop()
         #购买完后的用户数据
         MyData.getUsercurrency()
@@ -177,5 +190,4 @@ class Shopmodule(Shop):
         print(number)
         self.buy_ticket_step(nString=number)
         return True
-
 
