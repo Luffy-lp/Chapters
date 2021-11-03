@@ -7,6 +7,7 @@ from scenes.scenes_login.SCN_newuser import NewUserGuide
 from scenes.scenes_discover.SCN_discover import Discover
 from scenes.SCN_pageTurn import PageTurn
 from scenes.scenes_SidePanel.SCN_LanguagePanel import LanguagePanel
+from step.test_login_step import test_stopgame, test_startgame
 
 
 def test_click(findName, clickName, description):
@@ -87,3 +88,11 @@ def test_newUserGuide():
     myNewUserGuide = NewUserGuide()
     actualValue = myNewUserGuide.newUserPopUp()
     assert_equal(actualValue, True, "新手引导{0}".format(myNewUserGuide.NewUserGuide_info))
+
+
+def resetEnv():
+    """重跑"""
+    test_stopgame()
+    test_startgame()
+    test_GameLoaded()
+    test_discoverPopup()

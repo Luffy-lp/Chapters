@@ -19,6 +19,7 @@ case2:
     repeattime: "3"
     reportname: "用户登陆"
     step:
+        - ${test_stopgame()} #关闭游戏
         - ${test_startgame()} #启动游戏
         - ${test_GameLoaded()} #游戏加载处理
 #        - ${test_discoverPopup()} #大厅弹框

@@ -302,6 +302,17 @@ class APiClass():
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="fashionShowApi")
         return data["data"]
 
+    def getAdConfigApi(self,uuid):
+        """拉取广告配置列表"""
+        url = self.url + "/Controllers/activity/AdConfigApi.php?DEBUG=true"
+        body = {
+                "uuid": uuid,
+                "action": "getList",
+                "channel_id":self.channel_id
+                }
+        data = self.try_APIlink(url=url, headers=self.Header, body=body, name="getAdConfigApi")
+        return data["data"]
+
     def avgcontentApi(self, bookid, channel_id="AVG10005", country_code="CN"):
         """获取章节资源下载地址"""
         url = self.url + "avgcontentApi.Class.php?DEBUG=true"
@@ -341,7 +352,9 @@ class APiClass():
         print("下载书籍资源失败")
         # raise Exception("下载书籍资源失败")
 # APiClass1 = APiClass()
-# APiClass1.syncValueApi()
+# data=APiClass1.getAdConfigApi("49000")
+# print(type(data["is_pay_user"]))
+# print(json.dumps(data, indent=4)) # 有层次感
 # # fashion_dir={}
 # bookid="52059"
 # # role_id="16051"
