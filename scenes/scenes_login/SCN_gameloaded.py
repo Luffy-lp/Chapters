@@ -47,7 +47,10 @@ class GameLoaded(FindObject):
             if float(COM_utilities.clock("stop")) > 360:
                 print("游戏加载失败。。。")
                 log(Exception("游戏加载失败。。。"), snapshot=True)
-                raise Exception
+                try:
+                    raise Exception("游戏加载失败。。。")
+                except Exception as e:
+                    print("游戏加载失败。。。",e)
         if self.GameLoaded_info["loadtime"] is None:
             self.GameLoaded_info["loadtime"] = float(COM_utilities.clock("stop")) - 2
         # mylog.info("完成游戏加载，加载时间为{0}秒".format(self.GameLoaded_info["loadtime"]))
@@ -56,7 +59,10 @@ class GameLoaded(FindObject):
         UserID = StdPocoAgent1.get_UserID()
         MyData.UserData_dir["uuid"] = UserID
         print("UserID:", UserID)
-        MyData.getUsercurrency()
+        try:
+            MyData.getUsercurrency()
+        except:
+            print("虚拟币拉取失败")
         return True
 
     def Popup_login(self, login=1):

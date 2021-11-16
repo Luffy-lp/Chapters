@@ -58,7 +58,6 @@ def mkdir(path):
         return False
 # 项目的根路径
 path_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 # 资源路径
 path_resource = os.path.join(path_BASE_DIR, "resource")
 
@@ -110,5 +109,4 @@ mkdir(path_resource)#资源路径
 mkdir(path_RESOURCE_IMAGE)#图片资源路径
 mkdir(path_RES_DIR)#测试报告录屏的目录路径
 mkdir(path_BOOKREAD_ERROR_IMAGE)
-
 

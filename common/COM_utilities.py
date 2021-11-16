@@ -15,6 +15,8 @@ import types
 from airtest.core.android.recorder import *
 
 # from common.COM_data import MyData
+from common.my_log import mylog
+
 spendtime = None
 
 def mysnapshot(loc_desc,IMG_parameter,quality=None,max_size=None):
@@ -173,3 +175,28 @@ def testnude_test():
     sleep(3)
     nude_test(fname,60)
 # snapshot(filename=filename, msg=filename)
+def fileCheck(filepath):
+    """文件正确性验证"""
+    # fileName = os.path.join(path_resource, filepath)
+    filebool = os.path.exists(filepath)
+    return filebool
+    # if filebool:
+    #     mysize = os.path.getsize(fileName)
+    #     if mysize > size:
+    #         pass
+    #         # print("文件大小正常")
+    #     else:
+    #         filebool = False
+    # return filebool
+def report(self,result, type, chapter, des, roleID=None, chat=None):
+    if not result:
+        if type == 0:
+            content = "{0}-->【{1}异常】-【角色{2}】-【id:{3}】：{4}".format(chapter, type, roleID, chat, des)
+            mylog.error(content)
+        if chat:
+            content = "{0}-->【{1}异常】-【角色{2}】-【id:{3}】：{4}".format(chapter, type, roleID, chat, des)
+            mylog.error(content)
+        else:
+            content = "{0}-->【{1}异常】-【角色{2}】:{3}".format(chapter, type, roleID, des)
+            mylog.error(content)
+

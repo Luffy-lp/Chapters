@@ -257,7 +257,7 @@ class FindObject(CommonDevices):
                     log("【资源检查】:{0}->{1}->{2}".format(description, findAttr, attrValue), desc="【资源检查】:{0}->{1}->{2}")
                     if self.freeze_poco is None:
                         self.freeze_poco = self.poco.freeze()
-                    return attrValue
+                    return True
                 else:
                     self.freeze_poco = None
                     sleep(0.2)
@@ -275,11 +275,6 @@ class FindObject(CommonDevices):
         """表情检测"""
         while (tryTime > 0):
             tryTime -= 1
-            # self.freeze_poco=None
-            # if self.freeze_poco != None:
-            #     poco = self.freeze_poco
-            # else:
-            #     poco = self.poco
             try:
                 attrValue = self.poco(parentName).offspring(partName).attr(findAttr)
                 if attrValue:
@@ -295,10 +290,8 @@ class FindObject(CommonDevices):
                         sleep(0.2)
                         log("配置表情{0}表情不匹配".format(description))
             except:
-                # self.freeze_poco = None
                 sleep(0.2)
-                # log(ResourceError(errorMessage="【表情异常】：未找到{}表情".format(face_id, findAttr)),
-                #     desc="【资源异常】：{0}->未找到{1}".format(description, findAttr), snapshot=True, level="error")
+
         log(ResourceError(errorMessage="【表情异常】：{0}->未找到{1}表情".format(description, face_id)),
             desc="【表情异常】：{0}->未找到{1}".format(description, face_id), snapshot=True, level="error")
         return False
@@ -323,7 +316,6 @@ class FindObject(CommonDevices):
 
     def assert_getText(self, parentName, findName, textAttr, description="", waitTime=1, tryTime=2, reportError=True,
                        sleeptime=0):
-        # self.poco("UIChapterSelectRoleOver").offspring("Cloth").attr("texture")
         while (tryTime > 0):
             tryTime = tryTime - 1
             if textAttr == "TMPtext":
@@ -373,9 +365,6 @@ class FindObject(CommonDevices):
             poco = self.androidpoco
         else:
             poco = self.poco
-            # ADBdevice=MyData.EnvData_dir["ADBdevice"]
-            # if ADBdevice in MyData.mobileconf_dir["Notch_Fit"]:
-            #     poco.use_render_resolution(True, MyData.mobileconf_dir["Notch_Fit"][ADBdevice])
         try:
             print("尝试寻找{0}".format(description))
             # gameobject = self.poco(findName)

@@ -59,10 +59,13 @@ class BookNewDetail(FindObject):
         MyData.getUsercurrency()
         if self.BookNewDetail_info["sequel_from"]:
             self.findClick_try("UpBtn", "UpBtn", description="Yes,I do")
-        if int(MyData.UserData_dir["diamond"]) < 3000:
-            MyData.updateUsercurrency("diamond", "3000")
-        if int(MyData.UserData_dir["ticket"]) < 99:
-            MyData.updateUsercurrency("ticket", "99")
+        try:
+            if int(MyData.UserData_dir["diamond"]) < 3000:
+                MyData.updateUsercurrency("diamond", "3000")
+            if int(MyData.UserData_dir["ticket"]) < 99:
+                MyData.updateUsercurrency("ticket", "99")
+        except:
+            print("调用虚拟币接口异常")
         MyData.r_yaml_fashion()
 
     def book_Play(self, bookid,index=None):

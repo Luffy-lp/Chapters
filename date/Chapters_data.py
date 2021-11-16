@@ -429,7 +429,6 @@ class UserData(APiClass):
             self.w_yaml_fashion()
         else:
             role_list = self.fashion_dir[role_id]
-        print("默认角色", role_list)
         return role_list
 
     def getDIYFashion(self, fashion_id):
@@ -449,7 +448,7 @@ class UserData(APiClass):
                 self.w_yaml_fashion()
             else:
                 fashion_list = self.fashion_dir[fashion_id]
-        print("DIY装扮", fashion_list)
+        # print("DIY装扮", fashion_list)
         return fashion_list
 
     def getfashion(self, bookid, role_id, fashion_id=None):
@@ -488,7 +487,7 @@ class UserData(APiClass):
         try:
             roleidData = self.getUserStoryDataApi(uuid, bookid)
             roleidData = roleidData["fashion"][str(roleid)]
-            print("roleidData",roleidData)
+            # print("roleidData",roleidData)
 
         except:
             roleidData = {}

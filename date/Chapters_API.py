@@ -24,6 +24,7 @@ class APiClass():
             value = yaml.safe_load(file)
         self.channel_id=value["channel_id"]
         self.url=value["url"]
+        print(self.channel_id)
         return self.channel_id
 
     def try_APIlink(self, url, headers, body, name, trytime=100, timeout=10):
@@ -313,7 +314,7 @@ class APiClass():
         data = self.try_APIlink(url=url, headers=self.Header, body=body, name="getAdConfigApi")
         return data["data"]
 
-    def avgcontentApi(self, bookid, channel_id="AVG10005", country_code="CN"):
+    def avgcontentApi(self, bookid, country_code="CN"):
         """获取章节资源下载地址"""
         url = self.url + "avgcontentApi.Class.php?DEBUG=true"
         body = {"chapter_id": bookid,
@@ -321,7 +322,9 @@ class APiClass():
                 "channel_id": self.channel_id,
                 "country_code": country_code,
                 }
+
         response = self.try_APIlink(url=url, headers=self.Header, body=body, name="avgcontentApi")
+        print(response)
         address: str = response["address"]
         addresslist = address.split('/')
         address = address.replace("\\", "")
@@ -352,7 +355,8 @@ class APiClass():
         print("下载书籍资源失败")
         # raise Exception("下载书籍资源失败")
 # APiClass1 = APiClass()
-# data=APiClass1.getAdConfigApi("49000")
+# APiClass1.get_set()
+# data=APiClass1.avgcontentApi("42012001")
 # print(type(data["is_pay_user"]))
 # print(json.dumps(data, indent=4)) # 有层次感
 # # fashion_dir={}

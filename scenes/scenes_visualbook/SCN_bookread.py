@@ -14,9 +14,10 @@ from pages.shop.shop import Shop
 from common.COM_Error import ResourceError
 from common.COM_path import *
 from common.COM_trans import *
+from manage.check_res import CheckRes
 
 
-class BookRead(FindObject):
+class BookRead(FindObject,CheckRes):
     # myShop = Shop()
     def __init__(self):
         FindObject.__init__(self)
@@ -200,20 +201,6 @@ class BookRead(FindObject):
         else:
             self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励")
 
-    # def manage_AD(self):
-    #     """广告处理"""
-    #     self.findClick_try("UIABBonusFrame", "BtnSkip", description="付费用户章节头奖励")
-    #     # if self.find_try("TxtFree", "非付费用户章节头广告"):
-    #     touch(self._POS)
-    #     keyevent("HOME")
-    #     start_app("com.mars.avgchapters")
-    #     sleep(2)
-    # if self.find_try("TxtFree", "非付费用户章节头广告"):
-    #     touch(self._POS)
-    #     keyevent("HOME")
-    #     start_app("com.mars.avgchapters")
-    #     sleep(2)
-
     def FullBody(self):
         """全身像处理"""
         if self.find_try("VisualRoleRender", "全身像类型"):
@@ -228,9 +215,7 @@ class BookRead(FindObject):
         if self.jumpPOS == None:
             pos = self.poco("Text (TMP)").wait(2).get_position()
             if MyData.DeviceData_dir["offset"]:
-                print(MyData.DeviceData_dir["offset"])
                 pos[1] += MyData.DeviceData_dir["offset"]
-                print(pos[1])
             # self.poco("Text (TMP)").click()
             self.jumpPOS = COM_utilities.PosTurn(pos)
             self.TextPOCO = self.poco("InputField").wait(2)
@@ -263,23 +248,6 @@ class BookRead(FindObject):
         """记录老的书籍阅读进度"""
         self.option_record["oldChatProgress"] = str(self.progress_info["chatProgress"])  # 记录当前进度
 
-    # def resource_result(self, result, findAtrr, des):
-    #     """检测结果"""
-    #     if result is False:
-    #         if self.progress_info["BookID"][0] == "1" and ("电话呼叫方头像" in des or "Back1" in des):
-    #             role_id = str(self.progress_info["option_info"]["role_id"])
-    #             dec = self.old_filename_head +"roleID"+role_id+des
-    #             if dec not in self.oldBookErrorList:
-    #                 self.oldBookErrorList.append(dec)
-    #                 self.BookRead_info["result"] = False
-    #                 self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
-    #                 myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-    #         else:
-    #             dec = self.filename_head + des
-    #             self.BookRead_info["result"] = False
-    #             self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
-    #             myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-
     def resource_result(self, result, findAtrr, des):
         """检测结果"""
         if result is False:
@@ -291,25 +259,6 @@ class BookRead(FindObject):
                 self.BookRead_info["result"] = False
                 self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
                 myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-        # else:
-        #     dec = self.filename_head + des
-        #     self.BookRead_info["result"] = False
-        #     self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
-        #     myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-        # if result is False:
-        #     if self.progress_info["BookID"][0] == "1" and ("电话呼叫方头像" in des or "Back1" in des):
-        #         role_id = str(self.progress_info["option_info"]["role_id"])
-        #         dec = self.old_filename_head +"roleID"+role_id+des
-        #         if dec not in self.oldBookErrorList:
-        #             self.oldBookErrorList.append(dec)
-        #             self.BookRead_info["result"] = False
-        #             self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
-        #             myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
-        #     else:
-        #         dec = self.filename_head + des
-        #         self.BookRead_info["result"] = False
-        #         self.BookRead_info[str(self.progress_info["chatProgress"])] = des + "->" + findAtrr + " is not find"
-        #         myscreenshot(path_BOOKREAD_ERROR_IMAGE, dec)
 
     def sceneBG_check(self):
         # 背景检测
@@ -335,21 +284,6 @@ class BookRead(FindObject):
             log(ResourceError(errorMessage="资源异常：friend_id内容为空或为0"), desc="资源异常：friend_id内容为空或为0",
                 snapshot=True)
         return False
-
-    # def goodsTxt_check(self):
-    #     try:
-    #         goodstype = self.progress_info["option_info"]["goodstype"]  # 普通文本
-    #         goodsid = self.progress_info["option_info"]["goodsid"]  # 普通文本
-    #         if goodstype and goodsid:
-    #             log("【资源检查】:goodstype:{1},goodsid:{2}->True".format(goodstype, goodsid))
-    #         else:
-    #             self.resource_result(False, "txt", "goodstype和goodsid")
-    #             log(ResourceError(errorMessage="资源异常：内容为空"), desc="资源异常：内容为空",
-    #                 snapshot=True)
-    #     except:
-    #         self.resource_result(False, "txt", "goodstype和goodsid")
-    #         log(ResourceError(errorMessage="资源异常：未找到goodstype或goodsid"), desc="资源异常：未找到goodstype或goodsid",
-    #             snapshot=True)
 
     def goods_check(self):
         """物品检测"""
@@ -411,8 +345,7 @@ class BookRead(FindObject):
     def role_check(self):
         """角色检测"""
         parameter = self.role_parameter()
-        self.roleParts_check(parameter["parentName"], parameter["attr"], parameter["des"], parameter["role_id"],
-                             parameter["fashion_id"], parameter["face_id"])
+        self.roleParts_check(parameter["parentName"], parameter["attr"], parameter["des"], parameter["role_id"],parameter["fashion_id"], parameter["face_id"])
 
     def setRoleName_check(self):
         """角色名称检测"""
@@ -462,6 +395,7 @@ class BookRead(FindObject):
                     parentName = "Head"
                     self.roleParts_check(parentName, attr, des, friend_id, fashion_id=friend_fashion_id)
 
+
     def oldShowChangeDress_check(self):
         log(ResourceError(errorMessage="【旧版换装提醒】"), desc="【旧版换装提醒", snapshot=True, level="error")
         self.resource_result(False, "旧版换装提醒", "旧版换装提醒")
@@ -471,6 +405,12 @@ class BookRead(FindObject):
         bool = self.assert_resource(parentName, partName, Attr, description=description)
         self.resource_result(bool, Attr, description)
         return bool
+
+    def assert_conf(self,bool,):
+        """资源正确性"""
+        role_id=self.progress_info["option_info"]["role_id"]
+
+        pass
 
     def face_check(self, parentName, partName, Attr, face_id, description):
         """face检测"""
@@ -495,11 +435,6 @@ class BookRead(FindObject):
         else:
             log(Exception("role_id不存在"), snapshot=True)
             return
-
-    def checkSleep(self):
-        """检测过快会导致问题"""
-        sleep(0.1)
-        print("睡眠")
 
     def content_check(self):
         """内容检测"""
@@ -618,7 +553,6 @@ class BookRead(FindObject):
                 return
             touch(self._POS, times=2, duration=0.2)
             # is_touch=True
-            print("点击操作")
         else:
             self.selectManage(select_id)
         self.touchtime = self.touchtime + 1
@@ -655,7 +589,7 @@ class BookRead(FindObject):
     def progressjudge(self):
         """进度异常判断"""
         reTime = time_difference(self.time_start)
-        if reTime > 1200:
+        if reTime > 1800:
             mylog.error("阅读时间{0},阅读超时".format(reTime))
             log(Exception("阅读时间{0},阅读超时".format(reTime)), snapshot=True)
             self.resource_result(False, "阅读", "阅读时间超过20分钟")

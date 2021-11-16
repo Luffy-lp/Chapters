@@ -20,7 +20,7 @@ class Discover(FindObject):
         while havePopup:
             print("进入弹框判断")
             mytime = float(COM_utilities.clock("stop"))
-            if mytime > 60:
+            if mytime > 70:
                 log(Exception("弹框处理超时...."),snapshot=True)
                 raise Exception
             if self.poco("FullScreenPanel").children():
